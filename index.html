@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generator SIKS Fasdik to PDF & Excel</title>
+  <!-- CDN Ringan (Hanya pustaka pemroses dokumen) -->
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #1e293b;
+      --border: #334155;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --primary: #38bdf8;
+      --primary-hover: #0ea5e9;
+      --accent: #10b981;
+      --danger: #ef4444;
+      --radius: 8px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 24px 16px; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 20px; }
+    header { text-align: center; margin-bottom: 8px; }
+    header h1 { font-size: 1.6rem; font-weight: 700; color: #fff; }
+    header p { color: var(--text-muted); font-size: 0.9rem; margin-top: 4px; }
+    .badge { display: inline-block; padding: 3px 10px; border-radius: 99px; background: rgba(56, 189, 248, 0.15); color: var(--primary); font-size: 0.75rem; font-weight: 600; margin-bottom: 8px; }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+    .dropzone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 32px 16px; text-align: center; cursor: pointer; transition: all 0.2s; }
+    .dropzone:hover, .dropzone.dragover { border-color: var(--primary); background: rgba(56, 189, 248, 0.05); }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 14px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    label { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); }
+    select, input { background: #0f172a; border: 1px solid var(--border); border-radius: 6px; color: #fff; padding: 10px 12px; font-size: 0.9rem; outline: none; }
+    select:focus, input:focus { border-color: var(--primary); }
+    .btn-group { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
+    button { flex: 1; min-width: 140px; padding: 12px 16px; border-radius: 6px; border: none; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-primary { background: var(--primary); color: #0f172a; }
+    .btn-primary:hover:not(:disabled) { background: var(--primary-hover); }
+    .btn-excel { background: var(--accent); color: #fff; }
+    .btn-excel:hover:not(:disabled) { opacity: 0.9; }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
+    .stats-bar { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-muted); padding: 10px 14px; background: #0f172a; border-radius: 6px; margin-top: 12px; }
+    .preview-wrap { margin-top: 16px; max-height: 260px; overflow: auto; border: 1px solid var(--border); border-radius: 6px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.8rem; text-align: left; }
+    th, td { padding: 8px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    th { background: #0f172a; color: var(--primary); position: sticky; top: 0; }
+    tr:hover td { background: rgba(255, 255, 255, 0.02); }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="badge">Fast &amp; Offline Ready</div>
+    <h1>SIKS Fasdik Report Generator</h1>
+    <p>Konversi instan file CSV SIKS ke PDF Landscape &amp; Excel tanpa kirim data ke server.</p>
+  </header>
+
+  <div class="card">
+    <div class="dropzone" id="dz" onclick="document.getElementById('csvFile').click()">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary);margin-bottom:8px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      <p id="dzText" style="font-weight: 500;">Pilih atau seret berkas <strong>.CSV SIKS</strong> ke sini</p>
+      <input type="file" id="csvFile" accept=".csv,text/csv" style="display:none;" />
+    </div>
+
+    <div class="stats-bar" id="statsBar" style="display:none;">
+      <span>File: <strong id="statFileName" style="color:#fff;">-</strong></span>
+      <span>Sekolah: <strong id="statSchools" style="color:#fff;">0</strong></span>
+      <span>Siswa: <strong id="statRows" style="color:#fff;">0</strong></span>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Ukuran Kertas</label>
+        <select id="paperSize">
+          <option value="f4">F4 / Folio (330 × 210 mm) - Standar</option>
+          <option value="a4">A4 (297 × 210 mm)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Format Mode</label>
+        <select id="reportMode">
+          <option value="triwulan">Per Triwulan (Tanpa NIK Siswa)</option>
+          <option value="bulanan">Per Bulan (Dengan NIK Siswa)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Bulan Laporan (Label Header)</label>
+        <input type="text" id="reportMonths" placeholder="Misal: JULI - AGUSTUS - SEPTEMBER" />
+      </div>
+      <div class="form-group">
+        <label>Nama Petugas / Pendamping (Kop Bawah)</label>
+        <input type="text" id="signerName" placeholder="Nama Lengkap & Gelar" />
+      </div>
+    </div>
+
+    <div class="preview-wrap" id="previewWrap" style="display:none;">
+      <table id="previewTable"></table>
+    </div>
+
+    <div class="btn-group">
+      <button class="btn-primary" id="btnPdf" disabled onclick="generatePDF()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Generate PDF
+      </button>
+      <button class="btn-excel" id="btnExcel" disabled onclick="exportExcel()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M9 9l6 6M15 9l-6 6"/></svg>
+        Ekspor Excel
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+let parsedData = [];
+let groupedSchools = {};
+
+const fileInput = document.getElementById('csvFile');
+const dz = document.getElementById('dz');
+const dzText = document.getElementById('dzText');
+const statsBar = document.getElementById('statsBar');
+const btnPdf = document.getElementById('btnPdf');
+const btnExcel = document.getElementById('btnExcel');
+
+// Drag & Drop
+dz.addEventListener('dragover', (e) => { e.preventDefault(); dz.classList.add('dragover'); });
+dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
+dz.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dz.classList.remove('dragover');
+  if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+});
+fileInput.addEventListener('change', (e) => {
+  if (e.target.files.length) handleFile(e.target.files[0]);
+});
+
+function handleFile(file) {
+  if (!file.name.endsWith('.csv')) {
+    alert('Harap unggah file berekstensi .csv');
+    return;
+  }
+  dzText.innerText = `Memproses: ${file.name}...`;
+
+  const reader = new FileReader();
+  reader.onload = (e) => parseCSV(e.target.result, file.name);
+  reader.readAsText(file, 'ISO-8859-1'); // Kompatibel dengan encoding SIKS
+}
+
+function parseCSV(content, fileName) {
+  const lines = content.trim().split(/\r?\n/);
+  if (lines.length < 2) { alert('Format CSV kosong atau salah.'); return; }
+
+  // Auto-detect delimiter (; atau ,)
+  const sep = lines[0].includes(';') ? ';' : ',';
+  const rawHeaders = lines[0].split(sep).map(h => h.trim().replace(/^"|"$/g, ''));
+
+  parsedData = [];
+  groupedSchools = {};
+
+  for (let i = 1; i < lines.length; i++) {
+    if (!lines[i].trim()) continue;
+    const cols = lines[i].split(sep).map(c => c.trim().replace(/^"|"$/g, ''));
+    let row = {};
+    rawHeaders.forEach((h, idx) => { row[h] = cols[idx] || ''; });
+
+    // Bersihkan kolom 'BENTUK PENDIDIKAN'
+    delete row['BENTUK PENDIDIKAN'];
+    parsedData.push(row);
+
+    // Grouping by Sekolah
+    const school = row['NAMA SEKOLAH'] || row['SEKOLAH'] || 'LAINNYA';
+    if (!groupedSchools[school]) groupedSchools[school] = [];
+    groupedSchools[school].push(row);
+  }
+
+  // Update UI stats
+  document.getElementById('statFileName').innerText = fileName;
+  document.getElementById('statSchools').innerText = Object.keys(groupedSchools).length;
+  document.getElementById('statRows').innerText = parsedData.length;
+  statsBar.style.display = 'flex';
+  dzText.innerHTML = `File siap: <strong>${fileName}</strong>`;
+  btnPdf.disabled = false;
+  btnExcel.disabled = false;
+
+  renderPreview();
+}
+
+function renderPreview() {
+  const wrap = document.getElementById('previewWrap');
+  const table = document.getElementById('previewTable');
+  if (!parsedData.length) return;
+
+  wrap.style.display = 'block';
+  const headers = Object.keys(parsedData[0]);
+  let html = '<thead><tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr></thead><tbody>';
+  
+  // Tampilkan max 8 baris pertama
+  parsedData.slice(0, 8).forEach(row => {
+    html += '<tr>' + headers.map(h => `<td>${row[h]}</td>`).join('') + '</tr>';
+  });
+  html += '</tbody>';
+  table.innerHTML = html;
+}
+
+async function generatePDF() {
+  const { jsPDF } = window.jspdf;
+  const paper = document.getElementById('paperSize').value;
+  const mode = document.getElementById('reportMode').value;
+  const months = document.getElementById('reportMonths').value || 'PERIODE LAPORAN';
+  const signer = document.getElementById('signerName').value;
+
+  const pageSize = paper === 'f4' ? [330, 210] : 'a4';
+  const schoolKeys = Object.keys(groupedSchools);
+
+  if (schoolKeys.length === 1) {
+    // Single School Download
+    const doc = buildPdfForSchool(schoolKeys[0], groupedSchools[schoolKeys[0]], pageSize, mode, months, signer);
+    doc.save(`Laporan_${schoolKeys[0].replace(/[^a-zA-Z0-9]/g, '_')}.pdf`);
+  } else {
+    // Multi School Auto-Zip
+    btnPdf.innerText = "Mengompresi ZIP...";
+    btnPdf.disabled = true;
+    const zip = new JSZip();
+
+    schoolKeys.forEach(sch => {
+      const doc = buildPdfForSchool(sch, groupedSchools[sch], pageSize, mode, months, signer);
+      const blob = doc.output('blob');
+      zip.file(`${sch.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`, blob);
+    });
+
+    const zipFile = await zip.generateAsync({ type: 'blob' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(zipFile);
+    link.download = `Laporan_SIKS_${Date.now()}.zip`;
+    link.click();
+
+    btnPdf.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Generate PDF`;
+    btnPdf.disabled = false;
+  }
+}
+
+function buildPdfForSchool(schoolName, rows, pageSize, mode, months, signer) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: pageSize });
+
+  // Urutkan siswa berdasarkan TINGKAT/KELAS secara alfabetis
+  rows.sort((a, b) => (a['TINGKAT'] || '').localeCompare(b['TINGKAT'] || ''));
+
+  // Ambil NPSN dari data pertama jika ada
+  const npsn = rows[0]['NPSN'] || '-';
+
+  // Format kolom tabel
+  const tableData = rows.map((r, i) => {
+    let base = [
+      i + 1,
+      r['NAMA PENGURUS'] || '',
+      r['NISN'] || '',
+      r['NAMA SISWA'] || ''
+    ];
+    if (mode === 'bulanan') base.push(r['NIK SISWA'] || '');
+    base.push(r['TINGKAT'] || '');
+    base.push('', '', ''); // Kolom centang kehadiran
+    return base;
+  });
+
+  let tableHead = ['NO', 'NAMA PENGURUS', 'NISN', 'NAMA SISWA'];
+  if (mode === 'bulanan') tableHead.push('NIK SISWA');
+  tableHead.push('TINGKAT', 'BLN 1', 'BLN 2', 'BLN 3');
+
+  // Header Title
+  doc.setFontSize(11);
+  doc.setFont('helvetica', 'bold');
+  doc.text(`LEMBAR VERIFIKASI FASILITAS PENDIDIKAN (${months.toUpperCase()})`, 14, 14);
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`SEKOLAH: ${schoolName} \vert{} NPSN:${npsn}`, 14, 19);
+
+  doc.autoTable({
+    startY: 23,
+    head: [tableHead],
+    body: tableData,
+    theme: 'grid',
+    styles: { fontSize: 8, cellPadding: 2, textColor: 30, lineColor: 150 },
+    headStyles: { fillColor: [240, 240, 240], textColor: 0, fontStyle: 'bold', halign: 'center' },
+    columnStyles: {
+      0: { halign: 'center', cellWidth: 10 },
+      2: { halign: 'center' },
+      4: { halign: 'center' },
+      5: { halign: 'center', cellWidth: 16 },
+      6: { halign: 'center', cellWidth: 16 },
+      7: { halign: 'center', cellWidth: 16 }
+    },
+    didDrawPage: (data) => {
+      // Footer Nomor Halaman
+      const pageCount = doc.internal.getNumberOfPages();
+      doc.setFontSize(8);
+      doc.text(`Halaman ${pageCount}`, doc.internal.pageSize.width - 25, doc.internal.pageSize.height - 8);
+    }
+  });
+
+  // Tanda Tangan jika diisi
+  if (signer) {
+    const finalY = doc.lastAutoTable.finalY || 100;
+    if (finalY + 30 < doc.internal.pageSize.height) {
+      const rightMargin = doc.internal.pageSize.width - 60;
+      doc.setFontSize(9);
+      doc.text('Petugas Verifikasi,', rightMargin, finalY + 12);
+      doc.text(signer, rightMargin, finalY + 28);
+    }
+  }
+
+  return doc;
+}
+
+function exportExcel() {
+  const wb = XLSX.utils.book_new();
+  Object.keys(groupedSchools).forEach(sch => {
+    const ws = XLSX.utils.json_to_sheet(groupedSchools[sch]);
+    // Batasi nama sheet max 31 karakter (aturan Excel)
+    const sheetName = sch.substring(0, 30).replace(/[:\\\/\?\*\[\]]/g, '');
+    XLSX.utils.book_append_sheet(wb, ws, sheetName);
+  });
+  XLSX.writeFile(wb, `Export_SIKS_${Date.now()}.xlsx`);
+}
+</script>
+</body>
+</html>
