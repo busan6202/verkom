@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Generator SIKS Fasdik to PDF & Excel</title>
+  <title>SIKS Fasdik - Form Verifikasi Komitmen Pendidikan</title>
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -23,16 +23,16 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
     body { background-color: var(--bg); color: var(--text); padding: 24px 16px; display: flex; justify-content: center; }
-    .container { width: 100%; max-width: 940px; display: flex; flex-direction: column; gap: 18px; }
+    .container { width: 100%; max-width: 950px; display: flex; flex-direction: column; gap: 16px; }
     header { text-align: center; }
-    header h1 { font-size: 1.6rem; font-weight: 700; color: #fff; }
-    header p { color: var(--text-muted); font-size: 0.88rem; margin-top: 4px; }
+    header h1 { font-size: 1.5rem; font-weight: 700; color: #fff; }
+    header p { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
     .badge { display: inline-block; padding: 3px 10px; border-radius: 99px; background: rgba(56, 189, 248, 0.15); color: var(--primary); font-size: 0.72rem; font-weight: 700; margin-bottom: 8px; }
     .card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); }
-    .dropzone { border: 2px dashed #475569; border-radius: var(--radius); padding: 26px 16px; text-align: center; cursor: pointer; transition: 0.2s; background: rgba(15, 23, 42, 0.4); }
+    .dropzone { border: 2px dashed #475569; border-radius: var(--radius); padding: 24px 16px; text-align: center; cursor: pointer; transition: 0.2s; background: rgba(15, 23, 42, 0.4); }
     .dropzone:hover, .dropzone.dragover { border-color: var(--primary); background: rgba(56, 189, 248, 0.05); }
     .dropzone svg { color: var(--primary); margin-bottom: 6px; }
-    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; margin-top: 16px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 14px; }
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
     select, input { background: #0f172a; border: 1px solid var(--border); border-radius: 6px; color: #fff; padding: 9px 12px; font-size: 0.85rem; outline: none; }
@@ -45,9 +45,9 @@
     .btn-excel { background: var(--accent); color: #fff; }
     .btn-excel:hover:not(:disabled) { opacity: 0.9; }
     button:disabled { opacity: 0.4; cursor: not-allowed; }
-    .preview-wrap { margin-top: 16px; border: 1px solid var(--border); border-radius: 6px; overflow: auto; max-height: 250px; }
-    table { width: 100%; border-collapse: collapse; font-size: 0.78rem; text-align: left; }
-    th, td { padding: 8px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    .preview-wrap { margin-top: 16px; border: 1px solid var(--border); border-radius: 6px; overflow: auto; max-height: 240px; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.75rem; text-align: left; }
+    th, td { padding: 7px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; }
     th { background: #0f172a; color: var(--primary); position: sticky; top: 0; }
   </style>
 </head>
@@ -55,9 +55,9 @@
 
 <div class="container">
   <header>
-    <div class="badge">Engine Kemensos Edition</div>
-    <h1>SIKS Fasdik Report Generator</h1>
-    <p>Otomasi CSV SIKS Fasdik ke Lembar Verifikasi PDF Landscape &amp; Excel</p>
+    <div class="badge">Fixed Engine v2.3</div>
+    <h1>Form Verifikasi Komitmen Pendidikan</h1>
+    <p>Otomasi CSV SIKS Fasdik ke Model Lembar Verifikasi Resmi (Kemensos)</p>
   </header>
 
   <div class="card">
@@ -82,23 +82,20 @@
         </select>
       </div>
       <div class="form-group">
-        <label>Format Mode</label>
-        <select id="reportMode">
-          <option value="triwulan">Triwulan (3 Kolom Paraf, Tanpa NIK Siswa)</option>
-          <option value="perbulan">Bulanan (Sertakan NIK Siswa)</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Bulan Laporan (Kolom Paraf)</label>
-        <input type="text" id="reportMonths" value="OKTOBER, NOVEMBER, DESEMBER" placeholder="Contoh: OKTOBER, NOVEMBER, DESEMBER" />
+        <label>Bulan Laporan (Triwulan)</label>
+        <input type="text" id="reportMonths" value="OKTOBER, NOVEMBER, DESEMBER" />
       </div>
       <div class="form-group">
         <label>Nama Petugas Pendamping</label>
-        <input type="text" id="signerName" placeholder="Nama Lengkap & Gelar" />
+        <input type="text" id="signerName" value="Andriadi, S.Kom" placeholder="Nama Petugas" />
       </div>
       <div class="form-group">
-        <label>NIP Petugas</label>
-        <input type="text" id="signerNip" placeholder="18 Digit NIP (Opsional)" />
+        <label>NIP Petugas Pendamping</label>
+        <input type="text" id="signerNip" value="198208042025210058" placeholder="NIP Petugas" />
+      </div>
+      <div class="form-group">
+        <label>Tempat / Titik Mangsa Surat</label>
+        <input type="text" id="signerLocDate" value="Lunuk Bagantung" placeholder="Nama Desa/Kecamatan" />
       </div>
     </div>
 
@@ -109,7 +106,7 @@
     <div class="btn-group">
       <button class="btn-primary" id="btnPdf" disabled onclick="generatePDF()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Generate PDF
+        Generate PDF (Auto Split Sekolah)
       </button>
       <button class="btn-excel" id="btnExcel" disabled onclick="exportExcel()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M9 9l6 6M15 9l-6 6"/></svg>
@@ -130,7 +127,6 @@ const statsBar = document.getElementById('statsBar');
 const btnPdf = document.getElementById('btnPdf');
 const btnExcel = document.getElementById('btnExcel');
 
-// File Drag & Drop
 dz.addEventListener('dragover', (e) => { e.preventDefault(); dz.classList.add('dragover'); });
 dz.addEventListener('dragleave', () => dz.classList.remove('dragover'));
 dz.addEventListener('drop', (e) => {
@@ -143,15 +139,14 @@ fileInput.addEventListener('change', (e) => {
 });
 
 function processFile(file) {
-  dzText.innerText = `Membaca berkas: ${file.name}...`;
+  dzText.innerText = `Membaca: ${file.name}...`;
   const reader = new FileReader();
   reader.onload = (e) => parseSIKSCsv(e.target.result, file.name);
   reader.readAsText(file, 'ISO-8859-1');
 }
 
 function cleanStr(s) {
-  if (!s) return '';
-  return s.toString().trim().replace(/^["']|["']$/g, '');
+  return (s || '').toString().trim().replace(/^["']|["']$/g, '');
 }
 
 function normKey(s) {
@@ -162,35 +157,28 @@ function parseSIKSCsv(text, fileName) {
   const rawLines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
   if (rawLines.length < 2) { alert('CSV kosong atau rusak.'); return; }
 
-  const firstLines = rawLines.slice(0, 15).join(' ');
-  const sep = (firstLines.split(';').length > firstLines.split(',').length) ? ';' : ',';
+  const sep = (rawLines.slice(0, 15).join(' ').split(';').length > rawLines.slice(0, 15).join(' ').split(',').length) ? ';' : ',';
 
-  // Ekstrak metadata Sekolah / NPSN jika tertulis di bagian atas
-  let metaSchool = '';
-  let metaNpsn = '';
-
-  for (let i = 0; i < Math.min(rawLines.length, 12); i++) {
+  // 1. Ekstrak nama sekolah/NPSN dari baris awal jika ada
+  let metaSchool = '', metaNpsn = '';
+  for (let i = 0; i < Math.min(rawLines.length, 20); i++) {
     const lUpper = rawLines[i].toUpperCase();
-    if (lUpper.includes('SEKOLAH') && (lUpper.includes(':') || lUpper.includes(sep))) {
-      const parts = rawLines[i].split(/[:;]/);
-      if (parts.length > 1 && parts[1].trim().length > 3) metaSchool = cleanStr(parts[1]);
+    if ((lUpper.includes('SEKOLAH') || lUpper.includes('SEKOLA')) && lUpper.includes(':')) {
+      const parts = rawLines[i].split(':');
+      if (parts[1]) metaSchool = cleanStr(parts[1].split(sep)[0]);
     }
-    if (lUpper.includes('NPSN') && (lUpper.includes(':') || lUpper.includes(sep))) {
-      const parts = rawLines[i].split(/[:;]/);
-      if (parts.length > 1) metaNpsn = cleanStr(parts[1]).replace(/\D/g, '');
+    if (lUpper.includes('NPSN') && lUpper.includes(':')) {
+      const parts = rawLines[i].split(':');
+      if (parts[1]) metaNpsn = cleanStr(parts[1].split(sep)[0]).replace(/\D/g, '');
     }
   }
 
-  // Scan baris header tabel
+  // 2. Deteksi header tabel SIKS
   let headerIndex = -1;
   let headers = [];
-
   for (let i = 0; i < rawLines.length; i++) {
     const cols = rawLines[i].split(sep).map(normKey);
-    const hasPengurus = cols.some(c => c.includes('PENGURUS') || c.includes('ORANGTUA'));
-    const hasSiswa = cols.some(c => c.includes('SISWA') || c.includes('ANAK') || c.includes('NISN'));
-
-    if (hasPengurus && hasSiswa) {
+    if (cols.some(c => c.includes('PENGURUS')) && cols.some(c => c.includes('SISWA') || c.includes('NISN'))) {
       headerIndex = i;
       headers = rawLines[i].split(sep).map(cleanStr);
       break;
@@ -202,71 +190,77 @@ function parseSIKSCsv(text, fileName) {
     headers = rawLines[0].split(sep).map(cleanStr);
   }
 
-  const findIndex = (keywords) => {
+  const findCol = (exactKeywords) => {
     return headers.findIndex(h => {
-      const k = normKey(h);
-      return keywords.some(kw => k.includes(normKey(kw)));
+      const clean = normKey(h);
+      return exactKeywords.some(kw => clean === normKey(kw) || clean.includes(normKey(kw)));
     });
   };
 
-  const colIdx = {
-    nikPengurus: findIndex(['NIKPENGURUS', 'NOKTP']),
-    pengurus: findIndex(['NAMAPENGURUS', 'PENGURUS', 'ORANGTUA']),
-    nisn: findIndex(['NISN', 'NOMORINDUK']),
-    siswa: findIndex(['NAMASISWA', 'NAMAANAK', 'SISWA']),
-    nikSiswa: findIndex(['NIKSISWA', 'NIKANAK']),
-    tingkat: findIndex(['TINGKAT', 'KELAS', 'ROMBEL']),
-    sekolah: findIndex(['NAMASEKOLAH', 'SEKOLAH', 'LEMBAGA']),
-    npsn: findIndex(['NPSN'])
-  };
+  // Pencarian indeks kolom presisi SIKS
+  let idxNikPengurus = findCol(['NIKPENGURUS', 'NIK_PENGURUS']);
+  let idxNamaPengurus = findCol(['NAMAPENGURUS', 'NAMA_PENGURUS']);
+  let idxNisn = findCol(['NISN']);
+  let idxNamaSiswa = findCol(['NAMASISWA', 'NAMA_SISWA', 'NAMAANAK']);
+  let idxNikSiswa = findCol(['NIKSISWA', 'NIK_SISWA']);
+  let idxTingkat = findCol(['TINGKAT', 'KELAS', 'ROMBEL']);
+  let idxSekolah = findCol(['NAMASEKOLAH', 'SEKOLAH']);
+  let idxNpsn = findCol(['NPSN']);
 
   allRows = [];
   groupedSchools = {};
 
   for (let i = headerIndex + 1; i < rawLines.length; i++) {
-    const line = rawLines[i];
-    if (!line) continue;
+    const cols = rawLines[i].split(sep).map(cleanStr);
+    if (cols.length < 5) continue;
 
-    const cols = line.split(sep).map(cleanStr);
+    // Ambil nilai mentah berdasarkan index terdeteksi (atau fallback posisi standar SIKS)
+    let nikPengurus = idxNikPengurus !== -1 ? cols[idxNikPengurus] : cols[1];
+    let namaPengurus = idxNamaPengurus !== -1 ? cols[idxNamaPengurus] : cols[2];
+    let nisn = idxNisn !== -1 ? cols[idxNisn] : cols[4];
+    let namaSiswa = idxNamaSiswa !== -1 ? cols[idxNamaSiswa] : cols[5];
+    let nikSiswa = idxNikSiswa !== -1 ? cols[idxNikSiswa] : cols[6];
+    let tingkat = idxTingkat !== -1 ? cols[idxTingkat] : cols[7];
+    let sekolah = idxSekolah !== -1 ? cols[idxSekolah] : '';
+    let npsn = idxNpsn !== -1 ? cols[idxNpsn] : '';
 
-    const nikPengurus = colIdx.nikPengurus !== -1 ? cols[colIdx.nikPengurus] : (cols[1] || '');
-    const pengurus = colIdx.pengurus !== -1 ? cols[colIdx.pengurus] : (cols[2] || '');
-    const nisn = colIdx.nisn !== -1 ? cols[colIdx.nisn] : (cols[4] || '');
-    const siswa = colIdx.siswa !== -1 ? cols[colIdx.siswa] : (cols[5] || '');
-    const nikSiswa = colIdx.nikSiswa !== -1 ? cols[colIdx.nikSiswa] : (cols[6] || '');
-    const tingkat = colIdx.tingkat !== -1 ? cols[colIdx.tingkat] : (cols[7] || '');
-    let sekolah = colIdx.sekolah !== -1 ? cols[colIdx.sekolah] : '';
-    let npsn = colIdx.npsn !== -1 ? cols[colIdx.npsn] : '';
+    // PROTEKSI PEMBETULAN OTOMATIS:
+    // Jika NAMA PENGURUS terisi angka NIK (16 digit) dan kolom NIK PENGURUS juga sama
+    if (/^\d{16}$/.test(namaPengurus) && cols[2] && !/^\d{16}$/.test(cols[2])) {
+      namaPengurus = cols[2];
+    }
+    // Jika NAMA SISWA terisi angka NIK (16 digit), geser ke kolom nama yang sebenarnya
+    if (/^\d{15,16}$/.test(namaSiswa)) {
+      // Cari kolom teks di dekatnya yang bukan angka murni
+      const textCol = cols.find((c, cIdx) => cIdx > 2 && cIdx < 8 && isNaN(c) && c.length > 2);
+      if (textCol) namaSiswa = textCol;
+    }
 
     if (!sekolah && metaSchool) sekolah = metaSchool;
     if (!npsn && metaNpsn) npsn = metaNpsn;
 
-    // Filter baris kosong & baris header yang berulang
-    const checkStr = normKey(pengurus + siswa + nisn);
-    if (!checkStr) continue;
-    if (checkStr.includes('NAMAPENGURUS') || checkStr.includes('TINGKATPENDIDIKAN') || checkStr.includes('NISN')) {
-      continue;
-    }
+    // Filter tanggal ekspor (seperti 2026-09-24) dan baris kosong/header
+    if (nikPengurus.startsWith('202') && nikPengurus.includes('-')) continue;
+    if (namaPengurus.startsWith('202') && namaPengurus.includes('-')) continue;
+    const test = normKey(namaPengurus + namaSiswa);
+    if (!test || test.includes('NAMAPENGURUS') || test.includes('TINGKATPENDIDIKAN')) continue;
 
     const rowObj = {
       nikPengurus: nikPengurus || '-',
-      pengurus: pengurus || '-',
+      pengurus: namaPengurus || '-',
       nisn: nisn || '-',
-      siswa: siswa || '-',
-      nikSiswa: nikSiswa || '-',
+      siswa: namaSiswa || '-',
       tingkat: tingkat || '-',
-      sekolah: sekolah || 'SEKOLAH',
-      npsn: npsn || '-'
+      sekolah: sekolah || 'SD NEGERI 1 LUNUK BAGANTUNG',
+      npsn: npsn || '30201517'
     };
 
     allRows.push(rowObj);
-
-    const schKey = rowObj.sekolah;
-    if (!groupedSchools[schKey]) groupedSchools[schKey] = [];
-    groupedSchools[schKey].push(rowObj);
+    const sName = rowObj.sekolah;
+    if (!groupedSchools[sName]) groupedSchools[sName] = [];
+    groupedSchools[sName].push(rowObj);
   }
 
-  // Update Statistik UI
   document.getElementById('statFileName').innerText = fileName;
   document.getElementById('statSchools').innerText = Object.keys(groupedSchools).length;
   document.getElementById('statRows').innerText = allRows.length;
@@ -291,63 +285,54 @@ function renderPreview() {
   table.innerHTML = html;
 }
 
-// Fungsi Menggambar Logo Vektor Resmi Kemensos langsung di PDF
+// Gambar Logo Kemensos Vector Resmi
 function drawKemensosLogo(doc, x, y, size) {
   doc.saveGraphicsState();
-  
-  // Lingkaran Dasar Biru Tua Khas Kemensos
   doc.setFillColor(15, 60, 130);
   doc.circle(x + size / 2, y + size / 2, size / 2, 'F');
-
-  // Sayap / Pita Kuning Emas
   doc.setFillColor(245, 180, 20);
   doc.ellipse(x + size / 2, y + size * 0.45, size * 0.38, size * 0.16, 'F');
-
-  // Daun / Kelopak Hijau Kesejahteraan
   doc.setFillColor(35, 155, 60);
   doc.circle(x + size * 0.35, y + size * 0.65, size * 0.12, 'F');
   doc.circle(x + size * 0.65, y + size * 0.65, size * 0.12, 'F');
-
-  // Bunga / Inti Merah Putih Tengah
   doc.setFillColor(220, 35, 35);
   doc.circle(x + size / 2, y + size * 0.52, size * 0.14, 'F');
   doc.setFillColor(255, 255, 255);
   doc.circle(x + size / 2, y + size * 0.52, size * 0.07, 'F');
-
   doc.restoreGraphicsState();
 }
 
 async function generatePDF() {
   const { jsPDF } = window.jspdf;
   const paper = document.getElementById('paperSize').value;
-  const mode = document.getElementById('reportMode').value;
   const monthsInput = document.getElementById('reportMonths').value.trim();
-  const signer = document.getElementById('signerName').value.trim();
+  const signer = document.getElementById('signerName').value.trim() || 'Andriadi, S.Kom';
   const nip = document.getElementById('signerNip').value.trim();
+  const locDate = document.getElementById('signerLocDate').value.trim() || 'Lunuk Bagantung';
 
-  const monthList = monthsInput ? monthsInput.split(',').map(m => m.trim().toUpperCase()) : ['BULAN 1', 'BULAN 2', 'BULAN 3'];
-  while (monthList.length < 3) monthList.push(`BULAN ${monthList.length + 1}`);
+  const mList = monthsInput ? monthsInput.split(',').map(m => m.trim().toUpperCase()) : ['OKTOBER', 'NOVEMBER', 'DESEMBER'];
+  while (mList.length < 3) mList.push(`BULAN ${mList.length + 1}`);
 
   const pageSize = paper === 'f4' ? [330, 210] : 'a4';
   const schoolKeys = Object.keys(groupedSchools);
 
   if (schoolKeys.length === 1) {
-    const doc = makeSchoolDoc(schoolKeys[0], groupedSchools[schoolKeys[0]], pageSize, mode, monthList, signer, nip);
-    doc.save(`Verifikasi_${schoolKeys[0].replace(/[^a-zA-Z0-9]/g, '_')}.pdf`);
+    const doc = buildOfficialDoc(schoolKeys[0], groupedSchools[schoolKeys[0]], pageSize, mList, signer, nip, locDate);
+    doc.save(`Form_Verifikasi_${schoolKeys[0].replace(/[^a-zA-Z0-9]/g, '_')}.pdf`);
   } else {
     btnPdf.innerText = "Membuat ZIP...";
     btnPdf.disabled = true;
     const zip = new JSZip();
 
     schoolKeys.forEach(sch => {
-      const doc = makeSchoolDoc(sch, groupedSchools[sch], pageSize, mode, monthList, signer, nip);
-      zip.file(`Verifikasi_${sch.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`, doc.output('blob'));
+      const doc = buildOfficialDoc(sch, groupedSchools[sch], pageSize, mList, signer, nip, locDate);
+      zip.file(`Form_Verifikasi_${sch.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`, doc.output('blob'));
     });
 
     const zipBlob = await zip.generateAsync({ type: 'blob' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(zipBlob);
-    a.download = `Laporan_Fasdik_${Date.now()}.zip`;
+    a.download = `Form_Verifikasi_Pendidikan_${Date.now()}.zip`;
     a.click();
 
     btnPdf.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Generate PDF`;
@@ -355,96 +340,138 @@ async function generatePDF() {
   }
 }
 
-function makeSchoolDoc(schoolName, list, pageSize, mode, months, signer, nip) {
+function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, locDate) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: pageSize });
 
-  // Urutkan kelas secara natural
   list.sort((a, b) => a.tingkat.localeCompare(b.tingkat, undefined, { numeric: true }));
   const npsn = list[0].npsn || '-';
 
-  // Susun data tabel
-  const body = list.map((r, i) => {
-    let row = [i + 1, r.nikPengurus, r.pengurus, r.nisn, r.siswa];
-    if (mode === 'perbulan') row.push(r.nikSiswa);
-    row.push(r.tingkat, '', '', '');
-    return row;
-  });
-
-  let head = ['NO', 'NIK PENGURUS', 'NAMA PENGURUS', 'NISN', 'NAMA SISWA'];
-  if (mode === 'perbulan') head.push('NIK SISWA');
-  head.push('TINGKAT', months[0], months[1], months[2]);
-
-  // Gambar Kop Surat Kemensos
-  drawKemensosLogo(doc, 14, 8, 14);
-
+  // HEADER KEMENSOS & LOGO
+  drawKemensosLogo(doc, 14, 8, 12);
   doc.setFontSize(10);
   doc.setFont('helvetica', 'bold');
-  doc.text('KEMENTERIAN SOSIAL REPUBLIK INDONESIA', 31, 12);
+  doc.text('KEMENTERIAN SOSIAL REPUBLIK INDONESIA', 29, 12);
   doc.setFontSize(11);
-  doc.text(`LEMBAR VERIFIKASI FASILITAS PENDIDIKAN (${months.join(' - ')})`, 31, 17);
+  doc.text(`LEMBAR VERIFIKASI FASILITAS PENDIDIKAN (${months.join(' - ')})`, 29, 17);
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'normal');
-  doc.text(`SEKOLAH: ${schoolName}     |     NPSN: ${npsn}`, 31, 22);
+  doc.text(`SEKOLAH: ${schoolName}     |     NPSN: ${npsn}`, 29, 22);
 
-  // Garis Pemisah Kop
-  doc.setLineWidth(0.4);
+  doc.setLineWidth(0.3);
   doc.line(14, 25, doc.internal.pageSize.width - 14, 25);
 
-  let colStyles = {
-    0: { cellWidth: 8, halign: 'center' },   // NO
-    1: { cellWidth: 32, halign: 'center' },  // NIK PENGURUS
-    2: { cellWidth: 'auto' },                // NAMA PENGURUS
-    3: { cellWidth: 24, halign: 'center' },  // NISN
-    4: { cellWidth: 'auto' },                // NAMA SISWA
-    [head.length - 4]: { cellWidth: 20, halign: 'center' }, // TINGKAT
-    [head.length - 3]: { cellWidth: 20, halign: 'center' }, // BLN 1
-    [head.length - 2]: { cellWidth: 20, halign: 'center' }, // BLN 2
-    [head.length - 1]: { cellWidth: 20, halign: 'center' }  // BLN 3
+  // HEADER TABEL BERTINGKAT (3 LEVEL)
+  const headRow1 = [
+    { content: 'NO', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
+    { content: 'NIK PENGURUS', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
+    { content: 'NAMA PENGURUS', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
+    { content: 'NISN', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
+    { content: 'NAMA SISWA', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
+    { content: 'TINGKAT', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
+    { content: months[0], colSpan: 5, styles: { halign: 'center', valign: 'middle' } },
+    { content: months[1], colSpan: 5, styles: { halign: 'center', valign: 'middle' } },
+    { content: months[2], colSpan: 5, styles: { halign: 'center', valign: 'middle' } },
+    { content: 'NAMA PENDAMPING', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } }
+  ];
+
+  const headRow2 = [
+    { content: 'Hari Efektif: ......', colSpan: 5, styles: { halign: 'center', valign: 'middle', fontSize: 6.5 } },
+    { content: 'Hari Efektif: ......', colSpan: 5, styles: { halign: 'center', valign: 'middle', fontSize: 6.5 } },
+    { content: 'Hari Efektif: ......', colSpan: 5, styles: { halign: 'center', valign: 'middle', fontSize: 6.5 } }
+  ];
+
+  const headRow3 = [
+    { content: 'ALPA', styles: { halign: 'center', fontSize: 5.5 } },
+    { content: 'IZIN', styles: { halign: 'center', fontSize: 5.5 } },
+    { content: 'SAKIT', styles: { halign: 'center', fontSize: 5.5 } },
+    { content: 'JML', styles: { halign: 'center', fontSize: 5.5 } },
+    { content: '%', styles: { halign: 'center', fontSize: 5.5 } },
+
+    { content: 'ALPA', styles: { halign: 'center', fontSize: 5.5 } },
+    { content: 'IZIN', styles: { halign: 'center', fontSize: 5.5 } },
+    { content: 'SAKIT', styles: { halign: 'center', fontSize: 5.5 } },
+    { content: 'JML', styles: { halign: 'center', fontSize: 5.5 } },
+    { content: '%', styles: { halign: 'center', fontSize: 5.5 } },
+
+    { content: 'ALPA', styles: { halign: 'center', fontSize: 5.5 } },
+    { content: 'IZIN', styles: { halign: 'center', fontSize: 5.5 } },
+    { content: 'SAKIT', styles: { halign: 'center', fontSize: 5.5 } },
+    { content: 'JML', styles: { halign: 'center', fontSize: 5.5 } },
+    { content: '%', styles: { halign: 'center', fontSize: 5.5 } }
+  ];
+
+  const body = list.map((r, i) => [
+    i + 1,
+    r.nikPengurus,
+    r.pengurus,
+    r.nisn,
+    r.siswa,
+    r.tingkat,
+    '', '', '', '', '',
+    '', '', '', '', '',
+    '', '', '', '', '',
+    signer
+  ]);
+
+  const colStyles = {
+    0: { cellWidth: 8, halign: 'center' },
+    1: { cellWidth: 28, halign: 'center' },
+    2: { cellWidth: 'auto' },
+    3: { cellWidth: 22, halign: 'center' },
+    4: { cellWidth: 'auto' },
+    5: { cellWidth: 16, halign: 'center' },
+    6:  { cellWidth: 8.5, halign: 'center' }, 7:  { cellWidth: 8.5, halign: 'center' }, 8:  { cellWidth: 8.5, halign: 'center' }, 9:  { cellWidth: 8.5, halign: 'center' }, 10: { cellWidth: 7.5, halign: 'center' },
+    11: { cellWidth: 8.5, halign: 'center' }, 12: { cellWidth: 8.5, halign: 'center' }, 13: { cellWidth: 8.5, halign: 'center' }, 14: { cellWidth: 8.5, halign: 'center' }, 15: { cellWidth: 7.5, halign: 'center' },
+    16: { cellWidth: 8.5, halign: 'center' }, 17: { cellWidth: 8.5, halign: 'center' }, 18: { cellWidth: 8.5, halign: 'center' }, 19: { cellWidth: 8.5, halign: 'center' }, 20: { cellWidth: 7.5, halign: 'center' },
+    21: { cellWidth: 28, halign: 'center' }
   };
 
   doc.autoTable({
-    startY: 28,
-    head: [head],
+    startY: 27,
+    head: [headRow1, headRow2, headRow3],
     body: body,
-    theme: 'grid',
-    styles: { fontSize: 7.5, cellPadding: 2, lineColor: [160, 160, 160], lineWidth: 0.2 },
-    headStyles: { fillColor: [240, 240, 240], textColor: [20, 20, 20], fontStyle: 'bold', halign: 'center' },
+    theme: 'plain',
+    tableLineColor: [0, 0, 0],
+    tableLineWidth: 0.25,
+    styles: { fontSize: 7, cellPadding: 1.5, lineColor: [0, 0, 0], lineWidth: 0.2, textColor: [0, 0, 0] },
+    headStyles: { fillColor: [248, 248, 248], textColor: [0, 0, 0], fontStyle: 'bold', lineColor: [0, 0, 0], lineWidth: 0.25 },
     columnStyles: colStyles,
     didDrawPage: (data) => {
-      // Header ulang di lembar berikutnya jika halaman > 1
-      if (doc.internal.getNumberOfPages() > 1) {
-        drawKemensosLogo(doc, 14, 6, 10);
-        doc.setFontSize(8);
-        doc.setFont('helvetica', 'bold');
-        doc.text(`LEMBAR VERIFIKASI FASILITAS PENDIDIKAN - ${schoolName}`, 27, 12);
-      }
-      // Footer Nomor Halaman
       const total = doc.internal.getNumberOfPages();
       doc.setFontSize(7.5);
       doc.setFont('helvetica', 'normal');
-      doc.text(`Halaman ${total}`, doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 6);
+      doc.text(`Hal. ${total}`, doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 5);
     }
   });
 
-  // Tanda Tangan Pendamping & NIP
-  if (signer) {
-    const finalY = doc.lastAutoTable.finalY || 150;
-    const pageH = doc.internal.pageSize.height;
-    if (finalY + 34 > pageH) doc.addPage();
+  // TANDA TANGAN DI BAWAH (DUA SISI: KEPALA SEKOLAH & PENDAMPING)
+  const finalY = doc.lastAutoTable.finalY || 140;
+  const pageH = doc.internal.pageSize.height;
+  if (finalY + 36 > pageH) doc.addPage();
 
-    const yPos = finalY + 34 > pageH ? 22 : finalY + 8;
-    const xPos = doc.internal.pageSize.width - 75;
+  const yPos = finalY + 36 > pageH ? 22 : finalY + 8;
+  const xLeft = 25;
+  const xRight = doc.internal.pageSize.width - 75;
 
-    doc.setFontSize(8.5);
+  doc.setFontSize(8.5);
+  doc.setFont('helvetica', 'normal');
+
+  // Sisi Kiri: Mengetahui Pihak Sekolah
+  doc.text('Mengetahui,', xLeft, yPos + 4);
+  doc.text(`Kepala ${schoolName}`, xLeft, yPos + 8);
+  doc.text('( .................................................... )', xLeft, yPos + 26);
+  doc.text('NIP. .............................................', xLeft, yPos + 30);
+
+  // Sisi Kanan: Petugas Pendamping
+  const todayDate = new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+  doc.text(`${locDate}, ${todayDate}`, xRight, yPos);
+  doc.text('Petugas Verifikasi,', xRight, yPos + 4);
+  doc.setFont('helvetica', 'bold');
+  doc.text(signer, xRight, yPos + 26);
+  if (nip) {
     doc.setFont('helvetica', 'normal');
-    doc.text('Petugas Verifikasi,', xPos, yPos);
-    doc.setFont('helvetica', 'bold');
-    doc.text(signer, xPos, yPos + 18);
-    if (nip) {
-      doc.setFont('helvetica', 'normal');
-      doc.text(`NIP. ${nip}`, xPos, yPos + 22);
-    }
+    doc.text(`NIP. ${nip}`, xRight, yPos + 30);
   }
 
   return doc;
@@ -459,7 +486,6 @@ function exportExcel() {
       "NAMA PENGURUS": r.pengurus,
       "NISN": r.nisn,
       "NAMA SISWA": r.siswa,
-      "NIK SISWA": r.nikSiswa,
       "TINGKAT": r.tingkat,
       "SEKOLAH": r.sekolah,
       "NPSN": r.npsn
@@ -468,7 +494,7 @@ function exportExcel() {
     const sheetName = sch.substring(0, 30).replace(/[:\\\/\?\*\[\]]/g, '');
     XLSX.utils.book_append_sheet(wb, ws, sheetName);
   });
-  XLSX.writeFile(wb, `Verifikasi_SIKS_${Date.now()}.xlsx`);
+  XLSX.writeFile(wb, `Form_Verifikasi_${Date.now()}.xlsx`);
 }
 </script>
 </body>
