@@ -71,7 +71,7 @@
 
 <div class="container">
   <header>
-    <div class="badge">Official Kemensos Generator</div>
+    <div class="badge">Official Kemensos Generator v2.5</div>
     <h1>Form Verifikasi Komitmen Pendidikan</h1>
     <p>Otomasi CSV SIKS Fasdik ke Lembar Verifikasi Resmi (Kemensos)</p>
   </header>
@@ -206,56 +206,42 @@ function togglePeriodType() {
   }
 }
 
-// Inisialisasi Logo Kemensos Resmi via Canvas
-function createKemensosLogoImage() {
-  const canvas = document.createElement('canvas');
-  canvas.width = 300;
-  canvas.height = 300;
-  const ctx = canvas.getContext('2d');
-  ctx.clearRect(0, 0, 300, 300);
+// RENDER LOGO RESMI KEMENSOS VECTOR (HIGH RESOLUTION & NO CLIPPING)
+function initKemensosVectorLogo() {
+  const svgString = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 500" width="600" height="600">
+    <!-- FIGUR BIRU (ORANG MELOMPAT) -->
+    <circle cx="160" cy="85" r="35" fill="#1464B4"/>
+    <path d="M110,135 C155,150 195,190 205,280 C180,215 150,175 110,135 Z" fill="#1464B4"/>
 
-  // Mangkuk Kuning
-  ctx.fillStyle = '#FAB414';
-  ctx.beginPath();
-  ctx.moveTo(50, 140);
-  ctx.bezierCurveTo(70, 240, 230, 240, 250, 140);
-  ctx.bezierCurveTo(210, 215, 90, 215, 50, 140);
-  ctx.fill();
+    <!-- 3 HELAI SAYAP/DAUN HIJAU MENUJU KE KANAN ATAS -->
+    <path d="M205,280 C235,160 300,75 390,25 C355,85 290,175 205,280 Z" fill="#198C3C"/>
+    <path d="M215,285 C255,185 345,120 440,85 C390,140 310,215 215,285 Z" fill="#198C3C"/>
+    <path d="M225,295 C280,215 385,175 480,150 C415,200 325,255 225,295 Z" fill="#198C3C"/>
 
-  // Figur Biru
-  ctx.fillStyle = '#1464B4';
-  ctx.beginPath();
-  ctx.arc(95, 60, 22, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.moveTo(70, 88);
-  ctx.bezierCurveTo(100, 100, 120, 115, 120, 175);
-  ctx.bezierCurveTo(110, 130, 95, 110, 70, 88);
-  ctx.fill();
+    <!-- TANGAN / MANGKUK EMAS BERGELOMBANG (BAWAH) -->
+    <path d="M95,245 C135,420 375,420 435,240 C395,350 255,395 195,350 C175,335 155,310 95,245 Z" fill="#FAB414"/>
+    <!-- LAYER LIPATAN INTERIOR MANGKUK -->
+    <path d="M220,290 C265,305 320,290 355,240 C335,275 285,295 240,285 Z" fill="#E6A00A"/>
+    <path d="M260,330 C305,340 365,310 395,240 C375,290 325,325 280,315 Z" fill="#E6A00A"/>
+  </svg>`;
 
-  // 3 Daun Hijau
-  ctx.fillStyle = '#198C3C';
-  ctx.beginPath();
-  ctx.moveTo(125, 160);
-  ctx.bezierCurveTo(135, 90, 180, 45, 235, 20);
-  ctx.bezierCurveTo(215, 55, 175, 105, 125, 160);
-  ctx.fill();
+  const img = new Image();
+  const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
 
-  ctx.beginPath();
-  ctx.moveTo(130, 165);
-  ctx.bezierCurveTo(145, 105, 200, 70, 255, 55);
-  ctx.bezierCurveTo(230, 85, 185, 120, 130, 165);
-  ctx.fill();
-
-  ctx.beginPath();
-  ctx.moveTo(135, 170);
-  ctx.bezierCurveTo(155, 120, 215, 95, 275, 90);
-  ctx.bezierCurveTo(245, 115, 195, 135, 135, 170);
-  ctx.fill();
-
-  logoKemensosDataUrl = canvas.toDataURL('image/png');
+  img.onload = function() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 600;
+    canvas.height = 600;
+    const ctx = canvas.getContext('2d');
+    ctx.clearRect(0, 0, 600, 600);
+    ctx.drawImage(img, 0, 0);
+    logoKemensosDataUrl = canvas.toDataURL('image/png');
+    URL.revokeObjectURL(url);
+  };
+  img.src = url;
 }
-createKemensosLogoImage();
+initKemensosVectorLogo();
 
 const fileInput = document.getElementById('csvFile');
 const dz = document.getElementById('dz');
@@ -413,19 +399,18 @@ function renderPreview() {
   table.innerHTML = html;
 }
 
-// Fungsi menggambar Watermark Logo Kemensos di tengah halaman PDF
+// GAMBAR WATERMARK DI TENGAH HALAMAN PDF (LEMBUT & TIDAK TERPOTONG)
 function drawKemensosBackground(doc) {
   if (!logoKemensosDataUrl) return;
   const pageW = doc.internal.pageSize.width;
   const pageH = doc.internal.pageSize.height;
-  const bgSize = 115; // Ukuran watermark tengah (115 mm)
+  const bgSize = 120; // 120 mm persegi proporsional
   const x = (pageW - bgSize) / 2;
-  const y = (pageH - bgSize) / 2;
+  const y = (pageH - bgSize) / 2 + 5;
 
   doc.saveGraphicsState();
-  // Transparansi lembut 10% agar data tabel tetap terbaca jelas
   if (doc.GState) {
-    doc.setGState(new doc.GState({ opacity: 0.10 }));
+    doc.setGState(new doc.GState({ opacity: 0.08 })); // 8% Opacity sangat halus
   }
   doc.addImage(logoKemensosDataUrl, 'PNG', x, y, bgSize, bgSize);
   doc.restoreGraphicsState();
@@ -479,10 +464,10 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
   list.sort((a, b) => a.tingkat.localeCompare(b.tingkat, undefined, { numeric: true }));
   const npsn = list[0].npsn || '-';
 
-  // 1. Gambar Watermark Background Logo Kemensos Halaman 1
+  // 1. Watermark Kemensos Halaman Pertama
   drawKemensosBackground(doc);
 
-  // 2. Logo Kemensos Tajam di Pojok Kiri Atas (Kop)
+  // 2. Logo Kemensos Tajam di Pojok Kiri Atas
   if (logoKemensosDataUrl) {
     doc.addImage(logoKemensosDataUrl, 'PNG', 14, 6, 14, 14);
   }
@@ -499,7 +484,7 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
   doc.setLineWidth(0.4);
   doc.line(14, 23.5, doc.internal.pageSize.width - 14, 23.5);
 
-  // HEADER TABEL SESUAI PERIODE
+  // KONSTRUKSI HEADER TABEL
   const headRow1 = [
     { content: 'NO', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
     { content: 'NIK PENGURUS', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
@@ -570,7 +555,6 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
     headStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0], fontStyle: 'bold', lineColor: [0, 0, 0], lineWidth: 0.25 },
     columnStyles: colStyles,
     didDrawPage: (data) => {
-      // Gambar Watermark Background jika bertambah halaman baru
       if (data.pageNumber > 1) {
         drawKemensosBackground(doc);
       }
