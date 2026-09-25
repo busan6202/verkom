@@ -413,6 +413,24 @@ function renderPreview() {
   table.innerHTML = html;
 }
 
+// Fungsi menggambar Watermark Logo Kemensos di tengah halaman PDF
+function drawKemensosBackground(doc) {
+  if (!logoKemensosDataUrl) return;
+  const pageW = doc.internal.pageSize.width;
+  const pageH = doc.internal.pageSize.height;
+  const bgSize = 115; // Ukuran watermark tengah (115 mm)
+  const x = (pageW - bgSize) / 2;
+  const y = (pageH - bgSize) / 2;
+
+  doc.saveGraphicsState();
+  // Transparansi lembut 10% agar data tabel tetap terbaca jelas
+  if (doc.GState) {
+    doc.setGState(new doc.GState({ opacity: 0.10 }));
+  }
+  doc.addImage(logoKemensosDataUrl, 'PNG', x, y, bgSize, bgSize);
+  doc.restoreGraphicsState();
+}
+
 async function generatePDF() {
   const { jsPDF } = window.jspdf;
   const paper = document.getElementById('paperSize').value;
@@ -461,6 +479,10 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
   list.sort((a, b) => a.tingkat.localeCompare(b.tingkat, undefined, { numeric: true }));
   const npsn = list[0].npsn || '-';
 
+  // 1. Gambar Watermark Background Logo Kemensos Halaman 1
+  drawKemensosBackground(doc);
+
+  // 2. Logo Kemensos Tajam di Pojok Kiri Atas (Kop)
   if (logoKemensosDataUrl) {
     doc.addImage(logoKemensosDataUrl, 'PNG', 14, 6, 14, 14);
   }
@@ -477,7 +499,7 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
   doc.setLineWidth(0.4);
   doc.line(14, 23.5, doc.internal.pageSize.width - 14, 23.5);
 
-  // KONSTRUKSI HEADER TABEL SESUAI JUMLAH BULAN
+  // HEADER TABEL SESUAI PERIODE
   const headRow1 = [
     { content: 'NO', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
     { content: 'NIK PENGURUS', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
@@ -517,7 +539,6 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
     return row;
   });
 
-  // PENGATURAN LEBAR KOLOM
   const isSingle = (months.length === 1);
   let colStyles = {
     0: { cellWidth: 8, halign: 'center' },
@@ -549,6 +570,10 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
     headStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0], fontStyle: 'bold', lineColor: [0, 0, 0], lineWidth: 0.25 },
     columnStyles: colStyles,
     didDrawPage: (data) => {
+      // Gambar Watermark Background jika bertambah halaman baru
+      if (data.pageNumber > 1) {
+        drawKemensosBackground(doc);
+      }
       const total = doc.internal.getNumberOfPages();
       doc.setFontSize(7.5);
       doc.setFont('helvetica', 'normal');
@@ -558,7 +583,10 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
 
   const finalY = doc.lastAutoTable.finalY || 140;
   const pageH = doc.internal.pageSize.height;
-  if (finalY + 34 > pageH) doc.addPage();
+  if (finalY + 34 > pageH) {
+    doc.addPage();
+    drawKemensosBackground(doc);
+  }
 
   const yPos = finalY + 34 > pageH ? 22 : finalY + 10;
   const xLeft = 25;
