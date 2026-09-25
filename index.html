@@ -19,10 +19,12 @@
       --primary: #38bdf8;
       --primary-hover: #0ea5e9;
       --accent: #10b981;
+      --tip: #f59e0b;
+      --tip-hover: #d97706;
       --radius: 8px;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 24px 16px; display: flex; justify-content: center; }
+    body { background-color: var(--bg); color: var(--text); padding: 24px 16px 80px 16px; display: flex; justify-content: center; }
     .container { width: 100%; max-width: 950px; display: flex; flex-direction: column; gap: 16px; }
     header { text-align: center; }
     header h1 { font-size: 1.5rem; font-weight: 700; color: #fff; }
@@ -101,13 +103,81 @@
     table { width: 100%; border-collapse: collapse; font-size: 0.75rem; text-align: left; }
     th, td { padding: 7px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; }
     th { background: #0f172a; color: var(--primary); position: sticky; top: 0; }
+
+    /* ===== FLOATING ACTION BUTTON (TRAKTEER) ===== */
+    .floating-tip-container {
+      position: fixed;
+      right: 20px;
+      bottom: 24px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .floating-tip-popover {
+      visibility: hidden;
+      opacity: 0;
+      width: 260px;
+      background: #1e293b;
+      border: 1px solid var(--tip);
+      color: #f8fafc;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      line-height: 1.45;
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.6);
+      margin-bottom: 10px;
+      transform: translateY(6px);
+      transition: all 0.25s ease-in-out;
+      pointer-events: none;
+    }
+    .floating-tip-popover strong { color: var(--tip); }
+    .floating-tip-container:hover .floating-tip-popover {
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .floating-tip-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      background: var(--tip);
+      color: #0f172a;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 99px;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4);
+      border: 1.5px solid #fde68a;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .floating-tip-btn:hover {
+      background: var(--tip-hover);
+      color: #fff;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(245, 158, 11, 0.6);
+    }
+    .floating-tip-pulse {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      box-shadow: 0 0 0 rgba(16, 185, 129, 0.7);
+      animation: tipPulse 2s infinite;
+    }
+    @keyframes tipPulse {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+      70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
   </style>
 </head>
 <body>
 
 <div class="container">
   <header>
-    <div class="badge">Official Generator Pro Multi-Batch v3.2</div>
+    <div class="badge">Official Generator Pro Multi-Batch v3.3</div>
     <h1>Form Verifikasi Komitmen Pendidikan</h1>
     <p>Otomasi CSV SIKS Fasdik ke Lembar Verifikasi Resmi (Kemensos)</p>
   </header>
@@ -124,7 +194,7 @@
     <div class="file-chip-wrap" id="fileListWrap" style="display:none;"></div>
 
     <div class="stats-bar" id="statsBar" style="display:none;">
-      <span>File: <strong id="statFileName" style="color:#fff;">0 File</strong></span>
+      <span>File: <strong id="statFileName" style="color:#fff;">0 Berkas</strong></span>
       <span>Sekolah: <strong id="statSchools" style="color:#fff;">0</strong></span>
       <span>Total Siswa Valid: <strong id="statRows" style="color:#fff;">0</strong></span>
     </div>
@@ -222,6 +292,21 @@
       </button>
     </div>
   </div>
+</div>
+
+<!-- ===== FLOATING TRAKTEER BUTTON (SEBELAH KANAN MELAYANG) ===== -->
+<div class="floating-tip-container">
+  <div class="floating-tip-popover">
+    <strong>Terbantu dan hemat waktu berjam-jam?</strong><br>
+    Pekerjaan selesai dalam hitungan detik tanpa repot edit manual! Jika tools ini sangat bermanfaat, dukung developer dengan traktir secangkir kopi agar aplikasi ini terus aktif &amp; berkembang untuk kita semua ☕
+  </div>
+  <a href="https://trakteer.id/bukit_santuai_korcam/tip" target="_blank" rel="noopener noreferrer" class="floating-tip-btn" title="Dukung Pengembang">
+    <span class="floating-tip-pulse"></span>
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/>
+    </svg>
+    <span>Traktir Kopi</span>
+  </a>
 </div>
 
 <script>
@@ -332,7 +417,6 @@ function handleMultipleFiles(files) {
 
   dzText.innerText = `Memproses ${uploadedFiles.length} berkas CSV...`;
 
-  // Tampilkan chip nama berkas
   fileListWrap.innerHTML = uploadedFiles.map(f => `
     <div class="file-chip">
       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
@@ -344,7 +428,6 @@ function handleMultipleFiles(files) {
   allRows = [];
   groupedSchools = {};
 
-  // Baca seluruh file secara paralel
   const promises = uploadedFiles.map(file => {
     return new Promise((resolve) => {
       const reader = new FileReader();
@@ -456,7 +539,6 @@ function parseSIKSCsvContent(text, fileName) {
     const test = normKey(namaPengurus + namaSiswa);
     if (!test || test.includes('NAMAPENGURUS') || test.includes('TINGKATPENDIDIKAN')) continue;
 
-    // Deduplikasi berdasar NISN
     if (nisn && allRows.some(r => r.nisn === nisn && r.nisn !== '-')) continue;
 
     const rowObj = {
@@ -561,10 +643,8 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
   list.sort((a, b) => a.tingkat.localeCompare(b.tingkat, undefined, { numeric: true }));
   const npsn = list[0].npsn || '-';
 
-  // Watermark
   drawDynamicWatermark(doc);
 
-  // Logo Kop Kiri Atas
   let textLeftOffset = 14;
   if (customLogoData) {
     const kopH = 15;
