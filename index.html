@@ -72,68 +72,78 @@
       flex-direction: column; 
       gap: 20px; 
     }
-    
-    /* Top Bar */
-    .top-bar {
+
+    /* ===== FLOATING ACTION BAR KANAN ATAS (VERTIKAL) ===== */
+    .floating-top-right {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .badge-ani {
-      display: inline-flex;
+      flex-direction: column;
       align-items: center;
       gap: 8px;
-      padding: 6px 14px;
-      border-radius: 99px;
       background: var(--panel);
+      padding: 8px 6px;
+      border-radius: 99px;
       border: 1px solid var(--border);
-      font-size: 0.75rem;
-      font-weight: 600;
-      box-shadow: var(--shadow);
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15), 0 8px 10px -6px rgba(0,0,0,0.1);
     }
-    .badge-ani-dot {
-      width: 7px;
-      height: 7px;
+    .floating-btn-v {
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
-      background: var(--accent);
-      animation: pulseDot 2s infinite;
-    }
-    @keyframes pulseDot {
-      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4); }
-      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(22, 163, 74, 0); }
-      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
-    }
-
-    /* Switcher Tema Micro-Animated */
-    .theme-switcher-ani {
-      display: inline-flex;
-      padding: 3px;
-      border-radius: 99px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      gap: 3px;
-    }
-    .theme-btn-ani {
-      border: none;
+      border: 1px solid transparent;
       background: transparent;
-      padding: 6px 12px;
-      border-radius: 99px;
-      font-size: 0.75rem;
-      font-weight: 600;
       color: var(--text-muted);
       cursor: pointer;
-      display: inline-flex;
+      display: flex;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      position: relative;
     }
-    .theme-btn-ani:hover { color: var(--text); }
-    .theme-btn-ani.active {
+    .floating-btn-v:hover {
+      color: var(--text);
+      background: var(--bg);
+      transform: scale(1.08);
+    }
+    .floating-btn-v.active {
       background: var(--primary);
       color: #ffffff;
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+    }
+    .floating-btn-v i {
+      font-size: 1.1rem;
+    }
+    .floating-divider-v {
+      width: 20px;
+      height: 1px;
+      background: var(--border);
+      margin: 2px 0;
+    }
+    /* Tooltip Hover */
+    .floating-btn-v::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      right: 44px;
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateX(4px);
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow);
+    }
+    .floating-btn-v:hover::after {
+      opacity: 1;
+      transform: translateX(0);
     }
 
     header { text-align: left; }
@@ -430,28 +440,37 @@
 </head>
 <body oncontextmenu="return false;">
 
+<!-- ===== FLOATING MENU KANAN ATAS (VERTIKAL) ===== -->
+<div class="floating-top-right">
+  <!-- Pilihan Mode Siang/Malam -->
+  <button class="floating-btn-v active" id="btnThemeAuto" data-tooltip="Mode Auto (Zona Waktu)" onclick="setAppTheme('auto')">
+    <i class="ti ti-clock-play"></i>
+  </button>
+  <button class="floating-btn-v" id="btnThemeLight" data-tooltip="Mode Siang (Terang)" onclick="setAppTheme('light')">
+    <i class="ti ti-sun"></i>
+  </button>
+  <button class="floating-btn-v" id="btnThemeDark" data-tooltip="Mode Malam (Gelap)" onclick="setAppTheme('dark')">
+    <i class="ti ti-moon"></i>
+  </button>
+
+  <div class="floating-divider-v"></div>
+
+  <!-- Pilihan Zona Waktu Indonesia -->
+  <button class="floating-btn-v active" id="btnZoneAuto" data-tooltip="Zona: Auto Device" onclick="setIndonesiaZone('AUTO')">
+    <i class="ti ti-map-pin"></i>
+  </button>
+  <button class="floating-btn-v" id="btnZoneWIB" data-tooltip="Zona: WIB (UTC+7)" onclick="setIndonesiaZone('WIB')">
+    WIB
+  </button>
+  <button class="floating-btn-v" id="btnZoneWITA" data-tooltip="Zona: WITA (UTC+8)" onclick="setIndonesiaZone('WITA')">
+    WTA
+  </button>
+  <button class="floating-btn-v" id="btnZoneWIT" data-tooltip="Zona: WIT (UTC+9)" onclick="setIndonesiaZone('WIT')">
+    WIT
+  </button>
+</div>
+
 <div class="container">
-  <!-- Top Bar -->
-  <div class="top-bar">
-    <div class="badge-ani">
-      <div class="badge-ani-dot"></div>
-      <span id="zoneBadgeText">WIB Auto Theme</span>
-    </div>
-
-    <!-- Switcher Tema Tabler Icons -->
-    <div class="theme-switcher-ani" id="themeSwitcher">
-      <button class="theme-btn-ani active" data-mode="auto" onclick="setAppTheme('auto')">
-        <i class="ti ti-device-laptop"></i> Auto
-      </button>
-      <button class="theme-btn-ani" data-mode="light" onclick="setAppTheme('light')">
-        <i class="ti ti-sun"></i> Light
-      </button>
-      <button class="theme-btn-ani" data-mode="dark" onclick="setAppTheme('dark')">
-        <i class="ti ti-moon"></i> Dark
-      </button>
-    </div>
-  </div>
-
   <header>
     <h1>Form Verifikasi Komitmen Pendidikan</h1>
     <p>Otomasi CSV SIKS Fasdik ke Lembar Verifikasi Resmi (Kemensos)</p>
@@ -591,43 +610,50 @@
   </a>
 </div>
 
-<!-- Logika Tema Zona Waktu Indonesia -->
+<!-- Logika Floating Tema & Zona Waktu Indonesia -->
 <script>
 let currentThemeMode = localStorage.getItem('theme_preference') || 'auto';
+let currentZoneMode = localStorage.getItem('zone_preference') || 'AUTO';
 
-function getIndonesiaHour() {
-  return new Date().getHours();
+function getZoneHour() {
+  const d = new Date();
+  const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+  
+  if (currentZoneMode === 'WIB') {
+    return new Date(utc + (3600000 * 7)).getHours();
+  } else if (currentZoneMode === 'WITA') {
+    return new Date(utc + (3600000 * 8)).getHours();
+  } else if (currentZoneMode === 'WIT') {
+    return new Date(utc + (3600000 * 9)).getHours();
+  }
+  // Auto: jam lokal perangkat pengguna
+  return d.getHours();
 }
 
 function applyTheme() {
   const body = document.body;
-  const hour = getIndonesiaHour();
-  const badgeText = document.getElementById('zoneBadgeText');
-
-  const tzOffset = -nowOffsetMinutes() / 60;
-  let zoneLabel = "WIB";
-  if (tzOffset === 8) zoneLabel = "WITA";
-  if (tzOffset === 9) zoneLabel = "WIT";
+  const hour = getZoneHour();
 
   if (currentThemeMode === 'auto') {
+    // Siang: 06.00 - 17.59 | Malam: 18.00 - 05.59
     const isNight = (hour >= 18 || hour < 6);
     body.classList.toggle('dark-mode', isNight);
-    if (badgeText) badgeText.innerText = `${zoneLabel} AUTO (${isNight ? 'NIGHT' : 'DAY'})`;
   } else if (currentThemeMode === 'dark') {
     body.classList.add('dark-mode');
-    if (badgeText) badgeText.innerText = `DARK (${zoneLabel})`;
   } else {
     body.classList.remove('dark-mode');
-    if (badgeText) badgeText.innerText = `LIGHT (${zoneLabel})`;
   }
 
-  document.querySelectorAll('.theme-btn-ani').forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('data-mode') === currentThemeMode);
-  });
-}
+  // Update Tombol Tema
+  document.getElementById('btnThemeAuto').classList.toggle('active', currentThemeMode === 'auto');
+  document.getElementById('btnThemeLight').classList.toggle('active', currentThemeMode === 'light');
+  document.getElementById('btnThemeDark').classList.toggle('active', currentThemeMode === 'dark');
 
-function nowOffsetMinutes() {
-  return new Date().getTimezoneOffset();
+  // Update Tombol Zona
+  document.getElementById('btnZoneAuto').classList.toggle('active', currentZoneMode === 'AUTO');
+  document.getElementById('btnZoneWIB').classList.toggle('active', currentZoneMode === 'WIB');
+  document.getElementById('btnZoneWITA').classList.toggle('active', currentZoneMode === 'WITA');
+  document.getElementById('btnZoneWIT').classList.toggle('active', currentZoneMode === 'WIT');
 }
 
 function setAppTheme(mode) {
@@ -636,8 +662,15 @@ function setAppTheme(mode) {
   applyTheme();
 }
 
+function setIndonesiaZone(zone) {
+  currentZoneMode = zone;
+  localStorage.setItem('zone_preference', zone);
+  applyTheme();
+}
+
 applyTheme();
 
+// Cek otomatis setiap 60 detik jika di mode 'auto'
 setInterval(() => {
   if (currentThemeMode === 'auto') applyTheme();
 }, 60000);
