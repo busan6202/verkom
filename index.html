@@ -32,14 +32,30 @@
     .dropzone { border: 2px dashed #475569; border-radius: var(--radius); padding: 24px 16px; text-align: center; cursor: pointer; transition: 0.2s; background: rgba(15, 23, 42, 0.4); }
     .dropzone:hover, .dropzone.dragover { border-color: var(--primary); background: rgba(56, 189, 248, 0.05); }
     .dropzone svg { color: var(--primary); margin-bottom: 6px; }
+    
     .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 12px; margin-top: 14px; }
     .form-group { display: flex; flex-direction: column; gap: 6px; }
     label { font-size: 0.8rem; font-weight: 600; color: var(--text-muted); }
     select, input { background: #0f172a; border: 1px solid var(--border); border-radius: 6px; color: #fff; padding: 9px 12px; font-size: 0.85rem; outline: none; }
     select:focus, input:focus { border-color: var(--primary); }
+
+    /* Tombol Pilihan Preset Triwulan */
+    .tw-btn-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 2px; }
+    .btn-tw {
+      background: #0f172a; border: 1px solid var(--border); color: #cbd5e1;
+      padding: 7px 4px; border-radius: 6px; font-size: 0.75rem; font-weight: 600;
+      cursor: pointer; text-align: center; transition: 0.15s;
+    }
+    .btn-tw:hover { border-color: var(--primary); color: #fff; }
+    .btn-tw.active {
+      background: rgba(56, 189, 248, 0.2); border-color: var(--primary); color: var(--primary);
+    }
+    .btn-tw span { display: block; font-size: 0.65rem; color: var(--text-muted); font-weight: normal; margin-top: 2px; }
+    .btn-tw.active span { color: #bae6fd; }
+
     .stats-bar { display: flex; justify-content: space-between; font-size: 0.82rem; color: var(--text-muted); padding: 10px 14px; background: #0f172a; border: 1px solid var(--border); border-radius: 6px; margin-top: 14px; }
     .btn-group { display: flex; gap: 12px; margin-top: 16px; flex-wrap: wrap; }
-    button { flex: 1; min-width: 140px; padding: 11px 16px; border-radius: 6px; border: none; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+    button.action-btn { flex: 1; min-width: 140px; padding: 11px 16px; border-radius: 6px; border: none; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
     .btn-primary { background: var(--primary); color: #0f172a; }
     .btn-primary:hover:not(:disabled) { background: var(--primary-hover); }
     .btn-excel { background: var(--accent); color: #fff; }
@@ -81,18 +97,62 @@
           <option value="a4">A4 (297 × 210 mm)</option>
         </select>
       </div>
+
       <div class="form-group">
-        <label>Bulan Laporan (Triwulan)</label>
-        <input type="text" id="reportMonths" value="OKTOBER, NOVEMBER, DESEMBER" />
+        <label>Format Periode Laporan</label>
+        <select id="periodType" onchange="togglePeriodType()">
+          <option value="triwulan" selected>Triwulan (3 Bulan)</option>
+          <option value="bulanan">Bulanan (1 Bulan)</option>
+        </select>
       </div>
+
       <div class="form-group">
         <label>Nama Petugas Pendamping</label>
         <input type="text" id="signerName" value="Andriadi, S.Kom" placeholder="Nama Petugas" />
       </div>
+
       <div class="form-group">
         <label>NIP Petugas Pendamping</label>
         <input type="text" id="signerNip" value="198208042025210058" placeholder="NIP Petugas" />
       </div>
+    </div>
+
+    <!-- OPSI PILIHAN TRIWULAN (4 TOMBOL) -->
+    <div class="form-group" id="twContainer" style="margin-top: 14px;">
+      <label>Pilih Opsi Triwulan</label>
+      <div class="tw-btn-group">
+        <button type="button" class="btn-tw" data-tw="TW1" onclick="selectTw('TW1')">
+          TW 1<span>Jan–Mar</span>
+        </button>
+        <button type="button" class="btn-tw" data-tw="TW2" onclick="selectTw('TW2')">
+          TW 2<span>Apr–Jun</span>
+        </button>
+        <button type="button" class="btn-tw" data-tw="TW3" onclick="selectTw('TW3')">
+          TW 3<span>Jul–Sep</span>
+        </button>
+        <button type="button" class="btn-tw active" data-tw="TW4" onclick="selectTw('TW4')">
+          TW 4<span>Okt–Des</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- OPSI PILIHAN BULANAN (DROPDOWN 1 BULAN) -->
+    <div class="form-group" id="monthContainer" style="margin-top: 14px; display: none;">
+      <label>Pilih Bulan Laporan</label>
+      <select id="singleMonth">
+        <option value="JANUARI">Januari</option>
+        <option value="FEBRUARI">Februari</option>
+        <option value="MARET">Maret</option>
+        <option value="APRIL">April</option>
+        <option value="MEI">Mei</option>
+        <option value="JUNI">Juni</option>
+        <option value="JULI">Juli</option>
+        <option value="AGUSTUS">Agustus</option>
+        <option value="SEPTEMBER">September</option>
+        <option value="OKTOBER" selected>Oktober</option>
+        <option value="NOVEMBER">November</option>
+        <option value="DESEMBER">Desember</option>
+      </select>
     </div>
 
     <div class="preview-wrap" id="previewWrap" style="display:none;">
@@ -100,11 +160,11 @@
     </div>
 
     <div class="btn-group">
-      <button class="btn-primary" id="btnPdf" disabled onclick="generatePDF()">
+      <button class="action-btn btn-primary" id="btnPdf" disabled onclick="generatePDF()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         Generate PDF (Auto Split Sekolah)
       </button>
-      <button class="btn-excel" id="btnExcel" disabled onclick="exportExcel()">
+      <button class="action-btn btn-excel" id="btnExcel" disabled onclick="exportExcel()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3z"/><path d="M9 9l6 6M15 9l-6 6"/></svg>
         Ekspor Excel
       </button>
@@ -117,17 +177,44 @@ let groupedSchools = {};
 let allRows = [];
 let logoKemensosDataUrl = null;
 
-// Buat Logo Resmi Kemensos Presisi Tinggi Menggunakan Canvas
+// Konfigurasi Preset Triwulan
+const TW_PRESETS = {
+  TW1: ['JANUARI', 'FEBRUARI', 'MARET'],
+  TW2: ['APRIL', 'MEI', 'JUNI'],
+  TW3: ['JULI', 'AGUSTUS', 'SEPTEMBER'],
+  TW4: ['OKTOBER', 'NOVEMBER', 'DESEMBER']
+};
+let selectedTw = 'TW4';
+
+function selectTw(twKey) {
+  selectedTw = twKey;
+  document.querySelectorAll('.btn-tw').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-tw') === twKey);
+  });
+}
+
+function togglePeriodType() {
+  const type = document.getElementById('periodType').value;
+  const twBox = document.getElementById('twContainer');
+  const monthBox = document.getElementById('monthContainer');
+  if (type === 'triwulan') {
+    twBox.style.display = 'flex';
+    monthBox.style.display = 'none';
+  } else {
+    twBox.style.display = 'none';
+    monthBox.style.display = 'flex';
+  }
+}
+
+// Inisialisasi Logo Kemensos Resmi via Canvas
 function createKemensosLogoImage() {
   const canvas = document.createElement('canvas');
   canvas.width = 300;
   canvas.height = 300;
   const ctx = canvas.getContext('2d');
-
-  // Bersihkan background
   ctx.clearRect(0, 0, 300, 300);
 
-  // 1. Mangkuk / Tangan Kuning (Bawah)
+  // Mangkuk Kuning
   ctx.fillStyle = '#FAB414';
   ctx.beginPath();
   ctx.moveTo(50, 140);
@@ -135,37 +222,31 @@ function createKemensosLogoImage() {
   ctx.bezierCurveTo(210, 215, 90, 215, 50, 140);
   ctx.fill();
 
-  // 2. Figur Biru (Orang)
+  // Figur Biru
   ctx.fillStyle = '#1464B4';
-  // Kepala
   ctx.beginPath();
   ctx.arc(95, 60, 22, 0, Math.PI * 2);
   ctx.fill();
-  // Badan Melompat
   ctx.beginPath();
   ctx.moveTo(70, 88);
   ctx.bezierCurveTo(100, 100, 120, 115, 120, 175);
   ctx.bezierCurveTo(110, 130, 95, 110, 70, 88);
   ctx.fill();
 
-  // 3. Tiga Sayap / Daun Hijau (Naik ke Kanan Atas)
+  // 3 Daun Hijau
   ctx.fillStyle = '#198C3C';
-  
-  // Daun 1 (Atas)
   ctx.beginPath();
   ctx.moveTo(125, 160);
   ctx.bezierCurveTo(135, 90, 180, 45, 235, 20);
   ctx.bezierCurveTo(215, 55, 175, 105, 125, 160);
   ctx.fill();
 
-  // Daun 2 (Tengah)
   ctx.beginPath();
   ctx.moveTo(130, 165);
   ctx.bezierCurveTo(145, 105, 200, 70, 255, 55);
   ctx.bezierCurveTo(230, 85, 185, 120, 130, 165);
   ctx.fill();
 
-  // Daun 3 (Bawah)
   ctx.beginPath();
   ctx.moveTo(135, 170);
   ctx.bezierCurveTo(155, 120, 215, 95, 275, 90);
@@ -174,8 +255,6 @@ function createKemensosLogoImage() {
 
   logoKemensosDataUrl = canvas.toDataURL('image/png');
 }
-
-// Inisialisasi pembuatan logo
 createKemensosLogoImage();
 
 const fileInput = document.getElementById('csvFile');
@@ -300,8 +379,8 @@ function parseSIKSCsv(text, fileName) {
       nisn: nisn || '-',
       siswa: namaSiswa || '-',
       tingkat: tingkat || '-',
-      sekolah: sekolah || 'SD NEGERI 1 TUMBANG SAPIA',
-      npsn: npsn || '30201704'
+      sekolah: sekolah || 'SEKOLAH',
+      npsn: npsn || '-'
     };
 
     allRows.push(rowObj);
@@ -337,18 +416,22 @@ function renderPreview() {
 async function generatePDF() {
   const { jsPDF } = window.jspdf;
   const paper = document.getElementById('paperSize').value;
-  const monthsInput = document.getElementById('reportMonths').value.trim();
+  const periodType = document.getElementById('periodType').value;
   const signer = document.getElementById('signerName').value.trim() || 'Andriadi, S.Kom';
   const nip = document.getElementById('signerNip').value.trim();
 
-  const mList = monthsInput ? monthsInput.split(',').map(m => m.trim().toUpperCase()) : ['OKTOBER', 'NOVEMBER', 'DESEMBER'];
-  while (mList.length < 3) mList.push(`BULAN ${mList.length + 1}`);
+  let months = [];
+  if (periodType === 'triwulan') {
+    months = TW_PRESETS[selectedTw];
+  } else {
+    months = [document.getElementById('singleMonth').value];
+  }
 
   const pageSize = paper === 'f4' ? [330, 210] : 'a4';
   const schoolKeys = Object.keys(groupedSchools);
 
   if (schoolKeys.length === 1) {
-    const doc = buildOfficialDoc(schoolKeys[0], groupedSchools[schoolKeys[0]], pageSize, mList, signer, nip);
+    const doc = buildOfficialDoc(schoolKeys[0], groupedSchools[schoolKeys[0]], pageSize, months, signer, nip);
     doc.save(`Form_Verifikasi_${schoolKeys[0].replace(/[^a-zA-Z0-9]/g, '_')}.pdf`);
   } else {
     btnPdf.innerText = "Membuat ZIP...";
@@ -356,7 +439,7 @@ async function generatePDF() {
     const zip = new JSZip();
 
     schoolKeys.forEach(sch => {
-      const doc = buildOfficialDoc(sch, groupedSchools[sch], pageSize, mList, signer, nip);
+      const doc = buildOfficialDoc(sch, groupedSchools[sch], pageSize, months, signer, nip);
       zip.file(`Form_Verifikasi_${sch.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`, doc.output('blob'));
     });
 
@@ -378,12 +461,10 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
   list.sort((a, b) => a.tingkat.localeCompare(b.tingkat, undefined, { numeric: true }));
   const npsn = list[0].npsn || '-';
 
-  // SISIPKAN LOGO KEMENSOS DI POJOK KIRI ATAS
   if (logoKemensosDataUrl) {
     doc.addImage(logoKemensosDataUrl, 'PNG', 14, 6, 14, 14);
   }
 
-  // HEADER KEMENTERIAN SOSIAL
   doc.setFontSize(10.5);
   doc.setFont('helvetica', 'bold');
   doc.text('KEMENTERIAN SOSIAL REPUBLIK INDONESIA', 31, 10.5);
@@ -396,71 +477,66 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
   doc.setLineWidth(0.4);
   doc.line(14, 23.5, doc.internal.pageSize.width - 14, 23.5);
 
-  // HEADER TABEL BERTINGKAT (3 LEVEL)
+  // KONSTRUKSI HEADER TABEL SESUAI JUMLAH BULAN
   const headRow1 = [
     { content: 'NO', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
     { content: 'NIK PENGURUS', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
     { content: 'NAMA PENGURUS', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
     { content: 'NISN', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
     { content: 'NAMA SISWA', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
-    { content: 'TINGKAT', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
-    { content: months[0], colSpan: 5, styles: { halign: 'center', valign: 'middle' } },
-    { content: months[1], colSpan: 5, styles: { halign: 'center', valign: 'middle' } },
-    { content: months[2], colSpan: 5, styles: { halign: 'center', valign: 'middle' } },
-    { content: 'NAMA PENDAMPING', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } }
+    { content: 'TINGKAT', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } }
   ];
 
-  const headRow2 = [
-    { content: 'Hari Efektif: ......', colSpan: 5, styles: { halign: 'center', valign: 'middle', fontSize: 6.5 } },
-    { content: 'Hari Efektif: ......', colSpan: 5, styles: { halign: 'center', valign: 'middle', fontSize: 6.5 } },
-    { content: 'Hari Efektif: ......', colSpan: 5, styles: { halign: 'center', valign: 'middle', fontSize: 6.5 } }
-  ];
+  months.forEach(m => {
+    headRow1.push({ content: m, colSpan: 5, styles: { halign: 'center', valign: 'middle' } });
+  });
+  headRow1.push({ content: 'NAMA PENDAMPING', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } });
 
-  const headRow3 = [
-    { content: 'ALPA', styles: { halign: 'center', fontSize: 5.5 } },
-    { content: 'IZIN', styles: { halign: 'center', fontSize: 5.5 } },
-    { content: 'SAKIT', styles: { halign: 'center', fontSize: 5.5 } },
-    { content: 'JML', styles: { halign: 'center', fontSize: 5.5 } },
-    { content: '%', styles: { halign: 'center', fontSize: 5.5 } },
+  const headRow2 = [];
+  months.forEach(() => {
+    headRow2.push({ content: 'Hari Efektif: ......', colSpan: 5, styles: { halign: 'center', valign: 'middle', fontSize: 6.5 } });
+  });
 
-    { content: 'ALPA', styles: { halign: 'center', fontSize: 5.5 } },
-    { content: 'IZIN', styles: { halign: 'center', fontSize: 5.5 } },
-    { content: 'SAKIT', styles: { halign: 'center', fontSize: 5.5 } },
-    { content: 'JML', styles: { halign: 'center', fontSize: 5.5 } },
-    { content: '%', styles: { halign: 'center', fontSize: 5.5 } },
+  const headRow3 = [];
+  months.forEach(() => {
+    headRow3.push(
+      { content: 'ALPA', styles: { halign: 'center', fontSize: 5.5 } },
+      { content: 'IZIN', styles: { halign: 'center', fontSize: 5.5 } },
+      { content: 'SAKIT', styles: { halign: 'center', fontSize: 5.5 } },
+      { content: 'JML', styles: { halign: 'center', fontSize: 5.5 } },
+      { content: '%', styles: { halign: 'center', fontSize: 5.5 } }
+    );
+  });
 
-    { content: 'ALPA', styles: { halign: 'center', fontSize: 5.5 } },
-    { content: 'IZIN', styles: { halign: 'center', fontSize: 5.5 } },
-    { content: 'SAKIT', styles: { halign: 'center', fontSize: 5.5 } },
-    { content: 'JML', styles: { halign: 'center', fontSize: 5.5 } },
-    { content: '%', styles: { halign: 'center', fontSize: 5.5 } }
-  ];
+  const body = list.map((r, i) => {
+    let row = [i + 1, r.nikPengurus, r.pengurus, r.nisn, r.siswa, r.tingkat];
+    months.forEach(() => {
+      row.push('', '', '', '', '');
+    });
+    row.push(signer);
+    return row;
+  });
 
-  const body = list.map((r, i) => [
-    i + 1,
-    r.nikPengurus,
-    r.pengurus,
-    r.nisn,
-    r.siswa,
-    r.tingkat,
-    '', '', '', '', '',
-    '', '', '', '', '',
-    '', '', '', '', '',
-    signer
-  ]);
-
-  const colStyles = {
+  // PENGATURAN LEBAR KOLOM
+  const isSingle = (months.length === 1);
+  let colStyles = {
     0: { cellWidth: 8, halign: 'center' },
     1: { cellWidth: 28, halign: 'center' },
     2: { cellWidth: 'auto' },
     3: { cellWidth: 22, halign: 'center' },
     4: { cellWidth: 'auto' },
-    5: { cellWidth: 16, halign: 'center' },
-    6:  { cellWidth: 8.5, halign: 'center' }, 7:  { cellWidth: 8.5, halign: 'center' }, 8:  { cellWidth: 8.5, halign: 'center' }, 9:  { cellWidth: 8.5, halign: 'center' }, 10: { cellWidth: 7.5, halign: 'center' },
-    11: { cellWidth: 8.5, halign: 'center' }, 12: { cellWidth: 8.5, halign: 'center' }, 13: { cellWidth: 8.5, halign: 'center' }, 14: { cellWidth: 8.5, halign: 'center' }, 15: { cellWidth: 7.5, halign: 'center' },
-    16: { cellWidth: 8.5, halign: 'center' }, 17: { cellWidth: 8.5, halign: 'center' }, 18: { cellWidth: 8.5, halign: 'center' }, 19: { cellWidth: 8.5, halign: 'center' }, 20: { cellWidth: 7.5, halign: 'center' },
-    21: { cellWidth: 28, halign: 'center' }
+    5: { cellWidth: 16, halign: 'center' }
   };
+
+  let colIdx = 6;
+  months.forEach(() => {
+    colStyles[colIdx++] = { cellWidth: isSingle ? 14 : 8.5, halign: 'center' };
+    colStyles[colIdx++] = { cellWidth: isSingle ? 14 : 8.5, halign: 'center' };
+    colStyles[colIdx++] = { cellWidth: isSingle ? 14 : 8.5, halign: 'center' };
+    colStyles[colIdx++] = { cellWidth: isSingle ? 14 : 8.5, halign: 'center' };
+    colStyles[colIdx++] = { cellWidth: isSingle ? 12 : 7.5, halign: 'center' };
+  });
+  colStyles[colIdx] = { cellWidth: 28, halign: 'center' };
 
   doc.autoTable({
     startY: 25.5,
@@ -480,7 +556,6 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
     }
   });
 
-  // RUANGAN TANDATANGAN (SEJAJAR ANTARA PIHAK SEKOLAH & PETUGAS)
   const finalY = doc.lastAutoTable.finalY || 140;
   const pageH = doc.internal.pageSize.height;
   if (finalY + 34 > pageH) doc.addPage();
@@ -492,13 +567,11 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'normal');
 
-  // Sisi Kiri: Mengetahui Pihak Sekolah
   doc.text('Mengetahui,', xLeft, yPos);
   doc.text(`Kepala ${schoolName}`, xLeft, yPos + 4);
   doc.text('( .................................................... )', xLeft, yPos + 22);
   doc.text('NIP. .............................................', xLeft, yPos + 26);
 
-  // Sisi Kanan: Petugas Verifikasi (Tanpa Tanggal/Titik Mangsa)
   doc.text('Petugas Verifikasi,', xRight, yPos + 4);
   doc.setFont('helvetica', 'bold');
   doc.text(signer, xRight, yPos + 22);
