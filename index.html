@@ -8,44 +8,54 @@
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <!-- Tabler Icons CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
   <style>
-    /* Mode Terang Hyper-Minimal Line */
+    /* Mode Terang Micro-Animated */
     :root {
-      --bg: #ffffff;
+      --bg: #f8fafc;
       --panel: #ffffff;
-      --text: #09090b;
-      --text-muted: #71717a;
-      --line: #e4e4e7;
-      --line-active: #18181b;
-      --primary: #18181b;
-      --primary-text: #ffffff;
-      --accent: #27272a;
-      --radius: 4px;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --border-hover: #cbd5e1;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --accent: #16a34a;
+      --accent-hover: #15803d;
+      --tip: #d97706;
+      --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
+      --shadow-hover: 0 20px 30px -10px rgba(37, 99, 235, 0.15);
+      --radius: 12px;
+      --radius-sm: 8px;
     }
 
-    /* Mode Gelap Hyper-Minimal Line */
+    /* Mode Gelap Micro-Animated */
     body.dark-mode {
-      --bg: #09090b;
-      --panel: #09090b;
-      --text: #fafafa;
-      --text-muted: #a1a1aa;
-      --line: #27272a;
-      --line-active: #fafafa;
-      --primary: #fafafa;
-      --primary-text: #09090b;
-      --accent: #e4e4e7;
+      --bg: #090d16;
+      --panel: #111827;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #1f2937;
+      --border-hover: #374151;
+      --primary: #3b82f6;
+      --primary-hover: #60a5fa;
+      --accent: #22c55e;
+      --accent-hover: #4ade80;
+      --tip: #fbbf24;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      --shadow-hover: 0 20px 30px -10px rgba(59, 130, 246, 0.25);
     }
 
     * { 
       box-sizing: border-box; 
       margin: 0; 
       padding: 0; 
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, monospace;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
       -webkit-user-select: none; 
       user-select: none; 
-      box-shadow: none !important;
-      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+      transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     body { 
@@ -57,336 +67,388 @@
     }
     .container { 
       width: 100%; 
-      max-width: 920px; 
+      max-width: 960px; 
       display: flex; 
       flex-direction: column; 
       gap: 20px; 
     }
     
-    /* Top Bar & Theme Switcher */
+    /* Top Bar */
     .top-bar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
       gap: 12px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--line);
     }
-    .badge-line {
+    .badge-ani {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 4px 10px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      font-size: 0.72rem;
+      padding: 6px 14px;
+      border-radius: 99px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      font-size: 0.75rem;
       font-weight: 600;
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+      box-shadow: var(--shadow);
     }
-    .badge-line-dot {
-      width: 6px;
-      height: 6px;
+    .badge-ani-dot {
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
-      background: var(--text);
+      background: var(--accent);
+      animation: pulseDot 2s infinite;
+    }
+    @keyframes pulseDot {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.4); }
+      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(22, 163, 74, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
     }
 
-    .theme-switcher-line {
+    /* Switcher Tema Micro-Animated */
+    .theme-switcher-ani {
       display: inline-flex;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
+      padding: 3px;
+      border-radius: 99px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      gap: 3px;
     }
-    .theme-btn-line {
+    .theme-btn-ani {
       border: none;
       background: transparent;
-      padding: 5px 10px;
-      font-size: 0.72rem;
+      padding: 6px 12px;
+      border-radius: 99px;
+      font-size: 0.75rem;
       font-weight: 600;
       color: var(--text-muted);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      border-right: 1px solid var(--line);
     }
-    .theme-btn-line:last-child { border-right: none; }
-    .theme-btn-line.active {
-      background: var(--text);
-      color: var(--bg);
+    .theme-btn-ani:hover { color: var(--text); }
+    .theme-btn-ani.active {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
     }
 
-    header { text-align: left; margin-top: 4px; }
+    header { text-align: left; }
     header h1 { 
-      font-size: 1.5rem; 
-      font-weight: 700; 
+      font-size: 1.6rem; 
+      font-weight: 800; 
       color: var(--text); 
       letter-spacing: -0.5px; 
     }
     header p { 
       color: var(--text-muted); 
-      font-size: 0.82rem; 
+      font-size: 0.85rem; 
       margin-top: 4px; 
     }
     
-    /* Card Wireframe */
-    .card-line { 
+    /* Card Micro-Animated */
+    .card-ani { 
       background: var(--panel); 
-      border: 1px solid var(--line);
+      border: 1px solid var(--border);
       border-radius: var(--radius); 
-      padding: 24px; 
+      padding: 26px; 
+      box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
       gap: 20px;
     }
+    .card-ani:hover {
+      box-shadow: var(--shadow-hover);
+      border-color: var(--border-hover);
+    }
     
-    /* Dropzone Line */
-    .dropzone-line {
-      border: 1px dashed var(--line);
+    /* Dropzone Animated */
+    .dropzone-ani {
+      border: 2px dashed var(--border);
       border-radius: var(--radius);
       padding: 32px 16px;
       text-align: center;
       cursor: pointer;
-      background: transparent;
-      transition: all 0.2s ease;
+      background: var(--bg);
+      transition: all 0.25s ease;
     }
-    .dropzone-line:hover, .dropzone-line.dragover {
-      border-color: var(--line-active);
-      border-style: solid;
-      background: rgba(120, 120, 120, 0.03);
+    .dropzone-ani:hover, .dropzone-ani.dragover {
+      border-color: var(--primary);
+      background: rgba(37, 99, 235, 0.03);
+      transform: translateY(-2px);
     }
-    .icon-wrap-line {
+    .icon-wrap-ani {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 40px;
-      height: 40px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--primary);
       margin-bottom: 12px;
+      box-shadow: var(--shadow);
+    }
+    .dropzone-ani:hover .icon-wrap-ani {
+      transform: scale(1.1) rotate(5deg);
     }
     
-    .file-chip-wrap { display: flex; flex-wrap: wrap; gap: 6px; max-height: 90px; overflow-y: auto; }
-    .file-chip-line { 
-      background: transparent; 
+    .file-chip-wrap { display: flex; flex-wrap: wrap; gap: 8px; max-height: 90px; overflow-y: auto; }
+    .file-chip-ani { 
+      background: var(--bg); 
       color: var(--text); 
       font-size: 0.72rem; 
-      font-weight: 500;
-      padding: 4px 10px; 
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
+      font-weight: 600;
+      padding: 5px 12px; 
+      border: 1px solid var(--border);
+      border-radius: 99px; 
       display: inline-flex; 
       align-items: center; 
       gap: 6px; 
     }
+    .file-chip-ani i { color: var(--primary); }
 
-    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-    .form-group { display: flex; flex-direction: column; gap: 6px; }
-    label { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; }
+    label { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
+    label i { font-size: 1rem; color: var(--primary); }
     
-    /* Input dan Select Hyper-Minimal */
+    /* Input & Select */
     select, input[type="text"] { 
-      background: transparent; 
-      border: 1px solid var(--line); 
-      border-radius: var(--radius); 
+      background: var(--bg); 
+      border: 1px solid var(--border); 
+      border-radius: var(--radius-sm); 
       color: var(--text); 
-      padding: 10px 12px; 
-      font-size: 0.82rem; 
+      padding: 10px 14px; 
+      font-size: 0.85rem; 
       outline: none; 
     }
     select:focus, input[type="text"]:focus { 
-      border-color: var(--line-active);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
 
-    /* Logo Box Minimal */
-    .logo-box-line {
+    /* Logo Box */
+    .logo-box-ani {
       display: flex;
       align-items: center;
       gap: 12px;
-      background: transparent;
-      padding: 10px 12px;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
+      background: var(--bg);
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
     }
     .logo-preview-thumb {
-      width: 36px;
-      height: 36px;
-      border-radius: var(--radius);
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
       object-fit: contain;
-      border: 1px solid var(--line);
+      border: 1px solid var(--border);
+      background: var(--panel);
     }
-    .btn-line-small {
-      padding: 6px 12px;
-      font-size: 0.75rem;
+    .btn-ani-small {
+      padding: 7px 14px;
+      font-size: 0.78rem;
       font-weight: 600;
       color: var(--text);
-      background: transparent;
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
-    .btn-line-small:hover {
-      border-color: var(--line-active);
+    .btn-ani-small:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-1px);
     }
 
-    /* Preset Triwulan Line */
+    /* Preset Triwulan */
     .tw-btn-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-    .btn-tw-line {
-      background: transparent; 
-      border: 1px solid var(--line); 
+    .btn-tw-ani {
+      background: var(--bg); 
+      border: 1px solid var(--border); 
       color: var(--text);
-      padding: 8px 4px; 
-      border-radius: var(--radius); 
+      padding: 9px 4px; 
+      border-radius: var(--radius-sm); 
       font-size: 0.75rem; 
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer; 
       text-align: center; 
     }
-    .btn-tw-line:hover { border-color: var(--line-active); }
-    .btn-tw-line.active {
-      background: var(--text);
-      border-color: var(--text);
-      color: var(--bg);
+    .btn-tw-ani:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+    .btn-tw-ani.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
     }
-    .btn-tw-line span { display: block; font-size: 0.65rem; opacity: 0.8; font-weight: normal; margin-top: 2px; }
+    .btn-tw-ani span { display: block; font-size: 0.65rem; opacity: 0.8; font-weight: normal; margin-top: 2px; }
 
-    /* Bar Status Line */
-    .stats-bar-line { 
+    /* Bar Status */
+    .stats-bar-ani { 
       display: flex; 
       justify-content: space-between; 
-      font-size: 0.78rem; 
+      font-size: 0.8rem; 
       color: var(--text-muted); 
-      padding: 10px 14px; 
-      background: transparent; 
-      border: 1px solid var(--line);
-      border-radius: var(--radius); 
+      padding: 12px 16px; 
+      background: var(--bg); 
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm); 
     }
-    .stats-bar-line strong { color: var(--text); }
+    .stats-bar-ani strong { color: var(--primary); }
     
     /* Tombol Aksi */
-    .btn-group { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
-    button.action-btn-line {
+    .btn-group { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 4px; }
+    button.action-btn-ani {
       flex: 1; 
       min-width: 160px; 
-      padding: 12px 18px; 
+      padding: 13px 20px; 
       border-radius: var(--radius); 
-      font-weight: 600; 
-      font-size: 0.82rem; 
+      border: none;
+      font-weight: 700; 
+      font-size: 0.85rem; 
       cursor: pointer; 
       display: inline-flex; 
       align-items: center; 
       justify-content: center; 
       gap: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+      box-shadow: var(--shadow);
     }
-    button.action-btn-line.btn-primary { 
+    button.action-btn-ani.btn-primary { 
       background: var(--primary); 
-      color: var(--primary-text); 
-      border: 1px solid var(--primary);
+      color: #ffffff; 
     }
-    button.action-btn-line.btn-excel { 
-      background: transparent; 
-      color: var(--text); 
-      border: 1px solid var(--line);
+    button.action-btn-ani.btn-primary:hover:not(:disabled) { 
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4);
     }
-    button.action-btn-line.btn-excel:hover {
-      border-color: var(--line-active);
+    button.action-btn-ani.btn-excel { 
+      background: var(--accent); 
+      color: #ffffff; 
+    }
+    button.action-btn-ani.btn-excel:hover:not(:disabled) { 
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px -5px rgba(22, 163, 74, 0.4);
     }
     button:disabled { 
-      opacity: 0.35; 
+      opacity: 0.4; 
       cursor: not-allowed; 
-      border-color: var(--line) !important;
+      transform: none !important; 
+      box-shadow: none !important; 
     }
 
-    .preview-wrap-line { 
-      border: 1px solid var(--line);
-      border-radius: var(--radius); 
+    .preview-wrap-ani { 
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm); 
       overflow: auto; 
       max-height: 240px; 
-      background: transparent;
+      background: var(--bg);
     }
     table { width: 100%; border-collapse: collapse; font-size: 0.75rem; text-align: left; }
-    th, td { padding: 8px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
-    th { background: var(--panel); color: var(--text); position: sticky; top: 0; font-weight: 600; }
+    th, td { padding: 9px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    th { background: var(--panel); color: var(--primary); position: sticky; top: 0; font-weight: 700; }
 
-    /* Footer Copyright Line */
+    /* Footer */
     footer {
       text-align: center;
       margin-top: 10px;
       padding: 16px 8px;
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
-      border-top: 1px solid var(--line);
+      border-top: 1px solid var(--border);
     }
     footer strong { color: var(--text); font-weight: 600; }
 
-    /* Floating Tip Minimal */
+    /* Floating Tip Animated */
     .floating-tip-container {
       position: fixed;
-      right: 20px;
+      right: 24px;
       bottom: 24px;
       z-index: 999;
       display: flex;
       flex-direction: column;
       align-items: flex-end;
     }
-    .floating-tip-popover-line {
+    .floating-tip-popover-ani {
       visibility: hidden;
       opacity: 0;
-      width: 260px;
+      width: 270px;
       background: var(--panel);
       color: var(--text);
-      padding: 12px 14px;
-      border: 1px solid var(--line-active);
+      padding: 14px 16px;
+      border: 1px solid var(--border);
       border-radius: var(--radius);
-      font-size: 0.75rem;
+      font-size: 0.78rem;
       line-height: 1.45;
-      margin-bottom: 10px;
-      transition: all 0.2s ease;
+      box-shadow: var(--shadow);
+      margin-bottom: 12px;
+      transform: translateY(8px);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       pointer-events: none;
     }
-    .floating-tip-container:hover .floating-tip-popover-line {
+    .floating-tip-popover-ani strong { color: var(--tip); }
+    .floating-tip-container:hover .floating-tip-popover-ani {
       visibility: visible;
       opacity: 1;
+      transform: translateY(0);
     }
-    .floating-tip-btn-line {
+    .floating-tip-btn-ani {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 8px 14px;
-      background: var(--panel);
-      color: var(--text);
+      padding: 10px 16px;
+      background: var(--tip);
+      color: #ffffff;
       text-decoration: none;
-      font-size: 0.75rem;
-      font-weight: 600;
-      border-radius: var(--radius);
-      border: 1px solid var(--line);
-      letter-spacing: 0.5px;
-      text-transform: uppercase;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 99px;
+      box-shadow: 0 8px 20px -4px rgba(217, 119, 6, 0.5);
+      transition: all 0.2s ease;
     }
-    .floating-tip-btn-line:hover {
-      border-color: var(--line-active);
-      background: var(--text);
-      color: var(--bg);
+    .floating-tip-btn-ani:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 12px 25px -4px rgba(217, 119, 6, 0.7);
+    }
+    .floating-tip-dot {
+      width: 8px;
+      height: 8px;
+      background: #ffffff;
+      border-radius: 50%;
+      animation: pulseDot 2s infinite;
     }
   </style>
 </head>
 <body oncontextmenu="return false;">
 
 <div class="container">
-  <!-- Bar Atas -->
+  <!-- Top Bar -->
   <div class="top-bar">
-    <div class="badge-line">
-      <div class="badge-line-dot"></div>
+    <div class="badge-ani">
+      <div class="badge-ani-dot"></div>
       <span id="zoneBadgeText">WIB Auto Theme</span>
     </div>
 
-    <!-- Switcher Tema Line -->
-    <div class="theme-switcher-line" id="themeSwitcher">
-      <button class="theme-btn-line active" data-mode="auto" onclick="setAppTheme('auto')">Auto</button>
-      <button class="theme-btn-line" data-mode="light" onclick="setAppTheme('light')">Light</button>
-      <button class="theme-btn-line" data-mode="dark" onclick="setAppTheme('dark')">Dark</button>
+    <!-- Switcher Tema Tabler Icons -->
+    <div class="theme-switcher-ani" id="themeSwitcher">
+      <button class="theme-btn-ani active" data-mode="auto" onclick="setAppTheme('auto')">
+        <i class="ti ti-device-laptop"></i> Auto
+      </button>
+      <button class="theme-btn-ani" data-mode="light" onclick="setAppTheme('light')">
+        <i class="ti ti-sun"></i> Light
+      </button>
+      <button class="theme-btn-ani" data-mode="dark" onclick="setAppTheme('dark')">
+        <i class="ti ti-moon"></i> Dark
+      </button>
     </div>
   </div>
 
@@ -395,16 +457,14 @@
     <p>Otomasi CSV SIKS Fasdik ke Lembar Verifikasi Resmi (Kemensos)</p>
   </header>
 
-  <div class="card-line">
-    <!-- Dropzone Line -->
-    <div class="dropzone-line" id="dz" onclick="document.getElementById('csvFile').click()">
-      <div class="icon-wrap-line">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-        </svg>
+  <div class="card-ani">
+    <!-- Dropzone Animated -->
+    <div class="dropzone-ani" id="dz" onclick="document.getElementById('csvFile').click()">
+      <div class="icon-wrap-ani">
+        <i class="ti ti-cloud-upload" style="font-size: 24px;"></i>
       </div>
-      <p id="dzText" style="font-weight:600; font-size:0.85rem;">Klik atau seret berkas <strong>.CSV SIKS</strong> ke sini</p>
-      <span style="font-size:0.72rem; color:var(--text-muted); margin-top:4px; display:block;">Mendukung multi-file batch otomatis pecah sekolah</span>
+      <p id="dzText" style="font-weight:700; font-size:0.9rem;">Klik atau seret berkas <strong>.CSV SIKS</strong> ke sini</p>
+      <span style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; display:block;">Mendukung multi-file batch otomatis pecah sekolah</span>
       <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" multiple style="display:none;" />
     </div>
 
@@ -412,23 +472,23 @@
     <div class="file-chip-wrap" id="fileListWrap" style="display:none;"></div>
 
     <!-- Stats Bar -->
-    <div class="stats-bar-line" id="statsBar" style="display:none;">
-      <span>Berkas: <strong id="statFileName">0 Berkas</strong></span>
-      <span>Sekolah: <strong id="statSchools">0</strong></span>
-      <span>Total Siswa Tampil: <strong id="statRows">0</strong></span>
+    <div class="stats-bar-ani" id="statsBar" style="display:none;">
+      <span><i class="ti ti-files" style="margin-right:4px;"></i> Berkas: <strong id="statFileName">0 Berkas</strong></span>
+      <span><i class="ti ti-school" style="margin-right:4px;"></i> Sekolah: <strong id="statSchools">0</strong></span>
+      <span><i class="ti ti-users" style="margin-right:4px;"></i> Siswa Tampil: <strong id="statRows">0</strong></span>
     </div>
 
     <div class="form-grid">
       <!-- Filter Pendamping -->
       <div class="form-group">
-        <label>Filter Pendamping</label>
+        <label><i class="ti ti-user-search"></i> Filter Pendamping</label>
         <select id="filterPendamping" onchange="applyPendampingFilter()">
           <option value="ALL">-- Semua Pendamping --</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label>Ukuran Kertas</label>
+        <label><i class="ti ti-file-text"></i> Ukuran Kertas</label>
         <select id="paperSize">
           <option value="f4">F4 / Folio (330 × 210 mm) - Standar</option>
           <option value="a4">A4 (297 × 210 mm)</option>
@@ -436,7 +496,7 @@
       </div>
 
       <div class="form-group">
-        <label>Format Periode Laporan</label>
+        <label><i class="ti ti-calendar-stats"></i> Format Periode</label>
         <select id="periodType" onchange="togglePeriodType()">
           <option value="triwulan" selected>Triwulan (3 Bulan)</option>
           <option value="bulanan">Bulanan (1 Bulan)</option>
@@ -444,42 +504,42 @@
       </div>
 
       <div class="form-group">
-        <label>Nama Petugas Pendamping</label>
+        <label><i class="ti ti-user"></i> Nama Petugas</label>
         <input type="text" id="signerName" value="Andriadi, S.Kom" placeholder="Nama Petugas" />
       </div>
 
       <div class="form-group">
-        <label>NIP Petugas Pendamping</label>
+        <label><i class="ti ti-id"></i> NIP Petugas</label>
         <input type="text" id="signerNip" value="198208042025210058" placeholder="NIP Petugas" />
       </div>
     </div>
 
     <!-- Panel Kustom Logo -->
     <div class="form-group">
-      <label>Kustom Logo (Kop &amp; Watermark Background)</label>
-      <div class="logo-box-line">
+      <label><i class="ti ti-photo"></i> Kustom Logo (Kop &amp; Watermark)</label>
+      <div class="logo-box-ani">
         <img id="logoThumb" class="logo-preview-thumb" src="" alt="Logo" style="display:none;" />
-        <span id="logoStatus" style="font-size: 0.78rem; color: var(--text-muted); flex: 1;">Belum ada logo kustom</span>
-        <button type="button" class="btn-line-small" onclick="document.getElementById('logoInput').click()">Pilih Logo</button>
-        <button type="button" class="btn-line-small" id="btnResetLogo" onclick="resetLogo()" style="display:none;">Reset</button>
+        <span id="logoStatus" style="font-size: 0.8rem; color: var(--text-muted); flex: 1;">Belum ada logo kustom</span>
+        <button type="button" class="btn-ani-small" onclick="document.getElementById('logoInput').click()"><i class="ti ti-upload"></i> Pilih Logo</button>
+        <button type="button" class="btn-ani-small" id="btnResetLogo" onclick="resetLogo()" style="display:none; color:#ef4444;"><i class="ti ti-reload"></i> Reset</button>
         <input type="file" id="logoInput" accept="image/*" style="display:none;" onchange="handleLogoUpload(event)" />
       </div>
     </div>
 
     <!-- Opsi Triwulan -->
     <div class="form-group" id="twContainer">
-      <label>Pilihan Triwulan</label>
+      <label><i class="ti ti-calendar-month"></i> Pilihan Triwulan</label>
       <div class="tw-btn-group">
-        <button type="button" class="btn-tw-line" data-tw="TW1" onclick="selectTw('TW1')">TW 1<span>Jan–Mar</span></button>
-        <button type="button" class="btn-tw-line" data-tw="TW2" onclick="selectTw('TW2')">TW 2<span>Apr–Jun</span></button>
-        <button type="button" class="btn-tw-line" data-tw="TW3" onclick="selectTw('TW3')">TW 3<span>Jul–Sep</span></button>
-        <button type="button" class="btn-tw-line active" data-tw="TW4" onclick="selectTw('TW4')">TW 4<span>Okt–Des</span></button>
+        <button type="button" class="btn-tw-ani" data-tw="TW1" onclick="selectTw('TW1')">TW 1<span>Jan–Mar</span></button>
+        <button type="button" class="btn-tw-ani" data-tw="TW2" onclick="selectTw('TW2')">TW 2<span>Apr–Jun</span></button>
+        <button type="button" class="btn-tw-ani" data-tw="TW3" onclick="selectTw('TW3')">TW 3<span>Jul–Sep</span></button>
+        <button type="button" class="btn-tw-ani active" data-tw="TW4" onclick="selectTw('TW4')">TW 4<span>Okt–Des</span></button>
       </div>
     </div>
 
     <!-- Opsi Bulanan -->
     <div class="form-group" id="monthContainer" style="display: none;">
-      <label>Pilih Bulan Laporan</label>
+      <label><i class="ti ti-calendar"></i> Pilih Bulan Laporan</label>
       <select id="singleMonth">
         <option value="JANUARI">Januari</option>
         <option value="FEBRUARI">Februari</option>
@@ -497,19 +557,17 @@
     </div>
 
     <!-- Preview Tabel Data -->
-    <div class="preview-wrap-line" id="previewWrap" style="display:none;">
+    <div class="preview-wrap-ani" id="previewWrap" style="display:none;">
       <table id="previewTable"></table>
     </div>
 
     <!-- Tombol Aksi -->
     <div class="btn-group">
-      <button class="action-btn-line btn-primary" id="btnPdf" disabled onclick="generatePDF()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-        Generate PDF (Auto Split &amp; Zip)
+      <button class="action-btn-ani btn-primary" id="btnPdf" disabled onclick="generatePDF()">
+        <i class="ti ti-file-type-pdf" style="font-size: 1.2rem;"></i> Generate PDF (Auto Split &amp; Zip)
       </button>
-      <button class="action-btn-line btn-excel" id="btnExcel" disabled onclick="exportExcel()">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9l6 6M15 9l-6 6"/></svg>
-        Ekspor Excel
+      <button class="action-btn-ani btn-excel" id="btnExcel" disabled onclick="exportExcel()">
+        <i class="ti ti-file-spreadsheet" style="font-size: 1.2rem;"></i> Ekspor Excel
       </button>
     </div>
   </div>
@@ -520,21 +578,20 @@
   </footer>
 </div>
 
-<!-- Floating Tip Line -->
+<!-- Floating Tip Animated -->
 <div class="floating-tip-container">
-  <div class="floating-tip-popover-line">
+  <div class="floating-tip-popover-ani">
     <strong>Pekerjaan selesai dalam hitungan detik?</strong><br>
     Jika alat ini sangat membantu dan menghemat waktu berharga Anda, dukung pengembang dengan mentraktir secangkir kopi agar aplikasi ini terus aktif dan bermanfaat untuk kita semua ☕
   </div>
-  <a href="https://trakteer.id/bukit_santuai_korcam/tip" target="_blank" rel="noopener noreferrer" class="floating-tip-btn-line" title="Dukung Pengembang">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/>
-    </svg>
+  <a href="https://trakteer.id/bukit_santuai_korcam/tip" target="_blank" rel="noopener noreferrer" class="floating-tip-btn-ani" title="Dukung Pengembang">
+    <div class="floating-tip-dot"></div>
+    <i class="ti ti-coffee" style="font-size: 1.1rem;"></i>
     <span>Traktir Kopi</span>
   </a>
 </div>
 
-<!-- Logika Tema Waktu Indonesia -->
+<!-- Logika Tema Zona Waktu Indonesia -->
 <script>
 let currentThemeMode = localStorage.getItem('theme_preference') || 'auto';
 
@@ -564,7 +621,7 @@ function applyTheme() {
     if (badgeText) badgeText.innerText = `LIGHT (${zoneLabel})`;
   }
 
-  document.querySelectorAll('.theme-btn-line').forEach(btn => {
+  document.querySelectorAll('.theme-btn-ani').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-mode') === currentThemeMode);
   });
 }
@@ -638,7 +695,7 @@ function loadLogoImage(base64) {
     thumb.src = base64;
     thumb.style.display = 'block';
     document.getElementById('logoStatus').innerText = 'Logo dimuat (' + img.naturalWidth + 'x' + img.naturalHeight + ' px)';
-    document.getElementById('btnResetLogo').style.display = 'inline-block';
+    document.getElementById('btnResetLogo').style.display = 'inline-flex';
   };
   img.src = base64;
 }
@@ -662,7 +719,7 @@ let selectedTw = 'TW4';
 
 window.selectTw = function(twKey) {
   selectedTw = twKey;
-  document.querySelectorAll('.btn-tw-line').forEach(btn => {
+  document.querySelectorAll('.btn-tw-ani').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-tw') === twKey);
   });
 };
@@ -710,7 +767,7 @@ function handleMultipleFiles(files) {
   dzText.innerText = 'Memproses ' + uploadedFiles.length + ' berkas CSV...';
 
   fileListWrap.innerHTML = uploadedFiles.map(f => 
-    '<div class="file-chip-line"><span>' + f.name + '</span></div>'
+    '<div class="file-chip-ani"><i class="ti ti-file-text"></i><span>' + f.name + '</span></div>'
   ).join('');
   fileListWrap.style.display = 'flex';
 
@@ -953,7 +1010,7 @@ window.generatePDF = async function() {
     a.download = 'Batch_Verifikasi_' + Date.now() + '.zip';
     a.click();
 
-    btnPdf.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Generate PDF (Auto Split &amp; Zip)';
+    btnPdf.innerHTML = '<i class="ti ti-file-type-pdf" style="font-size: 1.2rem;"></i> Generate PDF (Auto Split &amp; Zip)';
     btnPdf.disabled = false;
   }
 };
