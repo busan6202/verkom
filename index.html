@@ -10,59 +10,54 @@
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 
   <style>
-    /* Mode Terang Neumorphism */
+    /* Mode Terang Hyper-Minimal Line */
     :root {
-      --bg: #e0e5ec;
-      --panel: #e0e5ec;
-      --text: #2d3748;
-      --text-muted: #718096;
-      --shadow-light: #ffffff;
-      --shadow-dark: #a3b1c6;
-      --border-subtle: rgba(163, 177, 198, 0.35);
-      --primary: #3182ce;
-      --primary-hover: #2b6cb0;
-      --accent: #38a169;
-      --accent-hover: #2f855a;
-      --tip: #d69e2e;
-      --radius: 16px;
-      --radius-sm: 10px;
+      --bg: #ffffff;
+      --panel: #ffffff;
+      --text: #09090b;
+      --text-muted: #71717a;
+      --line: #e4e4e7;
+      --line-active: #18181b;
+      --primary: #18181b;
+      --primary-text: #ffffff;
+      --accent: #27272a;
+      --radius: 4px;
     }
 
-    /* Mode Gelap Neumorphism */
+    /* Mode Gelap Hyper-Minimal Line */
     body.dark-mode {
-      --bg: #181d28;
-      --panel: #181d28;
-      --text: #e2e8f0;
-      --text-muted: #94a3b8;
-      --shadow-light: #222938;
-      --shadow-dark: #0e1118;
-      --border-subtle: rgba(34, 41, 56, 0.6);
-      --primary: #63b3ed;
-      --primary-hover: #4299e1;
-      --accent: #48bb78;
-      --accent-hover: #38a169;
-      --tip: #ecc94b;
+      --bg: #09090b;
+      --panel: #09090b;
+      --text: #fafafa;
+      --text-muted: #a1a1aa;
+      --line: #27272a;
+      --line-active: #fafafa;
+      --primary: #fafafa;
+      --primary-text: #09090b;
+      --accent: #e4e4e7;
     }
 
     * { 
       box-sizing: border-box; 
       margin: 0; 
       padding: 0; 
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, monospace;
       -webkit-user-select: none; 
       user-select: none; 
-      transition: background-color 0.3s ease, color 0.3s ease;
+      box-shadow: none !important;
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
     }
+
     body { 
       background-color: var(--bg); 
       color: var(--text); 
-      padding: 24px 16px 60px 16px; 
+      padding: 32px 16px 80px 16px; 
       display: flex; 
       justify-content: center; 
     }
     .container { 
       width: 100%; 
-      max-width: 960px; 
+      max-width: 920px; 
       display: flex; 
       flex-direction: column; 
       gap: 20px; 
@@ -75,354 +70,323 @@
       align-items: center;
       flex-wrap: wrap;
       gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--line);
     }
-    .badge-neu {
+    .badge-line {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 6px 16px;
-      border-radius: 99px;
-      background: var(--bg);
-      box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: var(--primary);
+      padding: 4px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
     }
-    .badge-neu-dot {
-      width: 8px;
-      height: 8px;
+    .badge-line-dot {
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #4285F4, #EA4335, #FBBC05, #34A853);
+      background: var(--text);
     }
 
-    /* Switcher Tema Gelap / Terang / Auto */
-    .theme-switcher-neu {
+    .theme-switcher-line {
       display: inline-flex;
-      padding: 4px;
-      border-radius: 99px;
-      background: var(--bg);
-      box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
-      gap: 4px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
     }
-    .theme-btn-neu {
+    .theme-btn-line {
       border: none;
       background: transparent;
-      padding: 6px 12px;
-      border-radius: 99px;
-      font-size: 0.75rem;
-      font-weight: 700;
+      padding: 5px 10px;
+      font-size: 0.72rem;
+      font-weight: 600;
       color: var(--text-muted);
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.2s;
+      border-right: 1px solid var(--line);
     }
-    .theme-btn-neu svg { width: 14px; height: 14px; fill: currentColor; }
-    .theme-btn-neu.active {
-      background: var(--bg);
-      color: var(--primary);
-      box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
+    .theme-btn-line:last-child { border-right: none; }
+    .theme-btn-line.active {
+      background: var(--text);
+      color: var(--bg);
     }
 
-    header { text-align: center; }
+    header { text-align: left; margin-top: 4px; }
     header h1 { 
-      font-size: 1.65rem; 
-      font-weight: 800; 
+      font-size: 1.5rem; 
+      font-weight: 700; 
       color: var(--text); 
       letter-spacing: -0.5px; 
     }
     header p { 
       color: var(--text-muted); 
-      font-size: 0.88rem; 
+      font-size: 0.82rem; 
       margin-top: 4px; 
     }
     
-    /* Kartu Utama Timbul */
-    .card-neu { 
+    /* Card Wireframe */
+    .card-line { 
       background: var(--panel); 
+      border: 1px solid var(--line);
       border-radius: var(--radius); 
-      padding: 26px; 
-      box-shadow: 9px 9px 18px var(--shadow-dark), -9px -9px 18px var(--shadow-light);
+      padding: 24px; 
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 20px;
     }
     
-    /* Dropzone Neumorphic Cekung */
-    .dropzone-neu {
+    /* Dropzone Line */
+    .dropzone-line {
+      border: 1px dashed var(--line);
       border-radius: var(--radius);
       padding: 32px 16px;
       text-align: center;
       cursor: pointer;
-      background: var(--bg);
-      box-shadow: inset 5px 5px 10px var(--shadow-dark), inset -5px -5px 10px var(--shadow-light);
-      transition: all 0.25s ease;
+      background: transparent;
+      transition: all 0.2s ease;
     }
-    .dropzone-neu:hover, .dropzone-neu.dragover {
-      box-shadow: inset 7px 7px 14px var(--shadow-dark), inset -7px -7px 14px var(--shadow-light);
+    .dropzone-line:hover, .dropzone-line.dragover {
+      border-color: var(--line-active);
+      border-style: solid;
+      background: rgba(120, 120, 120, 0.03);
     }
-    .icon-wrap-neu {
+    .icon-wrap-line {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      background: var(--bg);
-      box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
-      margin-bottom: 10px;
+      width: 40px;
+      height: 40px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
     }
     
-    .file-chip-wrap { display: flex; flex-wrap: wrap; gap: 8px; max-height: 90px; overflow-y: auto; }
-    .file-chip-neu { 
-      background: var(--bg); 
+    .file-chip-wrap { display: flex; flex-wrap: wrap; gap: 6px; max-height: 90px; overflow-y: auto; }
+    .file-chip-line { 
+      background: transparent; 
       color: var(--text); 
       font-size: 0.72rem; 
-      font-weight: 600;
-      padding: 5px 12px; 
-      border-radius: 99px; 
-      box-shadow: 2px 2px 5px var(--shadow-dark), -2px -2px 5px var(--shadow-light);
+      font-weight: 500;
+      padding: 4px 10px; 
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
       display: inline-flex; 
       align-items: center; 
       gap: 6px; 
     }
 
-    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
-    .form-group { display: flex; flex-direction: column; gap: 8px; }
-    label { font-size: 0.8rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    label { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
     
-    /* Input dan Select Neumorphic */
+    /* Input dan Select Hyper-Minimal */
     select, input[type="text"] { 
-      background: var(--bg); 
-      border: none; 
-      border-radius: var(--radius-sm); 
+      background: transparent; 
+      border: 1px solid var(--line); 
+      border-radius: var(--radius); 
       color: var(--text); 
-      padding: 11px 14px; 
-      font-size: 0.85rem; 
+      padding: 10px 12px; 
+      font-size: 0.82rem; 
       outline: none; 
-      box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
-      transition: all 0.2s;
     }
     select:focus, input[type="text"]:focus { 
-      box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
-      color: var(--primary);
+      border-color: var(--line-active);
     }
 
-    /* Logo Box Neumorphic */
-    .logo-box-neu {
+    /* Logo Box Minimal */
+    .logo-box-line {
       display: flex;
       align-items: center;
-      gap: 14px;
-      background: var(--bg);
-      padding: 10px 14px;
-      border-radius: var(--radius-sm);
-      box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+      gap: 12px;
+      background: transparent;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
     }
     .logo-preview-thumb {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
-      background: var(--bg);
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius);
       object-fit: contain;
-      box-shadow: 2px 2px 5px var(--shadow-dark), -2px -2px 5px var(--shadow-light);
+      border: 1px solid var(--line);
     }
-    .btn-neu-small {
-      padding: 7px 14px;
-      font-size: 0.78rem;
-      font-weight: 700;
+    .btn-line-small {
+      padding: 6px 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
       color: var(--text);
-      background: var(--bg);
-      border: none;
-      border-radius: var(--radius-sm);
+      background: transparent;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
       cursor: pointer;
-      box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
-      transition: all 0.15s;
     }
-    .btn-neu-small:active {
-      box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
+    .btn-line-small:hover {
+      border-color: var(--line-active);
     }
 
-    /* Preset Triwulan Neumorphic */
-    .tw-btn-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    .btn-tw-neu {
-      background: var(--bg); 
-      border: none; 
+    /* Preset Triwulan Line */
+    .tw-btn-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .btn-tw-line {
+      background: transparent; 
+      border: 1px solid var(--line); 
       color: var(--text);
-      padding: 10px 4px; 
-      border-radius: var(--radius-sm); 
+      padding: 8px 4px; 
+      border-radius: var(--radius); 
       font-size: 0.75rem; 
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer; 
       text-align: center; 
-      box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
-      transition: all 0.2s;
     }
-    .btn-tw-neu:hover { color: var(--primary); }
-    .btn-tw-neu.active {
-      box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
-      color: var(--primary);
+    .btn-tw-line:hover { border-color: var(--line-active); }
+    .btn-tw-line.active {
+      background: var(--text);
+      border-color: var(--text);
+      color: var(--bg);
     }
-    .btn-tw-neu span { display: block; font-size: 0.65rem; color: var(--text-muted); font-weight: normal; margin-top: 2px; }
+    .btn-tw-line span { display: block; font-size: 0.65rem; opacity: 0.8; font-weight: normal; margin-top: 2px; }
 
-    /* Bar Status Timbul */
-    .stats-bar-neu { 
+    /* Bar Status Line */
+    .stats-bar-line { 
       display: flex; 
       justify-content: space-between; 
-      font-size: 0.82rem; 
+      font-size: 0.78rem; 
       color: var(--text-muted); 
-      padding: 12px 18px; 
-      background: var(--bg); 
-      border-radius: var(--radius-sm); 
-      box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
+      padding: 10px 14px; 
+      background: transparent; 
+      border: 1px solid var(--line);
+      border-radius: var(--radius); 
     }
-    .stats-bar-neu strong { color: var(--primary); }
+    .stats-bar-line strong { color: var(--text); }
     
-    /* Tombol Aksi Utama Neumorphic */
-    .btn-group { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 4px; }
-    button.action-btn-neu {
+    /* Tombol Aksi */
+    .btn-group { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 4px; }
+    button.action-btn-line {
       flex: 1; 
       min-width: 160px; 
-      padding: 14px 20px; 
+      padding: 12px 18px; 
       border-radius: var(--radius); 
-      border: none;
-      font-weight: 800; 
-      font-size: 0.88rem; 
+      font-weight: 600; 
+      font-size: 0.82rem; 
       cursor: pointer; 
-      transition: all 0.2s ease;
       display: inline-flex; 
       align-items: center; 
       justify-content: center; 
-      gap: 10px;
-      background: var(--bg);
-      color: var(--text);
-      box-shadow: 5px 5px 12px var(--shadow-dark), -5px -5px 12px var(--shadow-light);
+      gap: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    button.action-btn-neu.btn-primary { color: var(--primary); }
-    button.action-btn-neu.btn-excel { color: var(--accent); }
-    
-    button.action-btn-neu:hover:not(:disabled) {
-      box-shadow: 7px 7px 16px var(--shadow-dark), -7px -7px 16px var(--shadow-light);
-      transform: translateY(-1px);
+    button.action-btn-line.btn-primary { 
+      background: var(--primary); 
+      color: var(--primary-text); 
+      border: 1px solid var(--primary);
     }
-    button.action-btn-neu:active:not(:disabled) {
-      box-shadow: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
-      transform: translateY(1px);
+    button.action-btn-line.btn-excel { 
+      background: transparent; 
+      color: var(--text); 
+      border: 1px solid var(--line);
+    }
+    button.action-btn-line.btn-excel:hover {
+      border-color: var(--line-active);
     }
     button:disabled { 
-      opacity: 0.5; 
+      opacity: 0.35; 
       cursor: not-allowed; 
-      box-shadow: none !important; 
-      transform: none !important; 
+      border-color: var(--line) !important;
     }
 
-    .preview-wrap-neu { 
-      border-radius: var(--radius-sm); 
+    .preview-wrap-line { 
+      border: 1px solid var(--line);
+      border-radius: var(--radius); 
       overflow: auto; 
       max-height: 240px; 
-      background: var(--bg);
-      box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
-      padding: 6px;
+      background: transparent;
     }
     table { width: 100%; border-collapse: collapse; font-size: 0.75rem; text-align: left; }
-    th, td { padding: 9px 12px; border-bottom: 1px solid var(--border-subtle); white-space: nowrap; }
-    th { background: var(--bg); color: var(--primary); position: sticky; top: 0; font-weight: 700; }
+    th, td { padding: 8px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+    th { background: var(--panel); color: var(--text); position: sticky; top: 0; font-weight: 600; }
 
-    /* Footer Copyright */
+    /* Footer Copyright Line */
     footer {
       text-align: center;
       margin-top: 10px;
       padding: 16px 8px;
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       color: var(--text-muted);
+      border-top: 1px solid var(--line);
     }
-    footer strong { color: var(--text); }
+    footer strong { color: var(--text); font-weight: 600; }
 
-    /* Floating Tip Neumorphic */
+    /* Floating Tip Minimal */
     .floating-tip-container {
       position: fixed;
-      right: 24px;
-      bottom: 26px;
+      right: 20px;
+      bottom: 24px;
       z-index: 999;
       display: flex;
       flex-direction: column;
       align-items: flex-end;
     }
-    .floating-tip-popover-neu {
+    .floating-tip-popover-line {
       visibility: hidden;
       opacity: 0;
-      width: 270px;
-      background: var(--bg);
+      width: 260px;
+      background: var(--panel);
       color: var(--text);
-      padding: 14px 16px;
+      padding: 12px 14px;
+      border: 1px solid var(--line-active);
       border-radius: var(--radius);
-      font-size: 0.78rem;
+      font-size: 0.75rem;
       line-height: 1.45;
-      box-shadow: 6px 6px 14px var(--shadow-dark), -6px -6px 14px var(--shadow-light);
-      margin-bottom: 12px;
-      transform: translateY(6px);
-      transition: all 0.25s ease-in-out;
+      margin-bottom: 10px;
+      transition: all 0.2s ease;
       pointer-events: none;
     }
-    .floating-tip-popover-neu strong { color: var(--tip); }
-    .floating-tip-container:hover .floating-tip-popover-neu {
+    .floating-tip-container:hover .floating-tip-popover-line {
       visibility: visible;
       opacity: 1;
-      transform: translateY(0);
     }
-    .floating-tip-btn-neu {
+    .floating-tip-btn-line {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 10px 16px;
-      background: var(--bg);
-      color: var(--tip);
+      padding: 8px 14px;
+      background: var(--panel);
+      color: var(--text);
       text-decoration: none;
-      font-size: 0.8rem;
-      font-weight: 800;
-      border-radius: 99px;
-      box-shadow: 5px 5px 12px var(--shadow-dark), -5px -5px 12px var(--shadow-light);
-      transition: all 0.2s ease;
+      font-size: 0.75rem;
+      font-weight: 600;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
     }
-    .floating-tip-btn-neu:hover {
-      box-shadow: 7px 7px 16px var(--shadow-dark), -7px -7px 16px var(--shadow-light);
-      transform: translateY(-2px);
-    }
-    .floating-tip-btn-neu:active {
-      box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
-    }
-    .floating-tip-dot {
-      width: 8px;
-      height: 8px;
-      background: var(--accent);
-      border-radius: 50%;
+    .floating-tip-btn-line:hover {
+      border-color: var(--line-active);
+      background: var(--text);
+      color: var(--bg);
     }
   </style>
 </head>
 <body oncontextmenu="return false;">
 
 <div class="container">
-  <!-- Bar Atas: Status & Pengalih Tema (Auto/Terang/Gelap) -->
+  <!-- Bar Atas -->
   <div class="top-bar">
-    <div class="badge-neu">
-      <div class="badge-neu-dot"></div>
+    <div class="badge-line">
+      <div class="badge-line-dot"></div>
       <span id="zoneBadgeText">WIB Auto Theme</span>
     </div>
 
-    <!-- Switcher Tema Neumorphic -->
-    <div class="theme-switcher-neu" id="themeSwitcher">
-      <button class="theme-btn-neu active" data-mode="auto" onclick="setAppTheme('auto')">
-        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1 0 10 10A10 10 0 0 0 12 2zm0 18a8 8 0 1 1 8-8 8 8 0 0 1-8 8z"/></svg>
-        <span>Auto (WIB)</span>
-      </button>
-      <button class="theme-btn-neu" data-mode="light" onclick="setAppTheme('light')">
-        <svg viewBox="0 0 24 24"><path d="M12 7a5 5 0 1 0 5 5 5 5 0 0 0-5-5zm0 8a3 3 0 1 1 3-3 3 3 0 0 1-3 3zm0-13a1 1 0 0 0 1-1V0a1 1 0 0 0-2 0v1a1 1 0 0 0 1 1zm0 20a1 1 0 0 0-1 1v1a1 1 0 0 0 2 0v-1a1 1 0 0 0-1-1zm11-10h-1a1 1 0 0 0 0 2h1a1 1 0 0 0 0-2zM3 12a1 1 0 0 0-1-1H1a1 1 0 0 0 0 2h1a1 1 0 0 0 1-1zm16.95-7.05a1 1 0 0 0-1.41 0l-.71.71a1 1 0 1 0 1.41 1.41l.71-.71a1 1 0 0 0 0-1.41zm-14.85 14.85a1 1 0 0 0-1.41 0l-.71.71a1 1 0 1 0 1.41 1.41l.71-.71a1 1 0 0 0 0-1.41zm14.85 0a1 1 0 0 0 0 1.41l.71.71a1 1 0 0 0 1.41-1.41l-.71-.71a1 1 0 0 0-1.41 0zM4.34 5.76a1 1 0 0 0 1.41-1.41l-.71-.71A1 1 0 0 0 3.63 5.05l.71.71z"/></svg>
-        <span>Terang</span>
-      </button>
-      <button class="theme-btn-neu" data-mode="dark" onclick="setAppTheme('dark')">
-        <svg viewBox="0 0 24 24"><path d="M12.3 2a10 10 0 0 0-1.9 20 10 10 0 0 0 8.6-4.9 1 1 0 0 0-1-1.5 8 8 0 1 1-7.2-13.1 1 1 0 0 0 1.5-1A10 10 0 0 0 12.3 2z"/></svg>
-        <span>Gelap</span>
-      </button>
+    <!-- Switcher Tema Line -->
+    <div class="theme-switcher-line" id="themeSwitcher">
+      <button class="theme-btn-line active" data-mode="auto" onclick="setAppTheme('auto')">Auto</button>
+      <button class="theme-btn-line" data-mode="light" onclick="setAppTheme('light')">Light</button>
+      <button class="theme-btn-line" data-mode="dark" onclick="setAppTheme('dark')">Dark</button>
     </div>
   </div>
 
@@ -431,16 +395,16 @@
     <p>Otomasi CSV SIKS Fasdik ke Lembar Verifikasi Resmi (Kemensos)</p>
   </header>
 
-  <div class="card-neu">
-    <!-- Dropzone Inset -->
-    <div class="dropzone-neu" id="dz" onclick="document.getElementById('csvFile').click()">
-      <div class="icon-wrap-neu">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--primary);">
+  <div class="card-line">
+    <!-- Dropzone Line -->
+    <div class="dropzone-line" id="dz" onclick="document.getElementById('csvFile').click()">
+      <div class="icon-wrap-line">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
         </svg>
       </div>
-      <p id="dzText" style="font-weight:700; color:var(--text);">Pilih atau seret berkas <strong>.CSV SIKS</strong> ke sini</p>
-      <span style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; display:block;">Dukungan multi-file batch otomatis pecah sekolah</span>
+      <p id="dzText" style="font-weight:600; font-size:0.85rem;">Klik atau seret berkas <strong>.CSV SIKS</strong> ke sini</p>
+      <span style="font-size:0.72rem; color:var(--text-muted); margin-top:4px; display:block;">Mendukung multi-file batch otomatis pecah sekolah</span>
       <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" multiple style="display:none;" />
     </div>
 
@@ -448,7 +412,7 @@
     <div class="file-chip-wrap" id="fileListWrap" style="display:none;"></div>
 
     <!-- Stats Bar -->
-    <div class="stats-bar-neu" id="statsBar" style="display:none;">
+    <div class="stats-bar-line" id="statsBar" style="display:none;">
       <span>Berkas: <strong id="statFileName">0 Berkas</strong></span>
       <span>Sekolah: <strong id="statSchools">0</strong></span>
       <span>Total Siswa Tampil: <strong id="statRows">0</strong></span>
@@ -457,20 +421,14 @@
     <div class="form-grid">
       <!-- Filter Pendamping -->
       <div class="form-group">
-        <label>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="color:var(--primary);"><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"/></svg>
-          Filter Pendamping
-        </label>
+        <label>Filter Pendamping</label>
         <select id="filterPendamping" onchange="applyPendampingFilter()">
           <option value="ALL">-- Semua Pendamping --</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="color:var(--accent);"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
-          Ukuran Kertas
-        </label>
+        <label>Ukuran Kertas</label>
         <select id="paperSize">
           <option value="f4">F4 / Folio (330 × 210 mm) - Standar</option>
           <option value="a4">A4 (297 × 210 mm)</option>
@@ -478,10 +436,7 @@
       </div>
 
       <div class="form-group">
-        <label>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style="color:var(--tip);"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm0 16H5V8h14v11z"/></svg>
-          Format Periode Laporan
-        </label>
+        <label>Format Periode Laporan</label>
         <select id="periodType" onchange="togglePeriodType()">
           <option value="triwulan" selected>Triwulan (3 Bulan)</option>
           <option value="bulanan">Bulanan (1 Bulan)</option>
@@ -502,11 +457,11 @@
     <!-- Panel Kustom Logo -->
     <div class="form-group">
       <label>Kustom Logo (Kop &amp; Watermark Background)</label>
-      <div class="logo-box-neu">
+      <div class="logo-box-line">
         <img id="logoThumb" class="logo-preview-thumb" src="" alt="Logo" style="display:none;" />
-        <span id="logoStatus" style="font-size: 0.8rem; color: var(--text-muted); flex: 1;">Belum ada logo khusus</span>
-        <button type="button" class="btn-neu-small" onclick="document.getElementById('logoInput').click()">Pilih Logo</button>
-        <button type="button" class="btn-neu-small" id="btnResetLogo" onclick="resetLogo()" style="display:none; color:#e53e3e;">Reset</button>
+        <span id="logoStatus" style="font-size: 0.78rem; color: var(--text-muted); flex: 1;">Belum ada logo kustom</span>
+        <button type="button" class="btn-line-small" onclick="document.getElementById('logoInput').click()">Pilih Logo</button>
+        <button type="button" class="btn-line-small" id="btnResetLogo" onclick="resetLogo()" style="display:none;">Reset</button>
         <input type="file" id="logoInput" accept="image/*" style="display:none;" onchange="handleLogoUpload(event)" />
       </div>
     </div>
@@ -515,10 +470,10 @@
     <div class="form-group" id="twContainer">
       <label>Pilihan Triwulan</label>
       <div class="tw-btn-group">
-        <button type="button" class="btn-tw-neu" data-tw="TW1" onclick="selectTw('TW1')">TW 1<span>Jan–Mar</span></button>
-        <button type="button" class="btn-tw-neu" data-tw="TW2" onclick="selectTw('TW2')">TW 2<span>Apr–Jun</span></button>
-        <button type="button" class="btn-tw-neu" data-tw="TW3" onclick="selectTw('TW3')">TW 3<span>Jul–Sep</span></button>
-        <button type="button" class="btn-tw-neu active" data-tw="TW4" onclick="selectTw('TW4')">TW 4<span>Okt–Des</span></button>
+        <button type="button" class="btn-tw-line" data-tw="TW1" onclick="selectTw('TW1')">TW 1<span>Jan–Mar</span></button>
+        <button type="button" class="btn-tw-line" data-tw="TW2" onclick="selectTw('TW2')">TW 2<span>Apr–Jun</span></button>
+        <button type="button" class="btn-tw-line" data-tw="TW3" onclick="selectTw('TW3')">TW 3<span>Jul–Sep</span></button>
+        <button type="button" class="btn-tw-line active" data-tw="TW4" onclick="selectTw('TW4')">TW 4<span>Okt–Des</span></button>
       </div>
     </div>
 
@@ -542,18 +497,18 @@
     </div>
 
     <!-- Preview Tabel Data -->
-    <div class="preview-wrap-neu" id="previewWrap" style="display:none;">
+    <div class="preview-wrap-line" id="previewWrap" style="display:none;">
       <table id="previewTable"></table>
     </div>
 
     <!-- Tombol Aksi -->
     <div class="btn-group">
-      <button class="action-btn-neu btn-primary" id="btnPdf" disabled onclick="generatePDF()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg>
+      <button class="action-btn-line btn-primary" id="btnPdf" disabled onclick="generatePDF()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         Generate PDF (Auto Split &amp; Zip)
       </button>
-      <button class="action-btn-neu btn-excel" id="btnExcel" disabled onclick="exportExcel()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-2h2v2zm0-4H7v-2h2v2zm0-4H7V7h2v2zm4 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2zm4 8h-2v-2h2v2zm0-4h-2v-2h2v2zm0-4h-2V7h2v2z"/></svg>
+      <button class="action-btn-line btn-excel" id="btnExcel" disabled onclick="exportExcel()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9l6 6M15 9l-6 6"/></svg>
         Ekspor Excel
       </button>
     </div>
@@ -565,31 +520,26 @@
   </footer>
 </div>
 
-<!-- Floating Tip Neumorphic -->
+<!-- Floating Tip Line -->
 <div class="floating-tip-container">
-  <div class="floating-tip-popover-neu">
+  <div class="floating-tip-popover-line">
     <strong>Pekerjaan selesai dalam hitungan detik?</strong><br>
     Jika alat ini sangat membantu dan menghemat waktu berharga Anda, dukung pengembang dengan mentraktir secangkir kopi agar aplikasi ini terus aktif dan bermanfaat untuk kita semua ☕
   </div>
-  <a href="https://trakteer.id/bukit_santuai_korcam/tip" target="_blank" rel="noopener noreferrer" class="floating-tip-btn-neu" title="Dukung Pengembang">
-    <div class="floating-tip-dot"></div>
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-      <path d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"/>
+  <a href="https://trakteer.id/bukit_santuai_korcam/tip" target="_blank" rel="noopener noreferrer" class="floating-tip-btn-line" title="Dukung Pengembang">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8zM6 1v3M10 1v3M14 1v3"/>
     </svg>
     <span>Traktir Kopi</span>
   </a>
 </div>
 
-<!-- ==============================================================
-     LOGIKA TEMA ZONA WAKTU INDONESIA (WIB / WITA / WIT)
-     ============================================================== -->
+<!-- Logika Tema Waktu Indonesia -->
 <script>
 let currentThemeMode = localStorage.getItem('theme_preference') || 'auto';
 
 function getIndonesiaHour() {
-  // Ambil jam lokal berdasarkan zona waktu perangkat pengguna di Indonesia
-  const now = new Date();
-  return now.getHours();
+  return new Date().getHours();
 }
 
 function applyTheme() {
@@ -597,27 +547,24 @@ function applyTheme() {
   const hour = getIndonesiaHour();
   const badgeText = document.getElementById('zoneBadgeText');
 
-  // Deteksi Zona Waktu
   const tzOffset = -nowOffsetMinutes() / 60;
   let zoneLabel = "WIB";
   if (tzOffset === 8) zoneLabel = "WITA";
   if (tzOffset === 9) zoneLabel = "WIT";
 
   if (currentThemeMode === 'auto') {
-    // Jam 06.00 s/d 17.59 = Terang, Jam 18.00 s/d 05.59 = Gelap
     const isNight = (hour >= 18 || hour < 6);
     body.classList.toggle('dark-mode', isNight);
-    if (badgeText) badgeText.innerText = `${zoneLabel} Auto (${isNight ? 'Malam 🌙' : 'Siang ☀️'})`;
+    if (badgeText) badgeText.innerText = `${zoneLabel} AUTO (${isNight ? 'NIGHT' : 'DAY'})`;
   } else if (currentThemeMode === 'dark') {
     body.classList.add('dark-mode');
-    if (badgeText) badgeText.innerText = `Mode Gelap (${zoneLabel})`;
+    if (badgeText) badgeText.innerText = `DARK (${zoneLabel})`;
   } else {
     body.classList.remove('dark-mode');
-    if (badgeText) badgeText.innerText = `Mode Terang (${zoneLabel})`;
+    if (badgeText) badgeText.innerText = `LIGHT (${zoneLabel})`;
   }
 
-  // Update Tombol Switcher Aktif
-  document.querySelectorAll('.theme-btn-neu').forEach(btn => {
+  document.querySelectorAll('.theme-btn-line').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-mode') === currentThemeMode);
   });
 }
@@ -632,18 +579,14 @@ function setAppTheme(mode) {
   applyTheme();
 }
 
-// Inisialisasi tema saat dibuka
 applyTheme();
 
-// Cek otomatis setiap 60 detik jika pengguna memilih mode 'auto'
 setInterval(() => {
   if (currentThemeMode === 'auto') applyTheme();
 }, 60000);
 </script>
 
-<!-- ==============================================================
-     ENCRYPTED RUNTIME LOADER & CORE LOGIC
-     ============================================================== -->
+<!-- Enkripsi Runtime Obfuscated Code -->
 <script>
 document.addEventListener('keydown', function(e) {
   if (
@@ -694,7 +637,7 @@ function loadLogoImage(base64) {
     const thumb = document.getElementById('logoThumb');
     thumb.src = base64;
     thumb.style.display = 'block';
-    document.getElementById('logoStatus').innerText = 'Logo tersimpan (' + img.naturalWidth + 'x' + img.naturalHeight + ' px)';
+    document.getElementById('logoStatus').innerText = 'Logo dimuat (' + img.naturalWidth + 'x' + img.naturalHeight + ' px)';
     document.getElementById('btnResetLogo').style.display = 'inline-block';
   };
   img.src = base64;
@@ -704,7 +647,7 @@ window.resetLogo = function() {
   localStorage.removeItem('custom_kemensos_logo');
   customLogoData = null;
   document.getElementById('logoThumb').style.display = 'none';
-  document.getElementById('logoStatus').innerText = 'Belum ada logo khusus';
+  document.getElementById('logoStatus').innerText = 'Belum ada logo kustom';
   document.getElementById('btnResetLogo').style.display = 'none';
   document.getElementById('logoInput').value = '';
 };
@@ -719,7 +662,7 @@ let selectedTw = 'TW4';
 
 window.selectTw = function(twKey) {
   selectedTw = twKey;
-  document.querySelectorAll('.btn-tw-neu').forEach(btn => {
+  document.querySelectorAll('.btn-tw-line').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-tw') === twKey);
   });
 };
@@ -767,7 +710,7 @@ function handleMultipleFiles(files) {
   dzText.innerText = 'Memproses ' + uploadedFiles.length + ' berkas CSV...';
 
   fileListWrap.innerHTML = uploadedFiles.map(f => 
-    '<div class="file-chip-neu"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg><span>' + f.name + '</span></div>'
+    '<div class="file-chip-line"><span>' + f.name + '</span></div>'
   ).join('');
   fileListWrap.style.display = 'flex';
 
@@ -798,7 +741,7 @@ function handleMultipleFiles(files) {
 
     applyPendampingFilter();
 
-    dzText.innerHTML = 'Siap! Berhasil memuat <strong>' + uploadedFiles.length + ' berkas</strong>';
+    dzText.innerHTML = 'Berhasil memuat <strong>' + uploadedFiles.length + ' berkas</strong>';
     btnPdf.disabled = false;
     btnExcel.disabled = false;
   });
@@ -995,7 +938,7 @@ window.generatePDF = async function() {
     const doc = buildOfficialDoc(schoolKeys[0], groupedSchools[schoolKeys[0]], pageSize, months, signer, nip);
     doc.save('Form_Verifikasi_' + schoolKeys[0].replace(/[^a-zA-Z0-9]/g, '_') + '.pdf');
   } else {
-    btnPdf.innerText = 'Membuat ZIP...';
+    btnPdf.innerText = 'Memproses ZIP...';
     btnPdf.disabled = true;
     const zip = new JSZip();
 
@@ -1010,7 +953,7 @@ window.generatePDF = async function() {
     a.download = 'Batch_Verifikasi_' + Date.now() + '.zip';
     a.click();
 
-    btnPdf.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg> Generate PDF (Auto Split &amp; Zip)';
+    btnPdf.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Generate PDF (Auto Split &amp; Zip)';
     btnPdf.disabled = false;
   }
 };
