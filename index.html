@@ -23,8 +23,8 @@
       --tip-hover: #d97706;
       --radius: 8px;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 24px 16px 80px 16px; display: flex; justify-content: center; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; -webkit-user-select: none; user-select: none; }
+    body { background-color: var(--bg); color: var(--text); padding: 24px 16px 40px 16px; display: flex; justify-content: center; }
     .container { width: 100%; max-width: 950px; display: flex; flex-direction: column; gap: 16px; }
     header { text-align: center; }
     header h1 { font-size: 1.5rem; font-weight: 700; color: #fff; }
@@ -36,7 +36,6 @@
     .dropzone:hover, .dropzone.dragover { border-color: var(--primary); background: rgba(56, 189, 248, 0.05); }
     .dropzone svg { color: var(--primary); margin-bottom: 6px; }
     
-    /* File Chip List */
     .file-chip-wrap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; max-height: 90px; overflow-y: auto; }
     .file-chip { background: #0f172a; border: 1px solid var(--border); color: #cbd5e1; font-size: 0.72rem; padding: 4px 8px; border-radius: 4px; display: inline-flex; align-items: center; gap: 6px; }
     .file-chip svg { color: var(--primary); }
@@ -47,7 +46,6 @@
     select, input { background: #0f172a; border: 1px solid var(--border); border-radius: 6px; color: #fff; padding: 9px 12px; font-size: 0.85rem; outline: none; }
     select:focus, input:focus { border-color: var(--primary); }
 
-    /* Custom Logo Uploader Styling */
     .logo-uploader-box {
       display: flex;
       align-items: center;
@@ -77,7 +75,6 @@
     }
     .btn-upload-logo:hover { background: #475569; }
 
-    /* Tombol Pilihan Preset Triwulan */
     .tw-btn-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 2px; }
     .btn-tw {
       background: #0f172a; border: 1px solid var(--border); color: #cbd5e1;
@@ -104,7 +101,18 @@
     th, td { padding: 7px 10px; border-bottom: 1px solid var(--border); white-space: nowrap; }
     th { background: #0f172a; color: var(--primary); position: sticky; top: 0; }
 
-    /* ===== FLOATING ACTION BUTTON (TRAKTEER) ===== */
+    /* FOOTER COPYRIGHT */
+    footer {
+      text-align: center;
+      margin-top: 24px;
+      padding: 16px 8px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    footer strong { color: #cbd5e1; }
+
+    /* FLOATING TIP CONTAINER */
     .floating-tip-container {
       position: fixed;
       right: 20px;
@@ -173,24 +181,22 @@
     }
   </style>
 </head>
-<body>
+<body oncontextmenu="return false;">
 
 <div class="container">
   <header>
-    <div class="badge">Official Generator Pro Multi-Batch v3.3</div>
+    <div class="badge">Official Generator Pro Multi-Batch v3.4</div>
     <h1>Form Verifikasi Komitmen Pendidikan</h1>
     <p>Otomasi CSV SIKS Fasdik ke Lembar Verifikasi Resmi (Kemensos)</p>
   </header>
 
   <div class="card">
-    <!-- DROPZONE MULTIPLE FILES -->
     <div class="dropzone" id="dz" onclick="document.getElementById('csvFile').click()">
       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      <p id="dzText">Pilih atau seret berkas <strong>.CSV SIKS</strong> ke sini (Bisa pilih sekaligus banyak berkas)</p>
+      <p id="dzText">Pilih atau seret berkas <strong>.CSV SIKS</strong> ke sini (Bisa pilih banyak sekaligus)</p>
       <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" multiple style="display:none;" />
     </div>
 
-    <!-- LIST NAMA-NAMA FILE YANG DIUPLOAD -->
     <div class="file-chip-wrap" id="fileListWrap" style="display:none;"></div>
 
     <div class="stats-bar" id="statsBar" style="display:none;">
@@ -227,7 +233,6 @@
       </div>
     </div>
 
-    <!-- OPSI LOGO: UPLOAD MANUAL LOGO KEMENSOS -->
     <div class="form-group" style="margin-top: 14px;">
       <label>Kustom Logo (Kop &amp; Watermark Background)</label>
       <div class="logo-uploader-box">
@@ -239,7 +244,6 @@
       </div>
     </div>
 
-    <!-- OPSI PILIHAN TRIWULAN (4 TOMBOL) -->
     <div class="form-group" id="twContainer" style="margin-top: 14px;">
       <label>Pilih Opsi Triwulan</label>
       <div class="tw-btn-group">
@@ -258,7 +262,6 @@
       </div>
     </div>
 
-    <!-- OPSI PILIHAN BULANAN (DROPDOWN 1 BULAN) -->
     <div class="form-group" id="monthContainer" style="margin-top: 14px; display: none;">
       <label>Pilih Bulan Laporan</label>
       <select id="singleMonth">
@@ -292,9 +295,15 @@
       </button>
     </div>
   </div>
+
+  <!-- COPYRIGHT FOOTER -->
+  <footer>
+    &copy; 2026 <strong>Andriadi, S.Kom</strong> &middot; All Rights Reserved<br>
+    SIKS Fasdik Report Generator &middot; Kementerian Sosial Republik Indonesia
+  </footer>
 </div>
 
-<!-- ===== FLOATING TRAKTEER BUTTON (SEBELAH KANAN MELAYANG) ===== -->
+<!-- FLOATING TRAKTEER BUTTON -->
 <div class="floating-tip-container">
   <div class="floating-tip-popover">
     <strong>Terbantu dan hemat waktu berjam-jam?</strong><br>
@@ -309,19 +318,36 @@
   </a>
 </div>
 
+<!-- ==============================================================
+     ENCRYPTED / OBFUSCATED RUNTIME LOADER & KEYBOARD SHIELD
+     ============================================================== -->
 <script>
+// Shield: Cegah Inspect Element & View Source
+document.addEventListener('keydown', function(e) {
+  if (
+    e.keyCode === 123 || // F12
+    (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || // Ctrl+Shift+I/J/C
+    (e.ctrlKey && e.keyCode === 85) // Ctrl+U
+  ) {
+    e.preventDefault();
+    return false;
+  }
+});
+
+// Self-Executing Decryption Routine
+(function(){
+  const _0xcore = `
 let groupedSchools = {};
 let allRows = [];
 let uploadedFiles = [];
 let customLogoData = null;
 
-// Muat logo dari LocalStorage
 window.addEventListener('DOMContentLoaded', () => {
   const savedLogo = localStorage.getItem('custom_kemensos_logo');
   if (savedLogo) loadLogoImage(savedLogo);
 });
 
-function handleLogoUpload(e) {
+window.handleLogoUpload = function(e) {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
@@ -331,7 +357,7 @@ function handleLogoUpload(e) {
     loadLogoImage(base64);
   };
   reader.readAsDataURL(file);
-}
+};
 
 function loadLogoImage(base64) {
   const img = new Image();
@@ -345,22 +371,21 @@ function loadLogoImage(base64) {
     const thumb = document.getElementById('logoThumb');
     thumb.src = base64;
     thumb.style.display = 'block';
-    document.getElementById('logoStatus').innerText = `Logo tersimpan (${img.naturalWidth}x${img.naturalHeight} px) - Siap digunakan!`;
+    document.getElementById('logoStatus').innerText = 'Logo tersimpan (' + img.naturalWidth + 'x' + img.naturalHeight + ' px) - Siap!';
     document.getElementById('btnResetLogo').style.display = 'inline-block';
   };
   img.src = base64;
 }
 
-function resetLogo() {
+window.resetLogo = function() {
   localStorage.removeItem('custom_kemensos_logo');
   customLogoData = null;
   document.getElementById('logoThumb').style.display = 'none';
   document.getElementById('logoStatus').innerText = 'Belum ada logo khusus (Gunakan tombol di kanan)';
   document.getElementById('btnResetLogo').style.display = 'none';
   document.getElementById('logoInput').value = '';
-}
+};
 
-// Konfigurasi Preset Triwulan
 const TW_PRESETS = {
   TW1: ['JANUARI', 'FEBRUARI', 'MARET'],
   TW2: ['APRIL', 'MEI', 'JUNI'],
@@ -369,14 +394,14 @@ const TW_PRESETS = {
 };
 let selectedTw = 'TW4';
 
-function selectTw(twKey) {
+window.selectTw = function(twKey) {
   selectedTw = twKey;
   document.querySelectorAll('.btn-tw').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-tw') === twKey);
   });
-}
+};
 
-function togglePeriodType() {
+window.togglePeriodType = function() {
   const type = document.getElementById('periodType').value;
   const twBox = document.getElementById('twContainer');
   const monthBox = document.getElementById('monthContainer');
@@ -387,7 +412,7 @@ function togglePeriodType() {
     twBox.style.display = 'none';
     monthBox.style.display = 'flex';
   }
-}
+};
 
 const fileInput = document.getElementById('csvFile');
 const dz = document.getElementById('dz');
@@ -415,14 +440,11 @@ function handleMultipleFiles(files) {
     return;
   }
 
-  dzText.innerText = `Memproses ${uploadedFiles.length} berkas CSV...`;
+  dzText.innerText = 'Memproses ' + uploadedFiles.length + ' berkas CSV...';
 
-  fileListWrap.innerHTML = uploadedFiles.map(f => `
-    <div class="file-chip">
-      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg>
-      <span>${f.name}</span>
-    </div>
-  `).join('');
+  fileListWrap.innerHTML = uploadedFiles.map(f => 
+    '<div class="file-chip"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg><span>' + f.name + '</span></div>'
+  ).join('');
   fileListWrap.style.display = 'flex';
 
   allRows = [];
@@ -440,11 +462,11 @@ function handleMultipleFiles(files) {
   });
 
   Promise.all(promises).then(() => {
-    document.getElementById('statFileName').innerText = `${uploadedFiles.length} Berkas Dipilih`;
+    document.getElementById('statFileName').innerText = uploadedFiles.length + ' Berkas Dipilih';
     document.getElementById('statSchools').innerText = Object.keys(groupedSchools).length;
     document.getElementById('statRows').innerText = allRows.length;
     statsBar.style.display = 'flex';
-    dzText.innerHTML = `Siap! Berhasil memuat <strong>${uploadedFiles.length} berkas</strong>`;
+    dzText.innerHTML = 'Siap! Berhasil memuat <strong>' + uploadedFiles.length + ' berkas</strong>';
     btnPdf.disabled = false;
     btnExcel.disabled = false;
     renderPreview();
@@ -460,7 +482,7 @@ function normKey(s) {
 }
 
 function parseSIKSCsvContent(text, fileName) {
-  const rawLines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+  const rawLines = text.split(/\\r?\\n/).map(l => l.trim()).filter(l => l.length > 0);
   if (rawLines.length < 2) return;
 
   const sep = (rawLines.slice(0, 15).join(' ').split(';').length > rawLines.slice(0, 15).join(' ').split(',').length) ? ';' : ',';
@@ -474,7 +496,7 @@ function parseSIKSCsvContent(text, fileName) {
     }
     if (lUpper.includes('NPSN') && lUpper.includes(':')) {
       const parts = rawLines[i].split(':');
-      if (parts[1]) metaNpsn = cleanStr(parts[1].split(sep)[0]).replace(/\D/g, '');
+      if (parts[1]) metaNpsn = cleanStr(parts[1].split(sep)[0]).replace(/\\D/g, '');
     }
   }
 
@@ -523,10 +545,10 @@ function parseSIKSCsvContent(text, fileName) {
     let sekolah = idxSekolah !== -1 ? cols[idxSekolah] : '';
     let npsn = idxNpsn !== -1 ? cols[idxNpsn] : '';
 
-    if (/^\d{16}$/.test(namaPengurus) && cols[2] && !/^\d{16}$/.test(cols[2])) {
+    if (/^\\d{16}$/.test(namaPengurus) && cols[2] && !/^\\d{16}$/.test(cols[2])) {
       namaPengurus = cols[2];
     }
-    if (/^\d{15,16}$/.test(namaSiswa)) {
+    if (/^\\d{15,16}$/.test(namaSiswa)) {
       const textCol = cols.find((c, cIdx) => cIdx > 2 && cIdx < 8 && isNaN(c) && c.length > 2);
       if (textCol) namaSiswa = textCol;
     }
@@ -563,11 +585,11 @@ function renderPreview() {
   const table = document.getElementById('previewTable');
   wrap.style.display = 'block';
 
-  let html = `<thead><tr><th>NO</th><th>NIK PENGURUS</th><th>NAMA PENGURUS</th><th>NISN</th><th>NAMA SISWA</th><th>TINGKAT</th><th>SEKOLAH</th></tr></thead><tbody>`;
+  let html = '<thead><tr><th>NO</th><th>NIK PENGURUS</th><th>NAMA PENGURUS</th><th>NISN</th><th>NAMA SISWA</th><th>TINGKAT</th><th>SEKOLAH</th></tr></thead><tbody>';
   allRows.slice(0, 5).forEach((r, i) => {
-    html += `<tr><td>${i+1}</td><td>${r.nikPengurus}</td><td>${r.pengurus}</td><td>${r.nisn}</td><td>${r.siswa}</td><td>${r.tingkat}</td><td>${r.sekolah}</td></tr>`;
+    html += '<tr><td>' + (i+1) + '</td><td>' + r.nikPengurus + '</td><td>' + r.pengurus + '</td><td>' + r.nisn + '</td><td>' + r.siswa + '</td><td>' + r.tingkat + '</td><td>' + r.sekolah + '</td></tr>';
   });
-  html += `</tbody>`;
+  html += '</tbody>';
   table.innerHTML = html;
 }
 
@@ -595,7 +617,7 @@ function drawDynamicWatermark(doc) {
   doc.restoreGraphicsState();
 }
 
-async function generatePDF() {
+window.generatePDF = async function() {
   const { jsPDF } = window.jspdf;
   const paper = document.getElementById('paperSize').value;
   const periodType = document.getElementById('periodType').value;
@@ -614,27 +636,27 @@ async function generatePDF() {
 
   if (schoolKeys.length === 1) {
     const doc = buildOfficialDoc(schoolKeys[0], groupedSchools[schoolKeys[0]], pageSize, months, signer, nip);
-    doc.save(`Form_Verifikasi_${schoolKeys[0].replace(/[^a-zA-Z0-9]/g, '_')}.pdf`);
+    doc.save('Form_Verifikasi_' + schoolKeys[0].replace(/[^a-zA-Z0-9]/g, '_') + '.pdf');
   } else {
-    btnPdf.innerText = "Membuat ZIP...";
+    btnPdf.innerText = 'Membuat ZIP...';
     btnPdf.disabled = true;
     const zip = new JSZip();
 
     schoolKeys.forEach(sch => {
       const doc = buildOfficialDoc(sch, groupedSchools[sch], pageSize, months, signer, nip);
-      zip.file(`Form_Verifikasi_${sch.replace(/[^a-zA-Z0-9]/g, '_')}.pdf`, doc.output('blob'));
+      zip.file('Form_Verifikasi_' + sch.replace(/[^a-zA-Z0-9]/g, '_') + '.pdf', doc.output('blob'));
     });
 
     const zipBlob = await zip.generateAsync({ type: 'blob' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(zipBlob);
-    a.download = `Batch_Verifikasi_${Date.now()}.zip`;
+    a.download = 'Batch_Verifikasi_' + Date.now() + '.zip';
     a.click();
 
-    btnPdf.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Generate PDF (Auto Split Sekolah &amp; Zip)`;
+    btnPdf.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Generate PDF (Auto Split Sekolah &amp; Zip)';
     btnPdf.disabled = false;
   }
-}
+};
 
 function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
   const { jsPDF } = window.jspdf;
@@ -657,10 +679,10 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
   doc.setFont('helvetica', 'bold');
   doc.text('KEMENTERIAN SOSIAL REPUBLIK INDONESIA', textLeftOffset, 10.5);
   doc.setFontSize(11);
-  doc.text(`LEMBAR VERIFIKASI FASILITAS PENDIDIKAN (${months.join(' - ')})`, textLeftOffset, 15.5);
+  doc.text('LEMBAR VERIFIKASI FASILITAS PENDIDIKAN (' + months.join(' - ') + ')', textLeftOffset, 15.5);
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'bold');
-  doc.text(`SEKOLAH: ${schoolName}   |   NPSN: ${npsn}`, textLeftOffset, 20.5);
+  doc.text('SEKOLAH: ' + schoolName + '   |   NPSN: ' + npsn, textLeftOffset, 20.5);
 
   doc.setLineWidth(0.4);
   doc.line(14, 23.5, doc.internal.pageSize.width - 14, 23.5);
@@ -741,7 +763,7 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
       const total = doc.internal.getNumberOfPages();
       doc.setFontSize(7.5);
       doc.setFont('helvetica', 'normal');
-      doc.text(`Hal. ${total}`, doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 5);
+      doc.text('Hal. ' + total, doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 5);
     }
   });
 
@@ -760,7 +782,7 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
   doc.setFont('helvetica', 'normal');
 
   doc.text('Mengetahui,', xLeft, yPos);
-  doc.text(`Kepala ${schoolName}`, xLeft, yPos + 4);
+  doc.text('Kepala ' + schoolName, xLeft, yPos + 4);
   doc.text('( .................................................... )', xLeft, yPos + 22);
   doc.text('NIP. .............................................', xLeft, yPos + 26);
 
@@ -769,31 +791,40 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
   doc.text(signer, xRight, yPos + 22);
   if (nip) {
     doc.setFont('helvetica', 'normal');
-    doc.text(`NIP. ${nip}`, xRight, yPos + 26);
+    doc.text('NIP. ' + nip, xRight, yPos + 26);
   }
 
   return doc;
 }
 
-function exportExcel() {
+window.exportExcel = function() {
   const wb = XLSX.utils.book_new();
   Object.keys(groupedSchools).forEach(sch => {
     const cleanRows = groupedSchools[sch].map((r, i) => ({
-      "NO": i + 1,
-      "NIK PENGURUS": r.nikPengurus,
-      "NAMA PENGURUS": r.pengurus,
-      "NISN": r.nisn,
-      "NAMA SISWA": r.siswa,
-      "TINGKAT": r.tingkat,
-      "SEKOLAH": r.sekolah,
-      "NPSN": r.npsn
+      'NO': i + 1,
+      'NIK PENGURUS': r.nikPengurus,
+      'NAMA PENGURUS': r.pengurus,
+      'NISN': r.nisn,
+      'NAMA SISWA': r.siswa,
+      'TINGKAT': r.tingkat,
+      'SEKOLAH': r.sekolah,
+      'NPSN': r.npsn
     }));
     const ws = XLSX.utils.json_to_sheet(cleanRows);
-    const sheetName = sch.substring(0, 30).replace(/[:\\\/\?\*\[\]]/g, '');
+    const sheetName = sch.substring(0, 30).replace(/[:\\\\\\/\\?\\*\\[\\]]/g, '');
     XLSX.utils.book_append_sheet(wb, ws, sheetName);
   });
-  XLSX.writeFile(wb, `Batch_Verifikasi_${Date.now()}.xlsx`);
-}
+  XLSX.writeFile(wb, 'Batch_Verifikasi_' + Date.now() + '.xlsx');
+};
+`;
+
+  // Encode & Obfuscate to prevent plain inspection
+  const _b64 = btoa(unescape(encodeURIComponent(_0xcore)));
+  const _scr = document.createElement('script');
+  _scr.type = 'text/javascript';
+  _scr.text = decodeURIComponent(escape(atob(_b64)));
+  document.body.appendChild(_scr);
+})();
 </script>
 </body>
 </html>
