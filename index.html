@@ -4,15 +4,20 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SIKS Fasdik - Form Verifikasi Komitmen Pendidikan</title>
+  
+  <!-- FAVICON & WEB ICON EKSKLUSIF (INLINE SVG) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23090d16'/%3E%3Crect x='1' y='1' width='62' height='62' rx='15' fill='none' stroke='%233b82f6' stroke-width='2' stroke-opacity='0.4'/%3E%3Cpath d='M16 14h22l12 12v24a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z' fill='%231e293b' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M38 14v12h12' fill='none' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M20 34h14M20 42h8' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='42' cy='42' r='10' fill='%2316a34a'/%3E%3Cpath d='M38 42l3 3 6-6' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23090d16'/%3E%3Crect x='1' y='1' width='62' height='62' rx='15' fill='none' stroke='%233b82f6' stroke-width='2' stroke-opacity='0.4'/%3E%3Cpath d='M16 14h22l12 12v24a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z' fill='%231e293b' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M38 14v12h12' fill='none' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M20 34h14M20 42h8' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='42' cy='42' r='10' fill='%2316a34a'/%3E%3Cpath d='M38 42l3 3 6-6' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <meta name="theme-color" content="#090d16" />
+
+  <!-- Pustaka Dokumen & Tabler Icons -->
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-  <!-- Tabler Icons CSS -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
   <style>
-    /* Mode Terang Micro-Animated */
     :root {
       --bg: #f8fafc;
       --panel: #ffffff;
@@ -31,7 +36,6 @@
       --radius-sm: 8px;
     }
 
-    /* Mode Gelap Micro-Animated */
     body.dark-mode {
       --bg: #090d16;
       --panel: #111827;
@@ -73,7 +77,7 @@
       gap: 20px; 
     }
 
-    /* ===== FLOATING ACTION BAR KANAN ATAS (VERTIKAL) ===== */
+    /* FLOATING ACTION BAR KANAN ATAS */
     .floating-top-right {
       position: fixed;
       top: 20px;
@@ -114,16 +118,13 @@
       color: #ffffff;
       box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
     }
-    .floating-btn-v i {
-      font-size: 1.1rem;
-    }
+    .floating-btn-v i { font-size: 1.1rem; }
     .floating-divider-v {
       width: 20px;
       height: 1px;
       background: var(--border);
       margin: 2px 0;
     }
-    /* Tooltip Hover */
     .floating-btn-v::after {
       content: attr(data-tooltip);
       position: absolute;
@@ -159,7 +160,6 @@
       margin-top: 4px; 
     }
     
-    /* Card Micro-Animated */
     .card-ani { 
       background: var(--panel); 
       border: 1px solid var(--border);
@@ -175,7 +175,6 @@
       border-color: var(--border-hover);
     }
     
-    /* Dropzone Animated */
     .dropzone-ani {
       border: 2px dashed var(--border);
       border-radius: var(--radius);
@@ -227,8 +226,7 @@
     label { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
     label i { font-size: 1rem; color: var(--primary); }
     
-    /* Input & Select */
-    select, input[type="text"] { 
+    select, input[type="text"], input[type="number"] { 
       background: var(--bg); 
       border: 1px solid var(--border); 
       border-radius: var(--radius-sm); 
@@ -237,12 +235,17 @@
       font-size: 0.85rem; 
       outline: none; 
     }
-    select:focus, input[type="text"]:focus { 
+    select:focus, input[type="text"]:focus, input[type="number"]:focus { 
       border-color: var(--primary);
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
 
-    /* Logo Box */
+    .date-row {
+      display: grid;
+      grid-template-columns: 70px 1fr 85px;
+      gap: 6px;
+    }
+
     .logo-box-ani {
       display: flex;
       align-items: center;
@@ -279,7 +282,6 @@
       transform: translateY(-1px);
     }
 
-    /* Preset Triwulan */
     .tw-btn-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
     .btn-tw-ani {
       background: var(--bg); 
@@ -301,7 +303,6 @@
     }
     .btn-tw-ani span { display: block; font-size: 0.65rem; opacity: 0.8; font-weight: normal; margin-top: 2px; }
 
-    /* Bar Status */
     .stats-bar-ani { 
       display: flex; 
       justify-content: space-between; 
@@ -314,7 +315,6 @@
     }
     .stats-bar-ani strong { color: var(--primary); }
     
-    /* Tombol Aksi */
     .btn-group { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 4px; }
     button.action-btn-ani {
       flex: 1; 
@@ -367,7 +367,6 @@
     th, td { padding: 9px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
     th { background: var(--panel); color: var(--primary); position: sticky; top: 0; font-weight: 700; }
 
-    /* Footer */
     footer {
       text-align: center;
       margin-top: 10px;
@@ -378,7 +377,6 @@
     }
     footer strong { color: var(--text); font-weight: 600; }
 
-    /* Floating Tip Animated */
     .floating-tip-container {
       position: fixed;
       right: 24px;
@@ -436,14 +434,18 @@
       border-radius: 50%;
       animation: pulseDot 2s infinite;
     }
+    @keyframes pulseDot {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255, 255, 255, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+    }
   </style>
 </head>
 <body oncontextmenu="return false;">
 
-<!-- ===== FLOATING MENU KANAN ATAS (VERTIKAL) ===== -->
+<!-- FLOATING MENU KANAN ATAS (VERTIKAL) -->
 <div class="floating-top-right">
-  <!-- Pilihan Mode Siang/Malam -->
-  <button class="floating-btn-v active" id="btnThemeAuto" data-tooltip="Mode Auto (Zona Waktu)" onclick="setAppTheme('auto')">
+  <button class="floating-btn-v active" id="btnThemeAuto" data-tooltip="Mode Auto (Waktu)" onclick="setAppTheme('auto')">
     <i class="ti ti-clock-play"></i>
   </button>
   <button class="floating-btn-v" id="btnThemeLight" data-tooltip="Mode Siang (Terang)" onclick="setAppTheme('light')">
@@ -455,7 +457,6 @@
 
   <div class="floating-divider-v"></div>
 
-  <!-- Pilihan Zona Waktu Indonesia -->
   <button class="floating-btn-v active" id="btnZoneAuto" data-tooltip="Zona: Auto Device" onclick="setIndonesiaZone('AUTO')">
     <i class="ti ti-map-pin"></i>
   </button>
@@ -530,6 +531,41 @@
       <div class="form-group">
         <label><i class="ti ti-id"></i> NIP Petugas</label>
         <input type="text" id="signerNip" value="198208042025210058" placeholder="NIP Petugas" />
+      </div>
+
+      <!-- OPSI TANGGAL, BULAN, TAHUN MANUAL (DI SEBELAH NIP) -->
+      <div class="form-group">
+        <label><i class="ti ti-calendar-event"></i> Tanggal TTD Dokumen</label>
+        <div class="date-row">
+          <input type="number" id="signDay" min="1" max="31" placeholder="Tgl" />
+          <select id="signMonth">
+            <option value="Januari">Januari</option>
+            <option value="Februari">Februari</option>
+            <option value="Maret">Maret</option>
+            <option value="April">April</option>
+            <option value="Mei">Mei</option>
+            <option value="Juni">Juni</option>
+            <option value="Juli">Juli</option>
+            <option value="Agustus">Agustus</option>
+            <option value="September">September</option>
+            <option value="Oktober">Oktober</option>
+            <option value="November">November</option>
+            <option value="Desember">Desember</option>
+          </select>
+          <input type="number" id="signYear" min="2020" max="2050" placeholder="Thn" />
+        </div>
+      </div>
+
+      <!-- OPSI KECAMATAN -->
+      <div class="form-group">
+        <label><i class="ti ti-building-community"></i> Kecamatan</label>
+        <input type="text" id="signerKecamatan" value="Bukit Santuai" placeholder="Contoh: Bukit Santuai" />
+      </div>
+
+      <!-- OPSI DESA -->
+      <div class="form-group">
+        <label><i class="ti ti-map-pin"></i> Desa / Kelurahan</label>
+        <input type="text" id="signerDesa" value="Lunuk Bagantung" placeholder="Contoh: Lunuk Bagantung" />
       </div>
     </div>
 
@@ -610,8 +646,22 @@
   </a>
 </div>
 
-<!-- Logika Floating Tema & Zona Waktu Indonesia -->
+<!-- Logika Tanggal Bawaan & Floating Tema Zona Waktu -->
 <script>
+// Set Tanggal Default Sesuai Hari Ini
+(function initDefaultDate() {
+  const now = new Date();
+  const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+  
+  const dayInp = document.getElementById('signDay');
+  const monthInp = document.getElementById('signMonth');
+  const yearInp = document.getElementById('signYear');
+
+  if (dayInp) dayInp.value = now.getDate();
+  if (monthInp) monthInp.value = months[now.getMonth()];
+  if (yearInp) yearInp.value = now.getFullYear();
+})();
+
 let currentThemeMode = localStorage.getItem('theme_preference') || 'auto';
 let currentZoneMode = localStorage.getItem('zone_preference') || 'AUTO';
 
@@ -626,7 +676,6 @@ function getZoneHour() {
   } else if (currentZoneMode === 'WIT') {
     return new Date(utc + (3600000 * 9)).getHours();
   }
-  // Auto: jam lokal perangkat pengguna
   return d.getHours();
 }
 
@@ -635,7 +684,6 @@ function applyTheme() {
   const hour = getZoneHour();
 
   if (currentThemeMode === 'auto') {
-    // Siang: 06.00 - 17.59 | Malam: 18.00 - 05.59
     const isNight = (hour >= 18 || hour < 6);
     body.classList.toggle('dark-mode', isNight);
   } else if (currentThemeMode === 'dark') {
@@ -644,12 +692,10 @@ function applyTheme() {
     body.classList.remove('dark-mode');
   }
 
-  // Update Tombol Tema
   document.getElementById('btnThemeAuto').classList.toggle('active', currentThemeMode === 'auto');
   document.getElementById('btnThemeLight').classList.toggle('active', currentThemeMode === 'light');
   document.getElementById('btnThemeDark').classList.toggle('active', currentThemeMode === 'dark');
 
-  // Update Tombol Zona
   document.getElementById('btnZoneAuto').classList.toggle('active', currentZoneMode === 'AUTO');
   document.getElementById('btnZoneWIB').classList.toggle('active', currentZoneMode === 'WIB');
   document.getElementById('btnZoneWITA').classList.toggle('active', currentZoneMode === 'WITA');
@@ -670,7 +716,6 @@ function setIndonesiaZone(zone) {
 
 applyTheme();
 
-// Cek otomatis setiap 60 detik jika di mode 'auto'
 setInterval(() => {
   if (currentThemeMode === 'auto') applyTheme();
 }, 60000);
@@ -1014,6 +1059,15 @@ window.generatePDF = async function() {
   const signer = document.getElementById('signerName').value.trim() || 'Andriadi, S.Kom';
   const nip = document.getElementById('signerNip').value.trim();
 
+  // Ambil Data Tanggal & Lokasi Manual
+  const sDay = document.getElementById('signDay').value || new Date().getDate();
+  const sMonth = document.getElementById('signMonth').value;
+  const sYear = document.getElementById('signYear').value || new Date().getFullYear();
+  const sDesa = document.getElementById('signerDesa').value.trim();
+  const sKec = document.getElementById('signerKecamatan').value.trim();
+
+  const formattedDate = (sDesa || sKec || 'Tempat') + ', ' + sDay + ' ' + sMonth + ' ' + sYear;
+
   let months = [];
   if (periodType === 'triwulan') {
     months = TW_PRESETS[selectedTw];
@@ -1025,7 +1079,7 @@ window.generatePDF = async function() {
   const schoolKeys = Object.keys(groupedSchools);
 
   if (schoolKeys.length === 1) {
-    const doc = buildOfficialDoc(schoolKeys[0], groupedSchools[schoolKeys[0]], pageSize, months, signer, nip);
+    const doc = buildOfficialDoc(schoolKeys[0], groupedSchools[schoolKeys[0]], pageSize, months, signer, nip, formattedDate);
     doc.save('Form_Verifikasi_' + schoolKeys[0].replace(/[^a-zA-Z0-9]/g, '_') + '.pdf');
   } else {
     btnPdf.innerText = 'Memproses ZIP...';
@@ -1033,7 +1087,7 @@ window.generatePDF = async function() {
     const zip = new JSZip();
 
     schoolKeys.forEach(sch => {
-      const doc = buildOfficialDoc(sch, groupedSchools[sch], pageSize, months, signer, nip);
+      const doc = buildOfficialDoc(sch, groupedSchools[sch], pageSize, months, signer, nip, formattedDate);
       zip.file('Form_Verifikasi_' + sch.replace(/[^a-zA-Z0-9]/g, '_') + '.pdf', doc.output('blob'));
     });
 
@@ -1048,7 +1102,7 @@ window.generatePDF = async function() {
   }
 };
 
-function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
+function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, formattedDate) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: pageSize });
 
@@ -1159,29 +1213,32 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip) {
 
   const finalY = doc.lastAutoTable.finalY || 140;
   const pageH = doc.internal.pageSize.height;
-  if (finalY + 34 > pageH) {
+  if (finalY + 36 > pageH) {
     doc.addPage();
     drawDynamicWatermark(doc);
   }
 
-  const yPos = finalY + 34 > pageH ? 22 : finalY + 10;
+  const yPos = finalY + 36 > pageH ? 22 : finalY + 8;
   const xLeft = 25;
   const xRight = doc.internal.pageSize.width - 75;
 
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'normal');
 
-  doc.text('Mengetahui,', xLeft, yPos);
-  doc.text('Kepala ' + schoolName, xLeft, yPos + 4);
-  doc.text('( .................................................... )', xLeft, yPos + 22);
-  doc.text('NIP. .............................................', xLeft, yPos + 26);
+  // Kiri: Kepala Sekolah
+  doc.text('Mengetahui,', xLeft, yPos + 4);
+  doc.text('Kepala ' + schoolName, xLeft, yPos + 8);
+  doc.text('( .................................................... )', xLeft, yPos + 26);
+  doc.text('NIP. .............................................', xLeft, yPos + 30);
 
+  // Kanan: Petugas Verifikasi + Tanggal & Lokasi Manual
+  doc.text(formattedDate, xRight, yPos);
   doc.text('Petugas Verifikasi,', xRight, yPos + 4);
   doc.setFont('helvetica', 'bold');
-  doc.text(signer, xRight, yPos + 22);
+  doc.text(signer, xRight, yPos + 26);
   if (nip) {
     doc.setFont('helvetica', 'normal');
-    doc.text('NIP. ' + nip, xRight, yPos + 26);
+    doc.text('NIP. ' + nip, xRight, yPos + 30);
   }
 
   return doc;
