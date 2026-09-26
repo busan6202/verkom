@@ -71,7 +71,7 @@
     }
     .container { 
       width: 100%; 
-      max-width: 960px; 
+      max-width: 980px; 
       display: flex; 
       flex-direction: column; 
       gap: 20px; 
@@ -221,18 +221,48 @@
     }
     .file-chip-ani i { color: var(--primary); }
 
-    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 16px; }
-    .form-group { display: flex; flex-direction: column; gap: 8px; }
-    label { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.3px; }
-    label i { font-size: 1rem; color: var(--primary); }
+    /* GRID SISTEM RAPI 4 KOLOM */
+    .form-grid { 
+      display: grid; 
+      grid-template-columns: repeat(4, 1fr); 
+      gap: 14px; 
+    }
+    @media (max-width: 860px) {
+      .form-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 520px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    .form-group { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 6px; 
+      min-width: 0; 
+    }
+    label { 
+      font-size: 0.75rem; 
+      font-weight: 700; 
+      color: var(--text-muted); 
+      display: flex; 
+      align-items: center; 
+      gap: 6px; 
+      text-transform: uppercase; 
+      letter-spacing: 0.3px; 
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    label i { font-size: 0.95rem; color: var(--primary); flex-shrink: 0; }
     
     select, input[type="text"], input[type="number"] { 
+      width: 100%;
       background: var(--bg); 
       border: 1px solid var(--border); 
       border-radius: var(--radius-sm); 
       color: var(--text); 
-      padding: 10px 14px; 
-      font-size: 0.85rem; 
+      padding: 9px 11px; 
+      font-size: 0.83rem; 
       outline: none; 
     }
     select:focus, input[type="text"]:focus, input[type="number"]:focus { 
@@ -240,10 +270,41 @@
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
 
+    /* BARIS TANGGAL FLEKSIBEL TANPA OVERFLOW */
     .date-row {
-      display: grid;
-      grid-template-columns: 70px 1fr 85px;
-      gap: 6px;
+      display: flex;
+      gap: 4px;
+      width: 100%;
+    }
+    .date-row input[type="number"]#signDay {
+      width: 48px;
+      flex-shrink: 0;
+      text-align: center;
+      padding: 9px 4px;
+      -moz-appearance: textfield;
+    }
+    .date-row input[type="number"]#signDay::-webkit-outer-spin-button,
+    .date-row input[type="number"]#signDay::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .date-row select#signMonth {
+      flex: 1;
+      min-width: 0;
+      padding: 9px 6px;
+      font-size: 0.8rem;
+    }
+    .date-row input[type="number"]#signYear {
+      width: 62px;
+      flex-shrink: 0;
+      text-align: center;
+      padding: 9px 4px;
+      -moz-appearance: textfield;
+    }
+    .date-row input[type="number"]#signYear::-webkit-outer-spin-button,
+    .date-row input[type="number"]#signYear::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
 
     .logo-box-ani {
@@ -498,8 +559,9 @@
       <span><i class="ti ti-users" style="margin-right:4px;"></i> Siswa Tampil: <strong id="statRows">0</strong></span>
     </div>
 
+    <!-- FORM GRID 4x2 SEJAJAR -->
     <div class="form-grid">
-      <!-- Filter Pendamping -->
+      <!-- Baris 1 -->
       <div class="form-group">
         <label><i class="ti ti-user-search"></i> Filter Pendamping</label>
         <select id="filterPendamping" onchange="applyPendampingFilter()">
@@ -528,12 +590,12 @@
         <input type="text" id="signerName" value="Andriadi, S.Kom" placeholder="Nama Petugas" />
       </div>
 
+      <!-- Baris 2 -->
       <div class="form-group">
         <label><i class="ti ti-id"></i> NIP Petugas</label>
         <input type="text" id="signerNip" value="198208042025210058" placeholder="NIP Petugas" />
       </div>
 
-      <!-- OPSI TANGGAL, BULAN, TAHUN MANUAL (DI SEBELAH NIP) -->
       <div class="form-group">
         <label><i class="ti ti-calendar-event"></i> Tanggal TTD Dokumen</label>
         <div class="date-row">
@@ -556,13 +618,11 @@
         </div>
       </div>
 
-      <!-- OPSI KECAMATAN -->
       <div class="form-group">
         <label><i class="ti ti-building-community"></i> Kecamatan</label>
         <input type="text" id="signerKecamatan" value="Bukit Santuai" placeholder="Contoh: Bukit Santuai" />
       </div>
 
-      <!-- OPSI DESA -->
       <div class="form-group">
         <label><i class="ti ti-map-pin"></i> Desa / Kelurahan</label>
         <input type="text" id="signerDesa" value="Lunuk Bagantung" placeholder="Contoh: Lunuk Bagantung" />
@@ -648,7 +708,6 @@
 
 <!-- Logika Tanggal Bawaan & Floating Tema Zona Waktu -->
 <script>
-// Set Tanggal Default Sesuai Hari Ini
 (function initDefaultDate() {
   const now = new Date();
   const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
@@ -1059,7 +1118,6 @@ window.generatePDF = async function() {
   const signer = document.getElementById('signerName').value.trim() || 'Andriadi, S.Kom';
   const nip = document.getElementById('signerNip').value.trim();
 
-  // Ambil Data Tanggal & Lokasi Manual
   const sDay = document.getElementById('signDay').value || new Date().getDate();
   const sMonth = document.getElementById('signMonth').value;
   const sYear = document.getElementById('signYear').value || new Date().getFullYear();
