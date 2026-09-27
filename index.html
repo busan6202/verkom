@@ -605,6 +605,632 @@
             <option value="Maret">Maret</option>
             <option value="April">April</option>
             <option value="Mei">Mei</option>
+            <option value="Juni">JuniBerikut adalah pembaruan kode lengkap `index.html`. 
+
+### Peningkatan pada Ekspor Excel:
+1. **Struktur Header 3-Tingkat Persis PDF:**
+   - **Kop Surat Kedinasan:** Kementerian Sosial RI, Judul Periode Laporan, Nama Sekolah & NPSN.
+   - **Baris 1:** Header utama (`NO`, `NIK PENGURUS`, `NAMA PENGURUS`, `NISN`, `NAMA SISWA`, `TINGKAT`, nama-nama bulan laporan, dan `NAMA PENDAMPING`).
+   - **Baris 2:** `Hari Efektif: ......` di atas masing-masing blok bulan.
+   - **Baris 3:** Sub-kolom absensi (`ALPA`, `IZIN`, `SAKIT`, `JML`, `%`) untuk setiap bulan.
+2. **Merge Cells Otomatis:** Menggunakan fitur `ws['!merges']` dari pustaka SheetJS agar kolom berjenjang menyatu persis seperti di PDF.
+3. **Format NIK & NISN Sebagai Teks Eksplisit:** Menggunakan tipe data `{ t: 's' }` agar angka 16 digit NIK dan 10 digit NISN **tidak terpotong dan tidak berubah menjadi notasi ilmiah / scientific notation (`1.98E+15`)**.
+4. **Blok Tanda Tangan Lengkap:** Di bagian bawah tabel Excel otomatis tercetak lembar tanda tangan dua sisi:
+   - **Kiri:** Mengetahui Kepala Sekolah beserta NIP.
+   - **Kanan:** Titimangsa (`Desa/Kecamatan, Tanggal Bulan Tahun`) dan Petugas Verifikasi beserta NIP.
+
+---
+
+### Simpan kode berikut sebagai `index.html`:
+
+```html
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIKS Fasdik - Form Verifikasi Komitmen Pendidikan</title>
+  
+  <!-- FAVICON & WEB ICON EKSKLUSIF (INLINE SVG) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23090d16'/%3E%3Crect x='1' y='1' width='62' height='62' rx='15' fill='none' stroke='%233b82f6' stroke-width='2' stroke-opacity='0.4'/%3E%3Cpath d='M16 14h22l12 12v24a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z' fill='%231e293b' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M38 14v12h12' fill='none' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M20 34h14M20 42h8' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='42' cy='42' r='10' fill='%2316a34a'/%3E%3Cpath d='M38 42l3 3 6-6' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='[http://www.w3.org/2000/svg](http://www.w3.org/2000/svg)' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23090d16'/%3E%3Crect x='1' y='1' width='62' height='62' rx='15' fill='none' stroke='%233b82f6' stroke-width='2' stroke-opacity='0.4'/%3E%3Cpath d='M16 14h22l12 12v24a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z' fill='%231e293b' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M38 14v12h12' fill='none' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M20 34h14M20 42h8' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='42' cy='42' r='10' fill='%2316a34a'/%3E%3Cpath d='M38 42l3 3 6-6' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <meta name="theme-color" content="#090d16" />
+
+  <!-- Pustaka Dokumen & Tabler Icons -->
+  <script src="[https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js](https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js)"></script>
+  <script src="[https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js](https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js)"></script>
+  <script src="[https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js](https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js)"></script>
+  <script src="[https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js](https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js)"></script>
+  <link rel="stylesheet" href="[https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css](https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css)">
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --panel: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --border-hover: #cbd5e1;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --accent: #16a34a;
+      --accent-hover: #15803d;
+      --tip: #d97706;
+      --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
+      --shadow-hover: 0 20px 30px -10px rgba(37, 99, 235, 0.15);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    body.dark-mode {
+      --bg: #090d16;
+      --panel: #111827;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #1f2937;
+      --border-hover: #374151;
+      --primary: #3b82f6;
+      --primary-hover: #60a5fa;
+      --accent: #22c55e;
+      --accent-hover: #4ade80;
+      --tip: #fbbf24;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      --shadow-hover: 0 20px 30px -10px rgba(59, 130, 246, 0.25);
+    }
+
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+      -webkit-user-select: none; 
+      user-select: none; 
+      transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    body { 
+      background-color: var(--bg); 
+      color: var(--text); 
+      padding: 32px 16px 80px 16px; 
+      display: flex; 
+      justify-content: center; 
+    }
+    .container { 
+      width: 100%; 
+      max-width: 980px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 20px; 
+    }
+
+    /* FLOATING ACTION BAR KANAN ATAS */
+    .floating-top-right {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      background: var(--panel);
+      padding: 8px 6px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15), 0 8px 10px -6px rgba(0,0,0,0.1);
+    }
+    .floating-btn-v {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      position: relative;
+    }
+    .floating-btn-v:hover {
+      color: var(--text);
+      background: var(--bg);
+      transform: scale(1.08);
+    }
+    .floating-btn-v.active {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
+    }
+    .floating-btn-v i { font-size: 1.1rem; }
+    .floating-divider-v {
+      width: 20px;
+      height: 1px;
+      background: var(--border);
+      margin: 2px 0;
+    }
+    .floating-btn-v::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      right: 44px;
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateX(4px);
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow);
+    }
+    .floating-btn-v:hover::after {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    header { text-align: left; }
+    header h1 { 
+      font-size: 1.6rem; 
+      font-weight: 800; 
+      color: var(--text); 
+      letter-spacing: -0.5px; 
+    }
+    header p { 
+      color: var(--text-muted); 
+      font-size: 0.85rem; 
+      margin-top: 4px; 
+    }
+    
+    .card-ani { 
+      background: var(--panel); 
+      border: 1px solid var(--border);
+      border-radius: var(--radius); 
+      padding: 26px; 
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    .card-ani:hover {
+      box-shadow: var(--shadow-hover);
+      border-color: var(--border-hover);
+    }
+    
+    .dropzone-ani {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 32px 16px;
+      text-align: center;
+      cursor: pointer;
+      background: var(--bg);
+      transition: all 0.25s ease;
+    }
+    .dropzone-ani:hover, .dropzone-ani.dragover {
+      border-color: var(--primary);
+      background: rgba(37, 99, 235, 0.03);
+      transform: translateY(-2px);
+    }
+    .icon-wrap-ani {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
+    }
+    .dropzone-ani:hover .icon-wrap-ani {
+      transform: scale(1.1) rotate(5deg);
+    }
+    
+    .file-chip-wrap { display: flex; flex-wrap: wrap; gap: 8px; max-height: 90px; overflow-y: auto; }
+    .file-chip-ani { 
+      background: var(--bg); 
+      color: var(--text); 
+      font-size: 0.72rem; 
+      font-weight: 600;
+      padding: 5px 12px; 
+      border: 1px solid var(--border);
+      border-radius: 99px; 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 6px; 
+    }
+    .file-chip-ani i { color: var(--primary); }
+
+    /* GRID SISTEM RAPI */
+    .form-grid { 
+      display: grid; 
+      grid-template-columns: repeat(4, 1fr); 
+      gap: 14px; 
+    }
+    @media (max-width: 860px) {
+      .form-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 520px) {
+      .form-grid { grid-template-columns: 1fr; }
+    }
+
+    .form-group { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 6px; 
+      min-width: 0; 
+    }
+    label { 
+      font-size: 0.75rem; 
+      font-weight: 700; 
+      color: var(--text-muted); 
+      display: flex; 
+      align-items: center; 
+      gap: 6px; 
+      text-transform: uppercase; 
+      letter-spacing: 0.3px; 
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    label i { font-size: 0.95rem; color: var(--primary); flex-shrink: 0; }
+    
+    select, input[type="text"], input[type="number"] { 
+      width: 100%;
+      background: var(--bg); 
+      border: 1px solid var(--border); 
+      border-radius: var(--radius-sm); 
+      color: var(--text); 
+      padding: 9px 11px; 
+      font-size: 0.83rem; 
+      outline: none; 
+    }
+    select:focus, input[type="text"]:focus, input[type="number"]:focus { 
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    .date-row {
+      display: flex;
+      gap: 4px;
+      width: 100%;
+    }
+    .date-row input[type="number"]#signDay {
+      width: 48px;
+      flex-shrink: 0;
+      text-align: center;
+      padding: 9px 4px;
+      -moz-appearance: textfield;
+    }
+    .date-row input[type="number"]#signDay::-webkit-outer-spin-button,
+    .date-row input[type="number"]#signDay::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .date-row select#signMonth {
+      flex: 1;
+      min-width: 0;
+      padding: 9px 6px;
+      font-size: 0.8rem;
+    }
+    .date-row input[type="number"]#signYear {
+      width: 62px;
+      flex-shrink: 0;
+      text-align: center;
+      padding: 9px 4px;
+      -moz-appearance: textfield;
+    }
+    .date-row input[type="number"]#signYear::-webkit-outer-spin-button,
+    .date-row input[type="number"]#signYear::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .logo-box-ani {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg);
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .logo-preview-thumb {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      object-fit: contain;
+      border: 1px solid var(--border);
+      background: var(--panel);
+    }
+    .btn-ani-small {
+      padding: 7px 14px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .btn-ani-small:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      transform: translateY(-1px);
+    }
+
+    .tw-btn-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .btn-tw-ani {
+      background: var(--bg); 
+      border: 1px solid var(--border); 
+      color: var(--text);
+      padding: 9px 4px; 
+      border-radius: var(--radius-sm); 
+      font-size: 0.75rem; 
+      font-weight: 700;
+      cursor: pointer; 
+      text-align: center; 
+    }
+    .btn-tw-ani:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+    .btn-tw-ani.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+    .btn-tw-ani span { display: block; font-size: 0.65rem; opacity: 0.8; font-weight: normal; margin-top: 2px; }
+
+    .stats-bar-ani { 
+      display: flex; 
+      justify-content: space-between; 
+      font-size: 0.8rem; 
+      color: var(--text-muted); 
+      padding: 12px 16px; 
+      background: var(--bg); 
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm); 
+    }
+    .stats-bar-ani strong { color: var(--primary); }
+    
+    .btn-group { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 4px; }
+    button.action-btn-ani {
+      flex: 1; 
+      min-width: 160px; 
+      padding: 13px 20px; 
+      border-radius: var(--radius); 
+      border: none;
+      font-weight: 700; 
+      font-size: 0.85rem; 
+      cursor: pointer; 
+      display: inline-flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 8px;
+      box-shadow: var(--shadow);
+    }
+    button.action-btn-ani.btn-primary { 
+      background: var(--primary); 
+      color: #ffffff; 
+    }
+    button.action-btn-ani.btn-primary:hover:not(:disabled) { 
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4);
+    }
+    button.action-btn-ani.btn-excel { 
+      background: var(--accent); 
+      color: #ffffff; 
+    }
+    button.action-btn-ani.btn-excel:hover:not(:disabled) { 
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px -5px rgba(22, 163, 74, 0.4);
+    }
+    button:disabled { 
+      opacity: 0.4; 
+      cursor: not-allowed; 
+      transform: none !important; 
+      box-shadow: none !important; 
+    }
+
+    .preview-wrap-ani { 
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm); 
+      overflow: auto; 
+      max-height: 240px; 
+      background: var(--bg);
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 0.75rem; text-align: left; }
+    th, td { padding: 9px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    th { background: var(--panel); color: var(--primary); position: sticky; top: 0; font-weight: 700; }
+
+    footer {
+      text-align: center;
+      margin-top: 10px;
+      padding: 16px 8px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+    footer strong { color: var(--text); font-weight: 600; }
+
+    .floating-tip-container {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .floating-tip-popover-ani {
+      visibility: hidden;
+      opacity: 0;
+      width: 270px;
+      background: var(--panel);
+      color: var(--text);
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.78rem;
+      line-height: 1.45;
+      box-shadow: var(--shadow);
+      margin-bottom: 12px;
+      transform: translateY(8px);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+    }
+    .floating-tip-popover-ani strong { color: var(--tip); }
+    .floating-tip-container:hover .floating-tip-popover-ani {
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .floating-tip-btn-ani {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: var(--tip);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 99px;
+      box-shadow: 0 8px 20px -4px rgba(217, 119, 6, 0.5);
+      transition: all 0.2s ease;
+    }
+    .floating-tip-btn-ani:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 12px 25px -4px rgba(217, 119, 6, 0.7);
+    }
+    .floating-tip-dot {
+      width: 8px;
+      height: 8px;
+      background: #ffffff;
+      border-radius: 50%;
+      animation: pulseDot 2s infinite;
+    }
+    @keyframes pulseDot {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255, 255, 255, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+    }
+  </style>
+</head>
+<body oncontextmenu="return false;">
+
+<!-- FLOATING MENU KANAN ATAS (VERTIKAL) -->
+<div class="floating-top-right">
+  <button class="floating-btn-v active" id="btnThemeAuto" data-tooltip="Mode Auto (Waktu)" onclick="setAppTheme('auto')">
+    <i class="ti ti-clock-play"></i>
+  </button>
+  <button class="floating-btn-v" id="btnThemeLight" data-tooltip="Mode Siang (Terang)" onclick="setAppTheme('light')">
+    <i class="ti ti-sun"></i>
+  </button>
+  <button class="floating-btn-v" id="btnThemeDark" data-tooltip="Mode Malam (Gelap)" onclick="setAppTheme('dark')">
+    <i class="ti ti-moon"></i>
+  </button>
+
+  <div class="floating-divider-v"></div>
+
+  <button class="floating-btn-v active" id="btnZoneAuto" data-tooltip="Zona: Auto Device" onclick="setIndonesiaZone('AUTO')">
+    <i class="ti ti-map-pin"></i>
+  </button>
+  <button class="floating-btn-v" id="btnZoneWIB" data-tooltip="Zona: WIB (UTC+7)" onclick="setIndonesiaZone('WIB')">
+    WIB
+  </button>
+  <button class="floating-btn-v" id="btnZoneWITA" data-tooltip="Zona: WITA (UTC+8)" onclick="setIndonesiaZone('WITA')">
+    WTA
+  </button>
+  <button class="floating-btn-v" id="btnZoneWIT" data-tooltip="Zona: WIT (UTC+9)" onclick="setIndonesiaZone('WIT')">
+    WIT
+  </button>
+</div>
+
+<div class="container">
+  <header>
+    <h1>Form Verifikasi Komitmen Pendidikan</h1>
+    <p>Otomasi CSV SIKS Fasdik ke Lembar Verifikasi Resmi (Kemensos)</p>
+  </header>
+
+  <div class="card-ani">
+    <!-- Dropzone Animated -->
+    <div class="dropzone-ani" id="dz" onclick="document.getElementById('csvFile').click()">
+      <div class="icon-wrap-ani">
+        <i class="ti ti-cloud-upload" style="font-size: 24px;"></i>
+      </div>
+      <p id="dzText" style="font-weight:700; font-size:0.9rem;">Klik atau seret berkas <strong>.CSV SIKS</strong> ke sini</p>
+      <span style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; display:block;">Mendukung multi-file batch otomatis pecah sekolah</span>
+      <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" multiple style="display:none;" />
+    </div>
+
+    <!-- File List Chips -->
+    <div class="file-chip-wrap" id="fileListWrap" style="display:none;"></div>
+
+    <!-- Stats Bar -->
+    <div class="stats-bar-ani" id="statsBar" style="display:none;">
+      <span><i class="ti ti-files" style="margin-right:4px;"></i> Berkas: <strong id="statFileName">0 Berkas</strong></span>
+      <span><i class="ti ti-school" style="margin-right:4px;"></i> Sekolah: <strong id="statSchools">0</strong></span>
+      <span><i class="ti ti-users" style="margin-right:4px;"></i> Siswa Tampil: <strong id="statRows">0</strong></span>
+    </div>
+
+    <!-- FORM GRID RAPI -->
+    <div class="form-grid">
+      <!-- Baris 1: Filter, Kertas, Format, Petugas -->
+      <div class="form-group">
+        <label><i class="ti ti-user-search"></i> Filter Pendamping</label>
+        <select id="filterPendamping" onchange="applyPendampingFilter()">
+          <option value="ALL">-- Semua Pendamping --</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label><i class="ti ti-file-text"></i> Ukuran Kertas</label>
+        <select id="paperSize">
+          <option value="f4">F4 / Folio (330 × 210 mm) - Standar</option>
+          <option value="a4">A4 (297 × 210 mm)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label><i class="ti ti-calendar-stats"></i> Format Periode</label>
+        <select id="periodType" onchange="togglePeriodType()">
+          <option value="triwulan" selected>Triwulan (3 Bulan)</option>
+          <option value="bulanan">Bulanan (1 Bulan)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label><i class="ti ti-user"></i> Nama Petugas</label>
+        <input type="text" id="signerName" value="Andriadi, S.Kom" placeholder="Nama Petugas" />
+      </div>
+
+      <!-- Baris 2: NIP Petugas, Tanggal TTD, Kecamatan, Desa -->
+      <div class="form-group">
+        <label><i class="ti ti-id"></i> NIP Petugas</label>
+        <input type="text" id="signerNip" value="198208042025210058" placeholder="NIP Petugas" />
+      </div>
+
+      <div class="form-group">
+        <label><i class="ti ti-calendar-event"></i> Tanggal TTD Dokumen</label>
+        <div class="date-row">
+          <input type="number" id="signDay" min="1" max="31" placeholder="Tgl" />
+          <select id="signMonth">
+            <option value="Januari">Januari</option>
+            <option value="Februari">Februari</option>
+            <option value="Maret">Maret</option>
+            <option value="April">April</option>
+            <option value="Mei">Mei</option>
             <option value="Juni">Juni</option>
             <option value="Juli">Juli</option>
             <option value="Agustus">Agustus</option>
@@ -692,7 +1318,7 @@
         <i class="ti ti-file-type-pdf" style="font-size: 1.2rem;"></i> Generate PDF (Auto Split &amp; Zip)
       </button>
       <button class="action-btn-ani btn-excel" id="btnExcel" disabled onclick="exportExcel()">
-        <i class="ti ti-file-spreadsheet" style="font-size: 1.2rem;"></i> Ekspor Excel
+        <i class="ti ti-file-spreadsheet" style="font-size: 1.2rem;"></i> Ekspor Excel (Sesuai PDF)
       </button>
     </div>
   </div>
@@ -709,7 +1335,7 @@
     <strong>Pekerjaan selesai dalam hitungan detik?</strong><br>
     Jika alat ini sangat membantu dan menghemat waktu berharga Anda, dukung pengembang dengan mentraktir secangkir kopi agar aplikasi ini terus aktif dan bermanfaat untuk kita semua ☕
   </div>
-  <a href="https://trakteer.id/bukit_santuai_korcam/tip" target="_blank" rel="noopener noreferrer" class="floating-tip-btn-ani" title="Dukung Pengembang">
+  <a href="[https://trakteer.id/bukit_santuai_korcam/tip](https://trakteer.id/bukit_santuai_korcam/tip)" target="_blank" rel="noopener noreferrer" class="floating-tip-btn-ani" title="Dukung Pengembang">
     <div class="floating-tip-dot"></div>
     <i class="ti ti-coffee" style="font-size: 1.1rem;"></i>
     <span>Traktir Kopi</span>
@@ -1065,7 +1691,6 @@ function parseSIKSCsvContent(text, fileName) {
     const test = normKey(namaPengurus + namaSiswa);
     if (!test || test.includes('NAMAPENGURUS') || test.includes('TINGKATPENDIDIKAN')) continue;
 
-    // Proteksi duplikasi baris berdasarkan kombinasi unik Pengurus + Siswa + Tingkat
     const checkKey = (nikPengurus + nisn + namaSiswa + tingkat).replace(/[^A-Za-z0-9]/g, '');
     if (masterRows.some(r => (r.nikPengurus + r.nisn + r.siswa + r.tingkat).replace(/[^A-Za-z0-9]/g, '') === checkKey)) continue;
 
@@ -1130,7 +1755,6 @@ window.generatePDF = async function() {
   const signer = document.getElementById('signerName').value.trim() || 'Andriadi, S.Kom';
   const nip = document.getElementById('signerNip').value.trim();
 
-  // Data Tanggal & Lokasi
   const sDay = document.getElementById('signDay').value || new Date().getDate();
   const sMonth = document.getElementById('signMonth').value;
   const sYear = document.getElementById('signYear').value || new Date().getFullYear();
@@ -1138,7 +1762,6 @@ window.generatePDF = async function() {
   const sKec = document.getElementById('signerKecamatan').value.trim();
   const formattedDate = (sDesa || sKec || 'Tempat') + ', ' + sDay + ' ' + sMonth + ' ' + sYear;
 
-  // Data Kepala Sekolah
   const headName = document.getElementById('headmasterName').value.trim();
   const headNip = document.getElementById('headmasterNip').value.trim();
 
@@ -1264,7 +1887,6 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, forma
   });
   colStyles[colIdx] = { cellWidth: 28, halign: 'center' };
 
-  // AUTO-PAGINATION FIX: Dukung > 52 Siswa (Unlimited baris)
   doc.autoTable({
     startY: 25.5,
     head: [headRow1, headRow2, headRow3],
@@ -1282,7 +1904,6 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, forma
     didDrawPage: (data) => {
       if (data.pageNumber > 1) {
         drawDynamicWatermark(doc);
-        // Cetak sub-kop tipis di lembar selanjutnya
         doc.setFontSize(8);
         doc.setFont('helvetica', 'bold');
         doc.text('LEMBAR VERIFIKASI FASILITAS PENDIDIKAN - ' + schoolName + ' (Lanjutan)', 14, 12);
@@ -1296,11 +1917,9 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, forma
     }
   });
 
-  // Tanda Tangan: Perhitungan ruang sisa presisi
   const finalY = doc.lastAutoTable.finalY || 140;
   const pageH = doc.internal.pageSize.height;
   
-  // Jika ruang sisa di halaman terakhir kurang dari 38mm untuk area tanda tangan, buat halaman baru
   if (finalY + 38 > pageH) {
     doc.addPage();
     drawDynamicWatermark(doc);
@@ -1313,7 +1932,7 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, forma
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'normal');
 
-  // Kiri: Kepala Sekolah (Gunakan input manual jika ada)
+  // Kiri: Kepala Sekolah
   doc.text('Mengetahui,', xLeft, yPos + 4);
   doc.text('Kepala ' + schoolName, xLeft, yPos + 8);
   if (headName) {
@@ -1326,7 +1945,7 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, forma
     doc.text('NIP. .............................................', xLeft, yPos + 30);
   }
 
-  // Kanan: Petugas Verifikasi + Tanggal & Lokasi Manual
+  // Kanan: Petugas Verifikasi
   doc.text(formattedDate, xRight, yPos);
   doc.text('Petugas Verifikasi,', xRight, yPos + 4);
   doc.setFont('helvetica', 'bold');
@@ -1340,24 +1959,169 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, forma
 }
 
 window.exportExcel = function() {
+  const periodType = document.getElementById('periodType').value;
+  const signer = document.getElementById('signerName').value.trim() || 'Andriadi, S.Kom';
+  const nip = document.getElementById('signerNip').value.trim();
+
+  const sDay = document.getElementById('signDay').value || new Date().getDate();
+  const sMonth = document.getElementById('signMonth').value;
+  const sYear = document.getElementById('signYear').value || new Date().getFullYear();
+  const sDesa = document.getElementById('signerDesa').value.trim();
+  const sKec = document.getElementById('signerKecamatan').value.trim();
+  const formattedDate = (sDesa || sKec || 'Tempat') + ', ' + sDay + ' ' + sMonth + ' ' + sYear;
+
+  const headName = document.getElementById('headmasterName').value.trim();
+  const headNip = document.getElementById('headmasterNip').value.trim();
+
+  let months = [];
+  if (periodType === 'triwulan') {
+    months = TW_PRESETS[selectedTw];
+  } else {
+    months = [document.getElementById('singleMonth').value];
+  }
+
   const wb = XLSX.utils.book_new();
+
   Object.keys(groupedSchools).forEach(sch => {
-    const cleanRows = groupedSchools[sch].map((r, i) => ({
-      'NO': i + 1,
-      'NIK PENGURUS': r.nikPengurus,
-      'NAMA PENGURUS': r.pengurus,
-      'NISN': r.nisn,
-      'NAMA SISWA': r.siswa,
-      'TINGKAT': r.tingkat,
-      'SEKOLAH': r.sekolah,
-      'NPSN': r.npsn,
-      'PENDAMPING': r.pendamping
-    }));
-    const ws = XLSX.utils.json_to_sheet(cleanRows);
+    const list = [...groupedSchools[sch]];
+    list.sort((a, b) => a.tingkat.localeCompare(b.tingkat, undefined, { numeric: true }));
+    const npsn = list[0].npsn || '-';
+
+    const ws_data = [];
+    const merges = [];
+
+    // Baris 0 - 2: Kop Dokumen
+    ws_data.push(['KEMENTERIAN SOSIAL REPUBLIK INDONESIA']);
+    ws_data.push(['LEMBAR VERIFIKASI FASILITAS PENDIDIKAN (' + months.join(' - ') + ')']);
+    ws_data.push(['SEKOLAH: ' + sch + '   |   NPSN: ' + npsn]);
+    ws_data.push([]); // Baris kosong pembatas
+
+    // Baris 4: Header Tingkat 1
+    const r4 = ['NO', 'NIK PENGURUS', 'NAMA PENGURUS', 'NISN', 'NAMA SISWA', 'TINGKAT'];
+    months.forEach(m => {
+      r4.push(m, '', '', '', '');
+    });
+    r4.push('NAMA PENDAMPING');
+    ws_data.push(r4);
+
+    // Baris 5: Header Tingkat 2 (Hari Efektif)
+    const r5 = ['', '', '', '', '', ''];
+    months.forEach(() => {
+      r5.push('Hari Efektif: ......', '', '', '', '');
+    });
+    r5.push('');
+    ws_data.push(r5);
+
+    // Baris 6: Header Tingkat 3 (Sub-kolom absensi)
+    const r6 = ['', '', '', '', '', ''];
+    months.forEach(() => {
+      r6.push('ALPA', 'IZIN', 'SAKIT', 'JML', '%');
+    });
+    r6.push('');
+    ws_data.push(r6);
+
+    const totalCols = 6 + (months.length * 5) + 1;
+
+    // Merge untuk Kop
+    merges.push({ s: { r: 0, c: 0 }, e: { r: 0, c: totalCols - 1 } });
+    merges.push({ s: { r: 1, c: 0 }, e: { r: 1, c: totalCols - 1 } });
+    merges.push({ s: { r: 2, c: 0 }, e: { r: 2, c: totalCols - 1 } });
+
+    // Merge Header Kolom 0 s.d 5 (Rowspan 3 tingkat: baris indeks 4 s.d 6)
+    for (let c = 0; c < 6; c++) {
+      merges.push({ s: { r: 4, c: c }, e: { r: 6, c: c } });
+    }
+
+    // Merge Bulan (Colspan 5 per bulan) & Hari Efektif
+    months.forEach((m, mIdx) => {
+      const startCol = 6 + (mIdx * 5);
+      merges.push({ s: { r: 4, c: startCol }, e: { r: 4, c: startCol + 4 } });
+      merges.push({ s: { r: 5, c: startCol }, e: { r: 5, c: startCol + 4 } });
+    });
+
+    // Merge Kolom Nama Pendamping Terakhir
+    merges.push({ s: { r: 4, c: totalCols - 1 }, e: { r: 6, c: totalCols - 1 } });
+
+    // Baris Data Siswa
+    list.forEach((r, i) => {
+      const row = [
+        i + 1,
+        { t: 's', v: r.nikPengurus }, // Explicit text agar tidak scientific notation
+        r.pengurus,
+        { t: 's', v: r.nisn },        // Explicit text
+        r.siswa,
+        r.tingkat
+      ];
+      months.forEach(() => {
+        row.push('', '', '', '', '');
+      });
+      row.push(r.pendamping || signer);
+      ws_data.push(row);
+    });
+
+    // Area Tanda Tangan
+    ws_data.push([]);
+    ws_data.push([]);
+
+    const ttdStartRow = ws_data.length;
+    const rightCol = totalCols - 5;
+
+    // Baris TTD 1: Tanggal di kanan
+    const rowTtd1 = new Array(totalCols).fill('');
+    rowTtd1[rightCol] = formattedDate;
+    ws_data.push(rowTtd1);
+
+    // Baris TTD 2: Jabatan
+    const rowTtd2 = new Array(totalCols).fill('');
+    rowTtd2[1] = 'Mengetahui,';
+    rowTtd2[rightCol] = 'Petugas Verifikasi,';
+    ws_data.push(rowTtd2);
+
+    // Baris TTD 3: Instansi Sekolah
+    const rowTtd3 = new Array(totalCols).fill('');
+    rowTtd3[1] = 'Kepala ' + sch;
+    ws_data.push(rowTtd3);
+
+    // Ruang Tanda Tangan
+    ws_data.push([]);
+    ws_data.push([]);
+    ws_data.push([]);
+
+    // Baris TTD 4: Nama Terang
+    const rowTtd4 = new Array(totalCols).fill('');
+    rowTtd4[1] = headName ? headName : '( .................................................... )';
+    rowTtd4[rightCol] = signer;
+    ws_data.push(rowTtd4);
+
+    // Baris TTD 5: NIP
+    const rowTtd5 = new Array(totalCols).fill('');
+    rowTtd5[1] = headNip ? ('NIP. ' + headNip) : 'NIP. .............................................';
+    rowTtd5[rightCol] = nip ? ('NIP. ' + nip) : '';
+    ws_data.push(rowTtd5);
+
+    const ws = XLSX.utils.aoa_to_sheet(ws_data);
+    ws['!merges'] = merges;
+
+    // Lebar Kolom Proporsional
+    const colWidths = [
+      { wch: 6 },  // NO
+      { wch: 22 }, // NIK PENGURUS
+      { wch: 28 }, // NAMA PENGURUS
+      { wch: 14 }, // NISN
+      { wch: 28 }, // NAMA SISWA
+      { wch: 12 }  // TINGKAT
+    ];
+    months.forEach(() => {
+      colWidths.push({ wch: 6 }, { wch: 6 }, { wch: 6 }, { wch: 6 }, { wch: 6 });
+    });
+    colWidths.push({ wch: 26 }); // PENDAMPING
+    ws['!cols'] = colWidths;
+
     const sheetName = sch.substring(0, 30).replace(/[:\\\\\\/\\?\\*\\[\\]]/g, '');
     XLSX.utils.book_append_sheet(wb, ws, sheetName);
   });
-  XLSX.writeFile(wb, 'Batch_Verifikasi_' + Date.now() + '.xlsx');
+
+  XLSX.writeFile(wb, 'Form_Verifikasi_' + Date.now() + '.xlsx');
 };
 `;
 
