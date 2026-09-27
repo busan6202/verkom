@@ -221,7 +221,7 @@
     }
     .file-chip-ani i { color: var(--primary); }
 
-    /* GRID SISTEM RAPI 4 KOLOM */
+    /* GRID SISTEM RAPI */
     .form-grid { 
       display: grid; 
       grid-template-columns: repeat(4, 1fr); 
@@ -270,7 +270,6 @@
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
 
-    /* BARIS TANGGAL FLEKSIBEL TANPA OVERFLOW */
     .date-row {
       display: flex;
       gap: 4px;
@@ -559,9 +558,9 @@
       <span><i class="ti ti-users" style="margin-right:4px;"></i> Siswa Tampil: <strong id="statRows">0</strong></span>
     </div>
 
-    <!-- FORM GRID 4x2 SEJAJAR -->
+    <!-- FORM GRID RAPI -->
     <div class="form-grid">
-      <!-- Baris 1 -->
+      <!-- Baris 1: Filter, Kertas, Format, Petugas -->
       <div class="form-group">
         <label><i class="ti ti-user-search"></i> Filter Pendamping</label>
         <select id="filterPendamping" onchange="applyPendampingFilter()">
@@ -590,7 +589,7 @@
         <input type="text" id="signerName" value="Andriadi, S.Kom" placeholder="Nama Petugas" />
       </div>
 
-      <!-- Baris 2 -->
+      <!-- Baris 2: NIP Petugas, Tanggal TTD, Kecamatan, Desa -->
       <div class="form-group">
         <label><i class="ti ti-id"></i> NIP Petugas</label>
         <input type="text" id="signerNip" value="198208042025210058" placeholder="NIP Petugas" />
@@ -626,6 +625,17 @@
       <div class="form-group">
         <label><i class="ti ti-map-pin"></i> Desa / Kelurahan</label>
         <input type="text" id="signerDesa" value="Lunuk Bagantung" placeholder="Contoh: Lunuk Bagantung" />
+      </div>
+
+      <!-- Baris 3: INPUT KEPALA SEKOLAH & NIP KEPALA SEKOLAH -->
+      <div class="form-group" style="grid-column: span 2;">
+        <label><i class="ti ti-user-check"></i> Nama Kepala Sekolah</label>
+        <input type="text" id="headmasterName" placeholder="Contoh: Budi Santoso, S.Pd (Opsional)" />
+      </div>
+
+      <div class="form-group" style="grid-column: span 2;">
+        <label><i class="ti ti-id-badge"></i> NIP Kepala Sekolah</label>
+        <input type="text" id="headmasterNip" placeholder="18 Digit NIP (Opsional)" />
       </div>
     </div>
 
@@ -1055,7 +1065,9 @@ function parseSIKSCsvContent(text, fileName) {
     const test = normKey(namaPengurus + namaSiswa);
     if (!test || test.includes('NAMAPENGURUS') || test.includes('TINGKATPENDIDIKAN')) continue;
 
-    if (nisn && masterRows.some(r => r.nisn === nisn && r.nisn !== '-')) continue;
+    // Proteksi duplikasi baris berdasarkan kombinasi unik Pengurus + Siswa + Tingkat
+    const checkKey = (nikPengurus + nisn + namaSiswa + tingkat).replace(/[^A-Za-z0-9]/g, '');
+    if (masterRows.some(r => (r.nikPengurus + r.nisn + r.siswa + r.tingkat).replace(/[^A-Za-z0-9]/g, '') === checkKey)) continue;
 
     if (pendamping && pendamping !== '-') pendampingList.add(pendamping);
 
@@ -1118,13 +1130,17 @@ window.generatePDF = async function() {
   const signer = document.getElementById('signerName').value.trim() || 'Andriadi, S.Kom';
   const nip = document.getElementById('signerNip').value.trim();
 
+  // Data Tanggal & Lokasi
   const sDay = document.getElementById('signDay').value || new Date().getDate();
   const sMonth = document.getElementById('signMonth').value;
   const sYear = document.getElementById('signYear').value || new Date().getFullYear();
   const sDesa = document.getElementById('signerDesa').value.trim();
   const sKec = document.getElementById('signerKecamatan').value.trim();
-
   const formattedDate = (sDesa || sKec || 'Tempat') + ', ' + sDay + ' ' + sMonth + ' ' + sYear;
+
+  // Data Kepala Sekolah
+  const headName = document.getElementById('headmasterName').value.trim();
+  const headNip = document.getElementById('headmasterNip').value.trim();
 
   let months = [];
   if (periodType === 'triwulan') {
@@ -1137,7 +1153,7 @@ window.generatePDF = async function() {
   const schoolKeys = Object.keys(groupedSchools);
 
   if (schoolKeys.length === 1) {
-    const doc = buildOfficialDoc(schoolKeys[0], groupedSchools[schoolKeys[0]], pageSize, months, signer, nip, formattedDate);
+    const doc = buildOfficialDoc(schoolKeys[0], groupedSchools[schoolKeys[0]], pageSize, months, signer, nip, formattedDate, headName, headNip);
     doc.save('Form_Verifikasi_' + schoolKeys[0].replace(/[^a-zA-Z0-9]/g, '_') + '.pdf');
   } else {
     btnPdf.innerText = 'Memproses ZIP...';
@@ -1145,7 +1161,7 @@ window.generatePDF = async function() {
     const zip = new JSZip();
 
     schoolKeys.forEach(sch => {
-      const doc = buildOfficialDoc(sch, groupedSchools[sch], pageSize, months, signer, nip, formattedDate);
+      const doc = buildOfficialDoc(sch, groupedSchools[sch], pageSize, months, signer, nip, formattedDate, headName, headNip);
       zip.file('Form_Verifikasi_' + sch.replace(/[^a-zA-Z0-9]/g, '_') + '.pdf', doc.output('blob'));
     });
 
@@ -1160,7 +1176,7 @@ window.generatePDF = async function() {
   }
 };
 
-function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, formattedDate) {
+function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, formattedDate, headName, headNip) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: pageSize });
 
@@ -1248,6 +1264,7 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, forma
   });
   colStyles[colIdx] = { cellWidth: 28, halign: 'center' };
 
+  // AUTO-PAGINATION FIX: Dukung > 52 Siswa (Unlimited baris)
   doc.autoTable({
     startY: 25.5,
     head: [headRow1, headRow2, headRow3],
@@ -1258,9 +1275,19 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, forma
     styles: { fontSize: 7, cellPadding: 1.5, lineColor: [0, 0, 0], lineWidth: 0.2, textColor: [0, 0, 0] },
     headStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0], fontStyle: 'bold', lineColor: [0, 0, 0], lineWidth: 0.25 },
     columnStyles: colStyles,
+    showHead: 'everyPage',
+    pageBreak: 'auto',
+    rowPageBreak: 'auto',
+    margin: { top: 25.5, bottom: 15, left: 14, right: 14 },
     didDrawPage: (data) => {
       if (data.pageNumber > 1) {
         drawDynamicWatermark(doc);
+        // Cetak sub-kop tipis di lembar selanjutnya
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'bold');
+        doc.text('LEMBAR VERIFIKASI FASILITAS PENDIDIKAN - ' + schoolName + ' (Lanjutan)', 14, 12);
+        doc.setLineWidth(0.3);
+        doc.line(14, 15, doc.internal.pageSize.width - 14, 15);
       }
       const total = doc.internal.getNumberOfPages();
       doc.setFontSize(7.5);
@@ -1269,25 +1296,35 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, forma
     }
   });
 
+  // Tanda Tangan: Perhitungan ruang sisa presisi
   const finalY = doc.lastAutoTable.finalY || 140;
   const pageH = doc.internal.pageSize.height;
-  if (finalY + 36 > pageH) {
+  
+  // Jika ruang sisa di halaman terakhir kurang dari 38mm untuk area tanda tangan, buat halaman baru
+  if (finalY + 38 > pageH) {
     doc.addPage();
     drawDynamicWatermark(doc);
   }
 
-  const yPos = finalY + 36 > pageH ? 22 : finalY + 8;
+  const yPos = (finalY + 38 > pageH) ? 22 : finalY + 8;
   const xLeft = 25;
   const xRight = doc.internal.pageSize.width - 75;
 
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'normal');
 
-  // Kiri: Kepala Sekolah
+  // Kiri: Kepala Sekolah (Gunakan input manual jika ada)
   doc.text('Mengetahui,', xLeft, yPos + 4);
   doc.text('Kepala ' + schoolName, xLeft, yPos + 8);
-  doc.text('( .................................................... )', xLeft, yPos + 26);
-  doc.text('NIP. .............................................', xLeft, yPos + 30);
+  if (headName) {
+    doc.setFont('helvetica', 'bold');
+    doc.text(headName, xLeft, yPos + 26);
+    doc.setFont('helvetica', 'normal');
+    doc.text(headNip ? ('NIP. ' + headNip) : 'NIP. .............................................', xLeft, yPos + 30);
+  } else {
+    doc.text('( .................................................... )', xLeft, yPos + 26);
+    doc.text('NIP. .............................................', xLeft, yPos + 30);
+  }
 
   // Kanan: Petugas Verifikasi + Tanggal & Lokasi Manual
   doc.text(formattedDate, xRight, yPos);
