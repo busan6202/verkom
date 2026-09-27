@@ -47,27 +47,10 @@
       --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
     }
 
-    * { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
 
-    body { 
-      background-color: var(--bg); 
-      color: var(--text); 
-      padding: 32px 16px 80px 16px; 
-      display: flex; 
-      justify-content: center; 
-    }
-    .container { 
-      width: 100%; 
-      max-width: 980px; 
-      display: flex; 
-      flex-direction: column; 
-      gap: 20px; 
-    }
+    body { background-color: var(--bg); color: var(--text); padding: 32px 16px 80px 16px; display: flex; justify-content: center; }
+    .container { width: 100%; max-width: 980px; display: flex; flex-direction: column; gap: 20px; }
 
     /* FLOATING TRAKTEER KIRI BAWAH */
     .floating-bottom-left {
@@ -80,7 +63,6 @@
       align-items: flex-start;
       gap: 12px;
     }
-
     .trakteer-msg {
       background: var(--panel);
       color: var(--text);
@@ -98,11 +80,7 @@
       transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
       transform-origin: bottom left;
     }
-
-    .trakteer-msg strong {
-      color: #ef4444;
-    }
-
+    .trakteer-msg strong { color: #ef4444; }
     .trakteer-btn {
       display: inline-flex;
       align-items: center;
@@ -117,320 +95,77 @@
       box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.4), 0 8px 10px -6px rgba(239, 68, 68, 0.3);
       transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
-
     .trakteer-btn:hover {
       transform: translateY(-4px) scale(1.03);
       box-shadow: 0 14px 30px -5px rgba(239, 68, 68, 0.6);
       color: #ffffff;
     }
-
-    .trakteer-btn i {
-      font-size: 1.3rem;
-      animation: heartbeat 1.5s infinite;
-    }
-
-    .floating-bottom-left:hover .trakteer-msg {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      visibility: visible;
-    }
-
-    @keyframes heartbeat {
-      0%, 100% { transform: scale(1); }
-      25% { transform: scale(1.15); }
-      50% { transform: scale(1); }
-      75% { transform: scale(1.15); }
-    }
+    .trakteer-btn i { font-size: 1.3rem; animation: heartbeat 1.5s infinite; }
+    .floating-bottom-left:hover .trakteer-msg { opacity: 1; transform: translateY(0) scale(1); visibility: visible; }
+    @keyframes heartbeat { 0%, 100% { transform: scale(1); } 25% { transform: scale(1.15); } 50% { transform: scale(1); } 75% { transform: scale(1.15); } }
 
     /* FLOATING MENU KANAN ATAS */
     .floating-top-right {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 1000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      background: var(--panel);
-      padding: 8px 6px;
-      border-radius: 99px;
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
+      position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; align-items: center; gap: 8px; background: var(--panel); padding: 8px 6px; border-radius: 99px; border: 1px solid var(--border); box-shadow: var(--shadow);
     }
-    .floating-btn-v {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      border: 1px solid transparent;
-      background: transparent;
-      color: var(--text-muted);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.75rem;
-      font-weight: 700;
-    }
-    .floating-btn-v:hover {
-      color: var(--text);
-      background: var(--bg);
-    }
-    .floating-btn-v.active {
-      background: var(--primary);
-      color: #ffffff;
-    }
-    .floating-divider-v {
-      width: 20px;
-      height: 1px;
-      background: var(--border);
-      margin: 2px 0;
-    }
+    .floating-btn-v { width: 34px; height: 34px; border-radius: 50%; border: 1px solid transparent; background: transparent; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+    .floating-btn-v:hover { color: var(--text); background: var(--bg); }
+    .floating-btn-v.active { background: var(--primary); color: #ffffff; }
+    .floating-divider-v { width: 20px; height: 1px; background: var(--border); margin: 2px 0; }
 
-    header h1 { 
-      font-size: 1.6rem; 
-      font-weight: 800; 
-      letter-spacing: -0.5px; 
-    }
-    header p { 
-      color: var(--text-muted); 
-      font-size: 0.85rem; 
-      margin-top: 4px; 
-    }
+    header h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; }
+    header p { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
     
-    .card-ani { 
-      background: var(--panel); 
-      border: 1px solid var(--border);
-      border-radius: var(--radius); 
-      padding: 24px; 
-      box-shadow: var(--shadow);
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
+    .card-ani { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 18px; }
     
-    .dropzone-ani {
-      border: 2px dashed var(--border);
-      border-radius: var(--radius);
-      padding: 30px 16px;
-      text-align: center;
-      cursor: pointer;
-      background: var(--bg);
-    }
-    .dropzone-ani:hover {
-      border-color: var(--primary);
-    }
-    .icon-wrap-ani {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 48px;
-      height: 48px;
-      border-radius: 14px;
-      background: var(--panel);
-      border: 1px solid var(--border);
-      color: var(--primary);
-      margin-bottom: 10px;
-    }
+    .dropzone-ani { border: 2px dashed var(--border); border-radius: var(--radius); padding: 30px 16px; text-align: center; cursor: pointer; background: var(--bg); }
+    .dropzone-ani:hover { border-color: var(--primary); }
+    .icon-wrap-ani { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 14px; background: var(--panel); border: 1px solid var(--border); color: var(--primary); margin-bottom: 10px; }
     
     .file-chip-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
-    .file-chip-ani { 
-      background: var(--bg); 
-      color: var(--text); 
-      font-size: 0.72rem; 
-      font-weight: 600;
-      padding: 5px 12px; 
-      border: 1px solid var(--border);
-      border-radius: 99px; 
-      display: inline-flex; 
-      align-items: center; 
-      gap: 6px; 
-    }
+    .file-chip-ani { background: var(--bg); color: var(--text); font-size: 0.72rem; font-weight: 600; padding: 5px 12px; border: 1px solid var(--border); border-radius: 99px; display: inline-flex; align-items: center; gap: 6px; }
 
-    /* GRID FORM TERSTRUKTUR */
-    .form-grid-4 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-    }
-    .form-grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-    }
-    @media (max-width: 860px) {
-      .form-grid-4 { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 520px) {
-      .form-grid-4, .form-grid-2 { grid-template-columns: 1fr; }
-      
-      /* Sembunyikan pesan trakteer di HP agar tidak menutupi layar */
-      .trakteer-msg { display: none; }
-    }
+    /* GRID FORM */
+    .form-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .form-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+    @media (max-width: 860px) { .form-grid-4 { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .form-grid-4, .form-grid-2 { grid-template-columns: 1fr; } .trakteer-msg { display: none; } }
 
-    .form-group { 
-      display: flex; 
-      flex-direction: column; 
-      gap: 6px; 
-      min-width: 0; 
-    }
-    label { 
-      font-size: 0.75rem; 
-      font-weight: 700; 
-      color: var(--text-muted); 
-      display: flex; 
-      align-items: center; 
-      gap: 6px; 
-      text-transform: uppercase; 
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    .form-group { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     label i { font-size: 0.95rem; color: var(--primary); }
-    
-    select, input[type="text"], input[type="number"] { 
-      width: 100%;
-      background: var(--bg); 
-      border: 1px solid var(--border); 
-      border-radius: var(--radius-sm); 
-      color: var(--text); 
-      padding: 9px 11px; 
-      font-size: 0.83rem; 
-      outline: none; 
-    }
-    select:focus, input[type="text"]:focus, input[type="number"]:focus { 
-      border-color: var(--primary);
-    }
+    select, input[type="text"], input[type="number"] { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); padding: 9px 11px; font-size: 0.83rem; outline: none; }
+    select:focus, input[type="text"]:focus, input[type="number"]:focus { border-color: var(--primary); }
 
-    .date-row {
-      display: flex;
-      gap: 6px;
-      width: 100%;
-    }
-    .date-row input[type="number"]#signDay {
-      width: 54px;
-      flex-shrink: 0;
-      text-align: center;
-    }
-    .date-row select#signMonth {
-      flex: 1;
-      min-width: 0;
-    }
-    .date-row input[type="number"]#signYear {
-      width: 68px;
-      flex-shrink: 0;
-      text-align: center;
-    }
+    .date-row { display: flex; gap: 6px; width: 100%; }
+    .date-row input[type="number"]#signDay { width: 54px; flex-shrink: 0; text-align: center; }
+    .date-row select#signMonth { flex: 1; min-width: 0; }
+    .date-row input[type="number"]#signYear { width: 68px; flex-shrink: 0; text-align: center; }
 
-    .logo-box-ani {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: var(--bg);
-      padding: 10px 14px;
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-    }
-    .logo-preview-thumb {
-      width: 38px;
-      height: 38px;
-      border-radius: 8px;
-      object-fit: contain;
-      border: 1px solid var(--border);
-      background: var(--panel);
-    }
-    .btn-ani-small {
-      padding: 7px 14px;
-      font-size: 0.78rem;
-      font-weight: 600;
-      color: var(--text);
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
+    .logo-box-ani { display: flex; align-items: center; gap: 12px; background: var(--bg); padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); }
+    .logo-preview-thumb { width: 38px; height: 38px; border-radius: 8px; object-fit: contain; border: 1px solid var(--border); background: var(--panel); }
+    .btn-ani-small { padding: 7px 14px; font-size: 0.78rem; font-weight: 600; color: var(--text); background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
 
     .tw-btn-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-    .btn-tw-ani {
-      background: var(--bg); 
-      border: 1px solid var(--border); 
-      color: var(--text);
-      padding: 9px 4px; 
-      border-radius: var(--radius-sm); 
-      font-size: 0.75rem; 
-      font-weight: 700;
-      cursor: pointer; 
-      text-align: center; 
-    }
-    .btn-tw-ani.active {
-      background: var(--primary);
-      border-color: var(--primary);
-      color: #ffffff;
-    }
+    .btn-tw-ani { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 9px 4px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 700; cursor: pointer; text-align: center; }
+    .btn-tw-ani.active { background: var(--primary); border-color: var(--primary); color: #ffffff; }
     .btn-tw-ani span { display: block; font-size: 0.65rem; opacity: 0.8; font-weight: normal; margin-top: 2px; }
 
-    .stats-bar-ani { 
-      display: flex; 
-      justify-content: space-between; 
-      font-size: 0.8rem; 
-      color: var(--text-muted); 
-      padding: 12px 16px; 
-      background: var(--bg); 
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm); 
-    }
+    .stats-bar-ani { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); padding: 12px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); }
     .stats-bar-ani strong { color: var(--primary); }
     
     .btn-group { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; }
-    button.action-btn-ani {
-      flex: 1; 
-      min-width: 160px; 
-      padding: 13px 20px; 
-      border-radius: var(--radius); 
-      border: none;
-      font-weight: 700; 
-      font-size: 0.85rem; 
-      cursor: pointer; 
-      display: inline-flex; 
-      align-items: center; 
-      justify-content: center; 
-      gap: 8px;
-    }
-    button.action-btn-ani.btn-primary { 
-      background: var(--primary); 
-      color: #ffffff; 
-    }
-    button.action-btn-ani.btn-excel { 
-      background: var(--accent); 
-      color: #ffffff; 
-    }
-    button:disabled { 
-      opacity: 0.4; 
-      cursor: not-allowed; 
-    }
+    button.action-btn-ani { flex: 1; min-width: 160px; padding: 13px 20px; border-radius: var(--radius); border: none; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+    button.action-btn-ani.btn-primary { background: var(--primary); color: #ffffff; }
+    button.action-btn-ani.btn-excel { background: var(--accent); color: #ffffff; }
+    button:disabled { opacity: 0.4; cursor: not-allowed; }
 
-    .preview-wrap-ani { 
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm); 
-      overflow: auto; 
-      max-height: 240px; 
-      background: var(--bg);
-    }
+    .preview-wrap-ani { border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: auto; max-height: 240px; background: var(--bg); }
     table { width: 100%; border-collapse: collapse; font-size: 0.75rem; text-align: left; }
     th, td { padding: 9px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
     th { background: var(--panel); color: var(--primary); position: sticky; top: 0; font-weight: 700; }
 
-    footer {
-      text-align: center;
-      margin-top: 10px;
-      padding: 16px 8px;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      border-top: 1px solid var(--border);
-    }
+    footer { text-align: center; margin-top: 10px; padding: 16px 8px; font-size: 0.78rem; color: var(--text-muted); border-top: 1px solid var(--border); }
     footer strong { color: var(--text); }
   </style>
 </head>
@@ -449,19 +184,11 @@
 
 <!-- FLOATING MENU KANAN ATAS -->
 <div class="floating-top-right">
-  <button class="floating-btn-v active" id="btnThemeAuto" title="Mode Auto" onclick="setAppTheme('auto')">
-    <i class="ti ti-clock-play"></i>
-  </button>
-  <button class="floating-btn-v" id="btnThemeLight" title="Mode Siang" onclick="setAppTheme('light')">
-    <i class="ti ti-sun"></i>
-  </button>
-  <button class="floating-btn-v" id="btnThemeDark" title="Mode Malam" onclick="setAppTheme('dark')">
-    <i class="ti ti-moon"></i>
-  </button>
+  <button class="floating-btn-v active" id="btnThemeAuto" title="Mode Auto" onclick="setAppTheme('auto')"><i class="ti ti-clock-play"></i></button>
+  <button class="floating-btn-v" id="btnThemeLight" title="Mode Siang" onclick="setAppTheme('light')"><i class="ti ti-sun"></i></button>
+  <button class="floating-btn-v" id="btnThemeDark" title="Mode Malam" onclick="setAppTheme('dark')"><i class="ti ti-moon"></i></button>
   <div class="floating-divider-v"></div>
-  <button class="floating-btn-v active" id="btnZoneAuto" title="Auto Zona" onclick="setIndonesiaZone('AUTO')">
-    <i class="ti ti-map-pin"></i>
-  </button>
+  <button class="floating-btn-v active" id="btnZoneAuto" title="Auto Zona" onclick="setIndonesiaZone('AUTO')"><i class="ti ti-map-pin"></i></button>
   <button class="floating-btn-v" id="btnZoneWIB" title="WIB" onclick="setIndonesiaZone('WIB')">WIB</button>
   <button class="floating-btn-v" id="btnZoneWITA" title="WITA" onclick="setIndonesiaZone('WITA')">WTA</button>
   <button class="floating-btn-v" id="btnZoneWIT" title="WIT" onclick="setIndonesiaZone('WIT')">WIT</button>
@@ -475,9 +202,7 @@
 
   <div class="card-ani">
     <div class="dropzone-ani" id="dz" onclick="document.getElementById('csvFile').click()">
-      <div class="icon-wrap-ani">
-        <i class="ti ti-cloud-upload" style="font-size: 24px;"></i>
-      </div>
+      <div class="icon-wrap-ani"><i class="ti ti-cloud-upload" style="font-size: 24px;"></i></div>
       <p id="dzText" style="font-weight:700; font-size:0.9rem;">Klik atau seret berkas <strong>.CSV SIKS</strong> ke sini</p>
       <span style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; display:block;">Mendukung multi-file batch otomatis pecah sekolah</span>
       <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" multiple style="display:none;" />
@@ -488,10 +213,10 @@
     <div class="stats-bar-ani" id="statsBar" style="display:none;">
       <span><i class="ti ti-files"></i> Berkas: <strong id="statFileName">0 Berkas</strong></span>
       <span><i class="ti ti-school"></i> Sekolah: <strong id="statSchools">0</strong></span>
-      <span><i class="ti ti-users"></i> Siswa: <strong id="statRows">0</strong></span>
+      <span><i class="ti ti-users"></i> Siswa Tampil: <strong id="statRows">0</strong></span>
     </div>
 
-    <!-- BARIS 1: 4 KOLOM -->
+    <!-- FORM GRID -->
     <div class="form-grid-4">
       <div class="form-group">
         <label><i class="ti ti-user-search"></i> Filter Pendamping</label>
@@ -499,7 +224,6 @@
           <option value="ALL">-- Semua Pendamping --</option>
         </select>
       </div>
-
       <div class="form-group">
         <label><i class="ti ti-file-text"></i> Ukuran Kertas</label>
         <select id="paperSize">
@@ -507,7 +231,6 @@
           <option value="a4">A4 (297 × 210 mm)</option>
         </select>
       </div>
-
       <div class="form-group">
         <label><i class="ti ti-calendar-stats"></i> Format Periode</label>
         <select id="periodType" onchange="togglePeriodType()">
@@ -515,20 +238,17 @@
           <option value="bulanan">Bulanan (1 Bulan)</option>
         </select>
       </div>
-
       <div class="form-group">
         <label><i class="ti ti-user"></i> Nama Petugas</label>
         <input type="text" id="signerName" value="Andriadi, S.Kom" placeholder="Nama Petugas" />
       </div>
     </div>
 
-    <!-- BARIS 2: 4 KOLOM -->
     <div class="form-grid-4">
       <div class="form-group">
         <label><i class="ti ti-id"></i> NIP Petugas</label>
         <input type="text" id="signerNip" value="198208042025210058" placeholder="NIP Petugas" />
       </div>
-
       <div class="form-group">
         <label><i class="ti ti-calendar-event"></i> Tanggal TTD Dokumen</label>
         <div class="date-row">
@@ -550,32 +270,27 @@
           <input type="number" id="signYear" min="2020" max="2050" placeholder="Thn" />
         </div>
       </div>
-
       <div class="form-group">
         <label><i class="ti ti-building-community"></i> Kecamatan</label>
         <input type="text" id="signerKecamatan" value="Bukit Santuai" placeholder="Kecamatan" />
       </div>
-
       <div class="form-group">
         <label><i class="ti ti-map-pin"></i> Desa / Kelurahan</label>
         <input type="text" id="signerDesa" value="Lunuk Bagantung" placeholder="Desa" />
       </div>
     </div>
 
-    <!-- BARIS 3: 2 KOLOM KEPALA SEKOLAH -->
     <div class="form-grid-2">
       <div class="form-group">
         <label><i class="ti ti-user-check"></i> Nama Kepala Sekolah</label>
         <input type="text" id="headmasterName" placeholder="Nama Kepala Sekolah (Opsional)" />
       </div>
-
       <div class="form-group">
         <label><i class="ti ti-id-badge"></i> NIP Kepala Sekolah</label>
         <input type="text" id="headmasterNip" placeholder="NIP Kepala Sekolah (Opsional)" />
       </div>
     </div>
 
-    <!-- KUSTOM LOGO -->
     <div class="form-group">
       <label><i class="ti ti-photo"></i> Kustom Logo (Kop &amp; Watermark)</label>
       <div class="logo-box-ani">
@@ -587,7 +302,6 @@
       </div>
     </div>
 
-    <!-- PILIHAN TRIWULAN -->
     <div class="form-group" id="twContainer">
       <label><i class="ti ti-calendar-month"></i> Pilihan Triwulan</label>
       <div class="tw-btn-group">
@@ -598,7 +312,6 @@
       </div>
     </div>
 
-    <!-- PILIHAN BULANAN -->
     <div class="form-group" id="monthContainer" style="display: none;">
       <label><i class="ti ti-calendar"></i> Pilih Bulan Laporan</label>
       <select id="singleMonth">
@@ -657,7 +370,6 @@ let currentZoneMode = localStorage.getItem('zone_preference') || 'AUTO';
 function getZoneHour() {
   const d = new Date();
   const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
-  
   if (currentZoneMode === 'WIB') return new Date(utc + 25200000).getHours();
   if (currentZoneMode === 'WITA') return new Date(utc + 28800000).getHours();
   if (currentZoneMode === 'WIT') return new Date(utc + 32400000).getHours();
@@ -667,7 +379,6 @@ function getZoneHour() {
 function applyTheme() {
   const body = document.body;
   const hour = getZoneHour();
-
   if (currentThemeMode === 'auto') {
     const isNight = (hour >= 18 || hour < 6);
     body.classList.toggle('dark-mode', isNight);
@@ -676,11 +387,9 @@ function applyTheme() {
   } else {
     body.classList.remove('dark-mode');
   }
-
   document.getElementById('btnThemeAuto').classList.toggle('active', currentThemeMode === 'auto');
   document.getElementById('btnThemeLight').classList.toggle('active', currentThemeMode === 'light');
   document.getElementById('btnThemeDark').classList.toggle('active', currentThemeMode === 'dark');
-
   document.getElementById('btnZoneAuto').classList.toggle('active', currentZoneMode === 'AUTO');
   document.getElementById('btnZoneWIB').classList.toggle('active', currentZoneMode === 'WIB');
   document.getElementById('btnZoneWITA').classList.toggle('active', currentZoneMode === 'WITA');
@@ -698,7 +407,6 @@ function setIndonesiaZone(zone) {
   localStorage.setItem('zone_preference', zone);
   applyTheme();
 }
-
 applyTheme();
 
 let masterRows = [];
@@ -707,6 +415,7 @@ let groupedSchools = {};
 let uploadedFiles = [];
 let customLogoData = null;
 let pendampingList = new Set();
+let processedRowsSet = new Set(); // Global Set for strict deduplication
 
 window.addEventListener('DOMContentLoaded', () => {
   const savedLogo = localStorage.getItem('custom_kemensos_logo');
@@ -728,15 +437,9 @@ window.handleLogoUpload = function(e) {
 function loadLogoImage(base64) {
   const img = new Image();
   img.onload = function() {
-    customLogoData = {
-      base64: base64,
-      width: img.naturalWidth,
-      height: img.naturalHeight,
-      aspectRatio: img.naturalWidth / img.naturalHeight
-    };
+    customLogoData = { base64: base64, width: img.naturalWidth, height: img.naturalHeight, aspectRatio: img.naturalWidth / img.naturalHeight };
     const thumb = document.getElementById('logoThumb');
-    thumb.src = base64;
-    thumb.style.display = 'block';
+    thumb.src = base64; thumb.style.display = 'block';
     document.getElementById('logoStatus').innerText = 'Logo dimuat (' + img.naturalWidth + 'x' + img.naturalHeight + ' px)';
     document.getElementById('btnResetLogo').style.display = 'inline-flex';
   };
@@ -762,9 +465,7 @@ let selectedTw = 'TW4';
 
 window.selectTw = function(twKey) {
   selectedTw = twKey;
-  document.querySelectorAll('.btn-tw-ani').forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('data-tw') === twKey);
-  });
+  document.querySelectorAll('.btn-tw-ani').forEach(btn => { btn.classList.toggle('active', btn.getAttribute('data-tw') === twKey); });
 };
 
 window.togglePeriodType = function() {
@@ -793,10 +494,7 @@ fileInput.addEventListener('change', (e) => {
 
 function handleMultipleFiles(files) {
   uploadedFiles = files.filter(f => f.name.toLowerCase().endsWith('.csv') || f.type.includes('csv') || f.type.includes('plain'));
-  if (uploadedFiles.length === 0) {
-    alert('Harap pilih berkas dengan format .csv');
-    return;
-  }
+  if (uploadedFiles.length === 0) { alert('Harap pilih berkas dengan format .csv'); return; }
 
   dzText.innerText = 'Memproses ' + uploadedFiles.length + ' berkas CSV...';
   fileListWrap.innerHTML = uploadedFiles.map(f => '<div class="file-chip-ani"><i class="ti ti-file-text"></i><span>' + f.name + '</span></div>').join('');
@@ -804,6 +502,7 @@ function handleMultipleFiles(files) {
 
   masterRows = [];
   pendampingList.clear();
+  processedRowsSet.clear(); // Bersihkan set duplikat setiap kali upload file baru
 
   const promises = uploadedFiles.map(file => {
     return new Promise((resolve) => {
@@ -821,8 +520,7 @@ function handleMultipleFiles(files) {
     Array.from(pendampingList).sort().forEach(p => {
       if (p && p !== '-' && p !== 'Andriadi, S.Kom') {
         const opt = document.createElement('option');
-        opt.value = p;
-        opt.textContent = p;
+        opt.value = p; opt.textContent = p;
         filterSelect.appendChild(opt);
       }
     });
@@ -854,51 +552,71 @@ window.applyPendampingFilter = function() {
   document.getElementById('statSchools').innerText = Object.keys(groupedSchools).length;
   document.getElementById('statRows').innerText = allRows.length;
   statsBar.style.display = 'flex';
-
   renderPreview();
 };
 
-function cleanStr(s) {
-  return (s || '').toString().trim().replace(/^["']|["']$/g, '');
-}
+function cleanStr(s) { return (s || '').toString().trim().replace(/^["']|["']$/g, ''); }
+function normKey(s) { return cleanStr(s).toUpperCase().replace(/[^A-Z0-9]/g, ''); }
 
-function normKey(s) {
-  return cleanStr(s).toUpperCase().replace(/[^A-Z0-9]/g, '');
+// ROBUST CSV PARSER: Mampu menangani ribuan baris, tanda kutip, koma di dalam nama, dan karakter khusus.
+function parseRobustCSV(text) {
+  const sep = (text.slice(0, 500).split(';').length > text.slice(0, 500).split(',').length) ? ';' : ',';
+  const rows = [];
+  let curRow = [], curCell = '', inQuotes = false;
+  
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (c === '"') {
+      if (inQuotes && text[i+1] === '"') { curCell += '"'; i++; } 
+      else { inQuotes = !inQuotes; }
+    } else if (c === sep && !inQuotes) {
+      curRow.push(curCell.trim()); curCell = '';
+    } else if (c === '\n' && !inQuotes) {
+      curRow.push(curCell.trim()); rows.push(curRow);
+      curRow = []; curCell = '';
+    } else if (c === '\r' && !inQuotes) {
+      // ignore \r
+    } else {
+      curCell += c;
+    }
+  }
+  if (curCell !== '' || curRow.length > 0) {
+    curRow.push(curCell.trim()); rows.push(curRow);
+  }
+  return rows;
 }
 
 function parseSIKSCsvContent(text, fileName) {
-  const rawLines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
-  if (rawLines.length < 2) return;
-
-  const sep = (rawLines.slice(0, 15).join(' ').split(';').length > rawLines.slice(0, 15).join(' ').split(',').length) ? ';' : ',';
-
+  // 1. Ekstrak Header Sekolah & NPSN di luar tabel dengan aman
+  const linesForMeta = text.split(/\r?\n/).slice(0, 20);
   let metaSchool = '', metaNpsn = '';
-  for (let i = 0; i < Math.min(rawLines.length, 20); i++) {
-    const lUpper = rawLines[i].toUpperCase();
+  linesForMeta.forEach(line => {
+    const lUpper = line.toUpperCase();
     if ((lUpper.includes('SEKOLAH') || lUpper.includes('SEKOLA')) && lUpper.includes(':')) {
-      const parts = rawLines[i].split(':');
-      if (parts[1]) metaSchool = cleanStr(parts[1].split(sep)[0]);
+      metaSchool = cleanStr(line.split(':')[1].split(/[,;]/)[0]);
     }
     if (lUpper.includes('NPSN') && lUpper.includes(':')) {
-      const parts = rawLines[i].split(':');
-      if (parts[1]) metaNpsn = cleanStr(parts[1].split(sep)[0]).replace(/\D/g, '');
+      metaNpsn = cleanStr(line.split(':')[1].split(/[,;]/)[0]).replace(/\D/g, '');
     }
-  }
+  });
 
-  let headerIndex = -1;
-  let headers = [];
-  for (let i = 0; i < rawLines.length; i++) {
-    const cols = rawLines[i].split(sep).map(normKey);
+  // 2. Gunakan parser robust untuk membaca keseluruhan data tanpa terpotong
+  const rawRows = parseRobustCSV(text);
+  if (rawRows.length < 2) return;
+
+  let headerIndex = -1, headers = [];
+  for (let i = 0; i < Math.min(rawRows.length, 50); i++) {
+    const cols = rawRows[i].map(normKey);
     if (cols.some(c => c.includes('PENGURUS')) && cols.some(c => c.includes('SISWA') || c.includes('NISN'))) {
       headerIndex = i;
-      headers = rawLines[i].split(sep).map(cleanStr);
+      headers = rawRows[i].map(cleanStr);
       break;
     }
   }
 
   if (headerIndex === -1) {
     headerIndex = 0;
-    headers = rawLines[0].split(sep).map(cleanStr);
+    headers = rawRows[0].map(cleanStr);
   }
 
   const findCol = (exactKeywords) => {
@@ -918,9 +636,10 @@ function parseSIKSCsvContent(text, fileName) {
   let idxNpsn = findCol(['NPSN']);
   let idxPendamping = findCol(['NAMAPENDAMPING', 'PENDAMPING', 'PETUGAS']);
 
-  for (let i = headerIndex + 1; i < rawLines.length; i++) {
-    const cols = rawLines[i].split(sep).map(cleanStr);
-    if (cols.length < 5) continue;
+  // Membaca isi tabel hingga ribuan baris!
+  for (let i = headerIndex + 1; i < rawRows.length; i++) {
+    const cols = rawRows[i].map(cleanStr);
+    if (cols.length < 5) continue; // Skip baris kosong
 
     let nikPengurus = idxNikPengurus !== -1 ? cols[idxNikPengurus] : cols[1];
     let namaPengurus = idxNamaPengurus !== -1 ? cols[idxNamaPengurus] : cols[2];
@@ -932,9 +651,7 @@ function parseSIKSCsvContent(text, fileName) {
     let npsn = idxNpsn !== -1 ? cols[idxNpsn] : '';
     let pendamping = idxPendamping !== -1 ? cols[idxPendamping] : 'Andriadi, S.Kom';
 
-    if (/^\d{16}$/.test(namaPengurus) && cols[2] && !/^\d{16}$/.test(cols[2])) {
-      namaPengurus = cols[2];
-    }
+    if (/^\d{16}$/.test(namaPengurus) && cols[2] && !/^\d{16}$/.test(cols[2])) { namaPengurus = cols[2]; }
     if (/^\d{15,16}$/.test(namaSiswa)) {
       const textCol = cols.find((c, cIdx) => cIdx > 2 && cIdx < 8 && isNaN(c) && c.length > 2);
       if (textCol) namaSiswa = textCol;
@@ -943,17 +660,20 @@ function parseSIKSCsvContent(text, fileName) {
     if (!sekolah && metaSchool) sekolah = metaSchool;
     if (!npsn && metaNpsn) npsn = metaNpsn;
 
+    // Filter baris sampah/metadata (misal TAHUN AJARAN dsb)
     if (nikPengurus.startsWith('202') && nikPengurus.includes('-')) continue;
     if (namaPengurus.startsWith('202') && namaPengurus.includes('-')) continue;
     const test = normKey(namaPengurus + namaSiswa);
     if (!test || test.includes('NAMAPENGURUS') || test.includes('TINGKATPENDIDIKAN')) continue;
 
-    const checkKey = (nikPengurus + nisn + namaSiswa + tingkat).replace(/[^A-Za-z0-9]/g, '');
-    if (masterRows.some(r => (r.nikPengurus + r.nisn + r.siswa + r.tingkat).replace(/[^A-Za-z0-9]/g, '') === checkKey)) continue;
+    // Sistem penangkal duplikat yang lebih pintar & tidak agresif (mencegah data valid tertelan)
+    const checkStr = [nikPengurus, nisn, namaSiswa, tingkat, sekolah].join('|').replace(/\s/g, '');
+    if (processedRowsSet.has(checkStr)) continue;
+    processedRowsSet.add(checkStr);
 
     if (pendamping && pendamping !== '-') pendampingList.add(pendamping);
 
-    const rowObj = {
+    masterRows.push({
       nikPengurus: nikPengurus || '-',
       pengurus: namaPengurus || '-',
       nisn: nisn || '-',
@@ -962,9 +682,7 @@ function parseSIKSCsvContent(text, fileName) {
       sekolah: sekolah || 'SEKOLAH',
       npsn: npsn || '-',
       pendamping: pendamping || 'Andriadi, S.Kom'
-    };
-
-    masterRows.push(rowObj);
+    });
   }
 }
 
@@ -985,18 +703,11 @@ function drawDynamicWatermark(doc) {
   if (!customLogoData) return;
   const pageW = doc.internal.pageSize.width;
   const pageH = doc.internal.pageSize.height;
-
   let targetH = 100;
   let targetW = targetH * customLogoData.aspectRatio;
-
-  if (targetW > pageW - 40) {
-    targetW = pageW - 40;
-    targetH = targetW / customLogoData.aspectRatio;
-  }
-
+  if (targetW > pageW - 40) { targetW = pageW - 40; targetH = targetW / customLogoData.aspectRatio; }
   const x = (pageW - targetW) / 2;
   const y = (pageH - targetH) / 2 + 5;
-
   doc.saveGraphicsState();
   if (doc.GState) doc.setGState(new doc.GState({ opacity: 0.08 }));
   doc.addImage(customLogoData.base64, 'PNG', x, y, targetW, targetH);
@@ -1028,23 +739,15 @@ window.generatePDF = async function() {
     const doc = buildOfficialDoc(schoolKeys[0], groupedSchools[schoolKeys[0]], pageSize, months, signer, nip, formattedDate, headName, headNip);
     doc.save('Form_Verifikasi_' + schoolKeys[0].replace(/[^a-zA-Z0-9]/g, '_') + '.pdf');
   } else {
-    btnPdf.innerText = 'Memproses ZIP...';
-    btnPdf.disabled = true;
+    btnPdf.innerText = 'Memproses ZIP...'; btnPdf.disabled = true;
     const zip = new JSZip();
-
     schoolKeys.forEach(sch => {
       const doc = buildOfficialDoc(sch, groupedSchools[sch], pageSize, months, signer, nip, formattedDate, headName, headNip);
       zip.file('Form_Verifikasi_' + sch.replace(/[^a-zA-Z0-9]/g, '_') + '.pdf', doc.output('blob'));
     });
-
     const zipBlob = await zip.generateAsync({ type: 'blob' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(zipBlob);
-    a.download = 'Batch_Verifikasi_' + Date.now() + '.zip';
-    a.click();
-
-    btnPdf.innerHTML = '<i class="ti ti-file-type-pdf" style="font-size: 1.2rem;"></i> Generate PDF (Auto Split &amp; Zip)';
-    btnPdf.disabled = false;
+    const a = document.createElement('a'); a.href = URL.createObjectURL(zipBlob); a.download = 'Batch_Verifikasi_' + Date.now() + '.zip'; a.click();
+    btnPdf.innerHTML = '<i class="ti ti-file-type-pdf" style="font-size: 1.2rem;"></i> Generate PDF (Auto Split &amp; Zip)'; btnPdf.disabled = false;
   }
 };
 
@@ -1059,23 +762,18 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, forma
 
   let textLeftOffset = 14;
   if (customLogoData) {
-    const kopH = 15;
-    const kopW = kopH * customLogoData.aspectRatio;
+    const kopH = 15; const kopW = kopH * customLogoData.aspectRatio;
     doc.addImage(customLogoData.base64, 'PNG', 14, 6, kopW, kopH);
     textLeftOffset = 14 + kopW + 3;
   }
 
-  doc.setFontSize(10.5);
-  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(10.5); doc.setFont('helvetica', 'bold');
   doc.text('KEMENTERIAN SOSIAL REPUBLIK INDONESIA', textLeftOffset, 10.5);
   doc.setFontSize(11);
   doc.text('LEMBAR VERIFIKASI FASILITAS PENDIDIKAN (' + months.join(' - ') + ')', textLeftOffset, 15.5);
-  doc.setFontSize(8.5);
-  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(8.5); doc.setFont('helvetica', 'bold');
   doc.text('SEKOLAH: ' + schoolName + '   |   NPSN: ' + npsn, textLeftOffset, 20.5);
-
-  doc.setLineWidth(0.4);
-  doc.line(14, 23.5, doc.internal.pageSize.width - 14, 23.5);
+  doc.setLineWidth(0.4); doc.line(14, 23.5, doc.internal.pageSize.width - 14, 23.5);
 
   const headRow1 = [
     { content: 'NO', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
@@ -1086,15 +784,11 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, forma
     { content: 'TINGKAT', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } }
   ];
 
-  months.forEach(m => {
-    headRow1.push({ content: m, colSpan: 5, styles: { halign: 'center', valign: 'middle' } });
-  });
+  months.forEach(m => { headRow1.push({ content: m, colSpan: 5, styles: { halign: 'center', valign: 'middle' } }); });
   headRow1.push({ content: 'NAMA PENDAMPING', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } });
 
   const headRow2 = [];
-  months.forEach(() => {
-    headRow2.push({ content: 'Hari Efektif: ......', colSpan: 5, styles: { halign: 'center', valign: 'middle', fontSize: 6.5 } });
-  });
+  months.forEach(() => { headRow2.push({ content: 'Hari Efektif: ......', colSpan: 5, styles: { halign: 'center', valign: 'middle', fontSize: 6.5 } }); });
 
   const headRow3 = [];
   months.forEach(() => {
@@ -1110,20 +804,14 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, forma
   const body = list.map((r, i) => {
     let row = [i + 1, r.nikPengurus, r.pengurus, r.nisn, r.siswa, r.tingkat];
     months.forEach(() => { row.push('', '', '', '', ''); });
-    row.push(r.pendamping || signer);
-    return row;
+    row.push(r.pendamping || signer); return row;
   });
 
   const isSingle = (months.length === 1);
   let colStyles = {
-    0: { cellWidth: 8, halign: 'center' },
-    1: { cellWidth: 28, halign: 'center' },
-    2: { cellWidth: 'auto' },
-    3: { cellWidth: 22, halign: 'center' },
-    4: { cellWidth: 'auto' },
-    5: { cellWidth: 16, halign: 'center' }
+    0: { cellWidth: 8, halign: 'center' }, 1: { cellWidth: 28, halign: 'center' }, 2: { cellWidth: 'auto' },
+    3: { cellWidth: 22, halign: 'center' }, 4: { cellWidth: 'auto' }, 5: { cellWidth: 16, halign: 'center' }
   };
-
   let colIdx = 6;
   months.forEach(() => {
     colStyles[colIdx++] = { cellWidth: isSingle ? 14 : 8.5, halign: 'center' };
@@ -1139,67 +827,46 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, forma
     head: [headRow1, headRow2, headRow3],
     body: body,
     theme: 'plain',
-    tableLineColor: [0, 0, 0],
-    tableLineWidth: 0.25,
+    tableLineColor: [0, 0, 0], tableLineWidth: 0.25,
     styles: { fontSize: 7, cellPadding: 1.5, lineColor: [0, 0, 0], lineWidth: 0.2, textColor: [0, 0, 0] },
     headStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0], fontStyle: 'bold', lineColor: [0, 0, 0], lineWidth: 0.25 },
     columnStyles: colStyles,
-    showHead: 'everyPage',
-    pageBreak: 'auto',
-    rowPageBreak: 'auto',
+    showHead: 'everyPage', pageBreak: 'auto', rowPageBreak: 'auto',
     margin: { top: 25.5, bottom: 15, left: 14, right: 14 },
     didDrawPage: (data) => {
       if (data.pageNumber > 1) {
         drawDynamicWatermark(doc);
-        doc.setFontSize(8);
-        doc.setFont('helvetica', 'bold');
+        doc.setFontSize(8); doc.setFont('helvetica', 'bold');
         doc.text('LEMBAR VERIFIKASI FASILITAS PENDIDIKAN - ' + schoolName + ' (Lanjutan)', 14, 12);
-        doc.setLineWidth(0.3);
-        doc.line(14, 15, doc.internal.pageSize.width - 14, 15);
+        doc.setLineWidth(0.3); doc.line(14, 15, doc.internal.pageSize.width - 14, 15);
       }
       const total = doc.internal.getNumberOfPages();
-      doc.setFontSize(7.5);
-      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(7.5); doc.setFont('helvetica', 'normal');
       doc.text('Hal. ' + total, doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 5);
     }
   });
 
   const finalY = doc.lastAutoTable.finalY || 140;
   const pageH = doc.internal.pageSize.height;
-  
-  if (finalY + 38 > pageH) {
-    doc.addPage();
-    drawDynamicWatermark(doc);
-  }
+  if (finalY + 38 > pageH) { doc.addPage(); drawDynamicWatermark(doc); }
 
   const yPos = (finalY + 38 > pageH) ? 22 : finalY + 8;
-  const xLeft = 25;
-  const xRight = doc.internal.pageSize.width - 75;
+  const xLeft = 25, xRight = doc.internal.pageSize.width - 75;
 
-  doc.setFontSize(8.5);
-  doc.setFont('helvetica', 'normal');
-
+  doc.setFontSize(8.5); doc.setFont('helvetica', 'normal');
   doc.text('Mengetahui,', xLeft, yPos + 4);
   doc.text('Kepala ' + schoolName, xLeft, yPos + 8);
   if (headName) {
-    doc.setFont('helvetica', 'bold');
-    doc.text(headName, xLeft, yPos + 26);
-    doc.setFont('helvetica', 'normal');
-    doc.text(headNip ? ('NIP. ' + headNip) : 'NIP. .............................................', xLeft, yPos + 30);
+    doc.setFont('helvetica', 'bold'); doc.text(headName, xLeft, yPos + 26);
+    doc.setFont('helvetica', 'normal'); doc.text(headNip ? ('NIP. ' + headNip) : 'NIP. .............................................', xLeft, yPos + 30);
   } else {
     doc.text('( .................................................... )', xLeft, yPos + 26);
     doc.text('NIP. .............................................', xLeft, yPos + 30);
   }
 
-  doc.text(formattedDate, xRight, yPos);
-  doc.text('Petugas Verifikasi,', xRight, yPos + 4);
-  doc.setFont('helvetica', 'bold');
-  doc.text(signer, xRight, yPos + 26);
-  if (nip) {
-    doc.setFont('helvetica', 'normal');
-    doc.text('NIP. ' + nip, xRight, yPos + 30);
-  }
-
+  doc.text(formattedDate, xRight, yPos); doc.text('Petugas Verifikasi,', xRight, yPos + 4);
+  doc.setFont('helvetica', 'bold'); doc.text(signer, xRight, yPos + 26);
+  if (nip) { doc.setFont('helvetica', 'normal'); doc.text('NIP. ' + nip, xRight, yPos + 30); }
   return doc;
 }
 
@@ -1207,17 +874,14 @@ window.exportExcel = function() {
   const periodType = document.getElementById('periodType').value;
   const signer = document.getElementById('signerName').value.trim() || 'Andriadi, S.Kom';
   const nip = document.getElementById('signerNip').value.trim();
-
   const sDay = document.getElementById('signDay').value || new Date().getDate();
   const sMonth = document.getElementById('signMonth').value;
   const sYear = document.getElementById('signYear').value || new Date().getFullYear();
   const sDesa = document.getElementById('signerDesa').value.trim();
   const sKec = document.getElementById('signerKecamatan').value.trim();
   const formattedDate = (sDesa || sKec || 'Tempat') + ', ' + sDay + ' ' + sMonth + ' ' + sYear;
-
   const headName = document.getElementById('headmasterName').value.trim();
   const headNip = document.getElementById('headmasterNip').value.trim();
-
   let months = periodType === 'triwulan' ? TW_PRESETS[selectedTw] : [document.getElementById('singleMonth').value];
   const wb = XLSX.utils.book_new();
 
@@ -1225,9 +889,7 @@ window.exportExcel = function() {
     const list = [...groupedSchools[sch]];
     list.sort((a, b) => a.tingkat.localeCompare(b.tingkat, undefined, { numeric: true }));
     const npsn = list[0].npsn || '-';
-
-    const ws_data = [];
-    const merges = [];
+    const ws_data = [], merges = [];
 
     ws_data.push(['KEMENTERIAN SOSIAL REPUBLIK INDONESIA']);
     ws_data.push(['LEMBAR VERIFIKASI FASILITAS PENDIDIKAN (' + months.join(' - ') + ')']);
@@ -1236,104 +898,50 @@ window.exportExcel = function() {
 
     const r4 = ['NO', 'NIK PENGURUS', 'NAMA PENGURUS', 'NISN', 'NAMA SISWA', 'TINGKAT'];
     months.forEach(m => { r4.push(m, '', '', '', ''); });
-    r4.push('NAMA PENDAMPING');
-    ws_data.push(r4);
+    r4.push('NAMA PENDAMPING'); ws_data.push(r4);
 
     const r5 = ['', '', '', '', '', ''];
     months.forEach(() => { r5.push('Hari Efektif: ......', '', '', '', ''); });
-    r5.push('');
-    ws_data.push(r5);
+    r5.push(''); ws_data.push(r5);
 
     const r6 = ['', '', '', '', '', ''];
     months.forEach(() => { r6.push('ALPA', 'IZIN', 'SAKIT', 'JML', '%'); });
-    r6.push('');
-    ws_data.push(r6);
+    r6.push(''); ws_data.push(r6);
 
     const totalCols = 6 + (months.length * 5) + 1;
-
     merges.push({ s: { r: 0, c: 0 }, e: { r: 0, c: totalCols - 1 } });
     merges.push({ s: { r: 1, c: 0 }, e: { r: 1, c: totalCols - 1 } });
     merges.push({ s: { r: 2, c: 0 }, e: { r: 2, c: totalCols - 1 } });
-
-    for (let c = 0; c < 6; c++) {
-      merges.push({ s: { r: 4, c: c }, e: { r: 6, c: c } });
-    }
-
+    for (let c = 0; c < 6; c++) { merges.push({ s: { r: 4, c: c }, e: { r: 6, c: c } }); }
     months.forEach((m, mIdx) => {
       const startCol = 6 + (mIdx * 5);
       merges.push({ s: { r: 4, c: startCol }, e: { r: 4, c: startCol + 4 } });
       merges.push({ s: { r: 5, c: startCol }, e: { r: 5, c: startCol + 4 } });
     });
-
     merges.push({ s: { r: 4, c: totalCols - 1 }, e: { r: 6, c: totalCols - 1 } });
 
     list.forEach((r, i) => {
-      const row = [
-        i + 1,
-        { t: 's', v: r.nikPengurus },
-        r.pengurus,
-        { t: 's', v: r.nisn },
-        r.siswa,
-        r.tingkat
-      ];
+      const row = [ i + 1, { t: 's', v: r.nikPengurus }, r.pengurus, { t: 's', v: r.nisn }, r.siswa, r.tingkat ];
       months.forEach(() => { row.push('', '', '', '', ''); });
-      row.push(r.pendamping || signer);
-      ws_data.push(row);
+      row.push(r.pendamping || signer); ws_data.push(row);
     });
 
-    ws_data.push([]);
-    ws_data.push([]);
-
+    ws_data.push([]); ws_data.push([]);
     const rightCol = totalCols - 5;
+    const rowTtd1 = new Array(totalCols).fill(''); rowTtd1[rightCol] = formattedDate; ws_data.push(rowTtd1);
+    const rowTtd2 = new Array(totalCols).fill(''); rowTtd2[1] = 'Mengetahui,'; rowTtd2[rightCol] = 'Petugas Verifikasi,'; ws_data.push(rowTtd2);
+    const rowTtd3 = new Array(totalCols).fill(''); rowTtd3[1] = 'Kepala ' + sch; ws_data.push(rowTtd3);
+    ws_data.push([]); ws_data.push([]); ws_data.push([]);
+    const rowTtd4 = new Array(totalCols).fill(''); rowTtd4[1] = headName ? headName : '( .................................................... )'; rowTtd4[rightCol] = signer; ws_data.push(rowTtd4);
+    const rowTtd5 = new Array(totalCols).fill(''); rowTtd5[1] = headNip ? ('NIP. ' + headNip) : 'NIP. .............................................'; rowTtd5[rightCol] = nip ? ('NIP. ' + nip) : ''; ws_data.push(rowTtd5);
 
-    const rowTtd1 = new Array(totalCols).fill('');
-    rowTtd1[rightCol] = formattedDate;
-    ws_data.push(rowTtd1);
-
-    const rowTtd2 = new Array(totalCols).fill('');
-    rowTtd2[1] = 'Mengetahui,';
-    rowTtd2[rightCol] = 'Petugas Verifikasi,';
-    ws_data.push(rowTtd2);
-
-    const rowTtd3 = new Array(totalCols).fill('');
-    rowTtd3[1] = 'Kepala ' + sch;
-    ws_data.push(rowTtd3);
-
-    ws_data.push([]);
-    ws_data.push([]);
-    ws_data.push([]);
-
-    const rowTtd4 = new Array(totalCols).fill('');
-    rowTtd4[1] = headName ? headName : '( .................................................... )';
-    rowTtd4[rightCol] = signer;
-    ws_data.push(rowTtd4);
-
-    const rowTtd5 = new Array(totalCols).fill('');
-    rowTtd5[1] = headNip ? ('NIP. ' + headNip) : 'NIP. .............................................';
-    rowTtd5[rightCol] = nip ? ('NIP. ' + nip) : '';
-    ws_data.push(rowTtd5);
-
-    const ws = XLSX.utils.aoa_to_sheet(ws_data);
-    ws['!merges'] = merges;
-
-    const colWidths = [
-      { wch: 6 },
-      { wch: 22 },
-      { wch: 28 },
-      { wch: 14 },
-      { wch: 28 },
-      { wch: 12 }
-    ];
-    months.forEach(() => {
-      colWidths.push({ wch: 6 }, { wch: 6 }, { wch: 6 }, { wch: 6 }, { wch: 6 });
-    });
-    colWidths.push({ wch: 26 });
-    ws['!cols'] = colWidths;
-
+    const ws = XLSX.utils.aoa_to_sheet(ws_data); ws['!merges'] = merges;
+    const colWidths = [ { wch: 6 }, { wch: 22 }, { wch: 28 }, { wch: 14 }, { wch: 28 }, { wch: 12 } ];
+    months.forEach(() => { colWidths.push({ wch: 6 }, { wch: 6 }, { wch: 6 }, { wch: 6 }, { wch: 6 }); });
+    colWidths.push({ wch: 26 }); ws['!cols'] = colWidths;
     const sheetName = sch.substring(0, 30).replace(/[:\\\/\?\*\[\]]/g, '');
     XLSX.utils.book_append_sheet(wb, ws, sheetName);
   });
-
   XLSX.writeFile(wb, 'Form_Verifikasi_' + Date.now() + '.xlsx');
 };
 </script>
