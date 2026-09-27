@@ -69,6 +69,80 @@
       gap: 20px; 
     }
 
+    /* FLOATING TRAKTEER KIRI BAWAH */
+    .floating-bottom-left {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
+    .trakteer-msg {
+      background: var(--panel);
+      color: var(--text);
+      padding: 14px 18px;
+      border-radius: var(--radius);
+      font-size: 0.8rem;
+      font-weight: 500;
+      line-height: 1.5;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      max-width: 270px;
+      opacity: 0;
+      transform: translateY(15px) scale(0.95);
+      visibility: hidden;
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      transform-origin: bottom left;
+    }
+
+    .trakteer-msg strong {
+      color: #ef4444;
+    }
+
+    .trakteer-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #ef4444, #b91c1c);
+      color: #ffffff;
+      padding: 12px 22px;
+      border-radius: 99px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      text-decoration: none;
+      box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.4), 0 8px 10px -6px rgba(239, 68, 68, 0.3);
+      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    }
+
+    .trakteer-btn:hover {
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 0 14px 30px -5px rgba(239, 68, 68, 0.6);
+      color: #ffffff;
+    }
+
+    .trakteer-btn i {
+      font-size: 1.3rem;
+      animation: heartbeat 1.5s infinite;
+    }
+
+    .floating-bottom-left:hover .trakteer-msg {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      visibility: visible;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      25% { transform: scale(1.15); }
+      50% { transform: scale(1); }
+      75% { transform: scale(1.15); }
+    }
+
+    /* FLOATING MENU KANAN ATAS */
     .floating-top-right {
       position: fixed;
       top: 20px;
@@ -189,6 +263,9 @@
     }
     @media (max-width: 520px) {
       .form-grid-4, .form-grid-2 { grid-template-columns: 1fr; }
+      
+      /* Sembunyikan pesan trakteer di HP agar tidak menutupi layar */
+      .trakteer-msg { display: none; }
     }
 
     .form-group { 
@@ -358,6 +435,17 @@
   </style>
 </head>
 <body oncontextmenu="return false;">
+
+<!-- FLOATING TRAKTEER KIRI BAWAH -->
+<div class="floating-bottom-left">
+  <div class="trakteer-msg">
+    <i>"Di balik kemudahan sebuah aplikasi, ada waktu dan dedikasi panjang yang dicurahkan."</i><br><br>
+    Mari <strong>hargai jerih payah Developer</strong> dengan secangkir semangat agar aplikasi ini terus bermanfaat! ❤️
+  </div>
+  <a href="https://trakteer.id/bukit_santuai_korcam/tip?open=true" target="_blank" rel="noopener noreferrer" class="trakteer-btn">
+    <i class="ti ti-cup"></i> Dukung Developer
+  </a>
+</div>
 
 <!-- FLOATING MENU KANAN ATAS -->
 <div class="floating-top-right">
