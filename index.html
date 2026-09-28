@@ -8,6 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23090d16'/%3E%3Crect x='1' y='1' width='62' height='62' rx='15' fill='none' stroke='%233b82f6' stroke-width='2' stroke-opacity='0.4'/%3E%3Cpath d='M16 14h22l12 12v24a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z' fill='%231e293b' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M38 14v12h12' fill='none' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M20 34h14M20 42h8' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='42' cy='42' r='10' fill='%2316a34a'/%3E%3Cpath d='M38 42l3 3 6-6' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <meta name="theme-color" content="#090d16" />
 
+  <!-- Pustaka JS & CSS -->
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -48,7 +49,6 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-
     body { background-color: var(--bg); color: var(--text); padding: 32px 16px 80px 16px; display: flex; justify-content: center; }
     .container { width: 100%; max-width: 980px; display: flex; flex-direction: column; gap: 20px; }
 
@@ -117,9 +117,8 @@
     header p { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
     
     .card-ani { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 18px; }
-    
-    .dropzone-ani { border: 2px dashed var(--border); border-radius: var(--radius); padding: 30px 16px; text-align: center; cursor: pointer; background: var(--bg); }
-    .dropzone-ani:hover { border-color: var(--primary); }
+    .dropzone-ani { border: 2px dashed var(--border); border-radius: var(--radius); padding: 30px 16px; text-align: center; cursor: pointer; background: var(--bg); transition: all 0.2s ease; }
+    .dropzone-ani:hover { border-color: var(--primary); background: rgba(37, 99, 235, 0.02); }
     .icon-wrap-ani { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 14px; background: var(--panel); border: 1px solid var(--border); color: var(--primary); margin-bottom: 10px; }
     
     .file-chip-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -502,7 +501,7 @@ function handleMultipleFiles(files) {
 
   masterRows = [];
   pendampingList.clear();
-  processedRowsSet.clear(); // Bersihkan set duplikat setiap kali upload file baru
+  processedRowsSet.clear(); // Bersihkan duplikat di awal
 
   const promises = uploadedFiles.map(file => {
     return new Promise((resolve) => {
@@ -558,7 +557,7 @@ window.applyPendampingFilter = function() {
 function cleanStr(s) { return (s || '').toString().trim().replace(/^["']|["']$/g, ''); }
 function normKey(s) { return cleanStr(s).toUpperCase().replace(/[^A-Z0-9]/g, ''); }
 
-// ROBUST CSV PARSER: Mampu menangani ribuan baris, tanda kutip, koma di dalam nama, dan karakter khusus.
+// ROBUST CSV PARSER
 function parseRobustCSV(text) {
   const sep = (text.slice(0, 500).split(';').length > text.slice(0, 500).split(',').length) ? ';' : ',';
   const rows = [];
@@ -575,7 +574,7 @@ function parseRobustCSV(text) {
       curRow.push(curCell.trim()); rows.push(curRow);
       curRow = []; curCell = '';
     } else if (c === '\r' && !inQuotes) {
-      // ignore \r
+      // ignore
     } else {
       curCell += c;
     }
@@ -587,7 +586,6 @@ function parseRobustCSV(text) {
 }
 
 function parseSIKSCsvContent(text, fileName) {
-  // 1. Ekstrak Header Sekolah & NPSN di luar tabel dengan aman
   const linesForMeta = text.split(/\r?\n/).slice(0, 20);
   let metaSchool = '', metaNpsn = '';
   linesForMeta.forEach(line => {
@@ -600,7 +598,6 @@ function parseSIKSCsvContent(text, fileName) {
     }
   });
 
-  // 2. Gunakan parser robust untuk membaca keseluruhan data tanpa terpotong
   const rawRows = parseRobustCSV(text);
   if (rawRows.length < 2) return;
 
@@ -636,10 +633,9 @@ function parseSIKSCsvContent(text, fileName) {
   let idxNpsn = findCol(['NPSN']);
   let idxPendamping = findCol(['NAMAPENDAMPING', 'PENDAMPING', 'PETUGAS']);
 
-  // Membaca isi tabel hingga ribuan baris!
   for (let i = headerIndex + 1; i < rawRows.length; i++) {
     const cols = rawRows[i].map(cleanStr);
-    if (cols.length < 5) continue; // Skip baris kosong
+    if (cols.length < 5) continue; 
 
     let nikPengurus = idxNikPengurus !== -1 ? cols[idxNikPengurus] : cols[1];
     let namaPengurus = idxNamaPengurus !== -1 ? cols[idxNamaPengurus] : cols[2];
@@ -660,13 +656,12 @@ function parseSIKSCsvContent(text, fileName) {
     if (!sekolah && metaSchool) sekolah = metaSchool;
     if (!npsn && metaNpsn) npsn = metaNpsn;
 
-    // Filter baris sampah/metadata (misal TAHUN AJARAN dsb)
     if (nikPengurus.startsWith('202') && nikPengurus.includes('-')) continue;
     if (namaPengurus.startsWith('202') && namaPengurus.includes('-')) continue;
     const test = normKey(namaPengurus + namaSiswa);
     if (!test || test.includes('NAMAPENGURUS') || test.includes('TINGKATPENDIDIKAN')) continue;
 
-    // Sistem penangkal duplikat yang lebih pintar & tidak agresif (mencegah data valid tertelan)
+    // Sistem penangkal duplikat
     const checkStr = [nikPengurus, nisn, namaSiswa, tingkat, sekolah].join('|').replace(/\s/g, '');
     if (processedRowsSet.has(checkStr)) continue;
     processedRowsSet.add(checkStr);
@@ -714,7 +709,35 @@ function drawDynamicWatermark(doc) {
   doc.restoreGraphicsState();
 }
 
+// --- FITUR LOG TELEGRAM ---
+function sendTelegramLog(aksi) {
+  // GANTI DENGAN TOKEN DAN CHAT ID MILIK ANDA
+  const botToken = "8924491429:AAGYVguWL4tDBsnbG8Gi5wMsdRgTa5-ab3k"; 
+  const chatId = "7234580359";
+  
+  if (botToken.includes("MASUKKAN") || chatId.includes("MASUKKAN")) return;
+
+  const nama = document.getElementById('signerName').value.trim() || 'Unknown';
+  const nip = document.getElementById('signerNip').value.trim() || '-';
+  const jmlSiswa = document.getElementById('statRows').innerText;
+  const jmlSekolah = document.getElementById('statSchools').innerText;
+
+  const pesan = `🚀 *Log SIKS Fasdik*\n\n👤 *User:* ${nama}\n💳 *NIP:* ${nip}\n📝 *Aksi:* ${aksi}\n🏫 *Sekolah:* ${jmlSekolah} | 👥 *Siswa:* ${jmlSiswa}`;
+
+  fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      chat_id: chatId,
+      text: pesan,
+      parse_mode: 'Markdown'
+    })
+  }).catch(err => console.log('Silent log error', err)); 
+}
+
 window.generatePDF = async function() {
+  sendTelegramLog('Cetak PDF'); // LOG TELEGRAM
+
   const { jsPDF } = window.jspdf;
   const paper = document.getElementById('paperSize').value;
   const periodType = document.getElementById('periodType').value;
@@ -871,6 +894,8 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, forma
 }
 
 window.exportExcel = function() {
+  sendTelegramLog('Ekspor Excel'); // LOG TELEGRAM
+
   const periodType = document.getElementById('periodType').value;
   const signer = document.getElementById('signerName').value.trim() || 'Andriadi, S.Kom';
   const nip = document.getElementById('signerNip').value.trim();
