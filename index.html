@@ -17,47 +17,17 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
   <style>
-    :root {
-      --bg: #f8fafc; --panel: #ffffff; --text: #0f172a; --text-muted: #64748b;
-      --border: #e2e8f0; --border-hover: #cbd5e1; --primary: #2563eb; --primary-hover: #1d4ed8;
-      --accent: #16a34a; --accent-hover: #15803d; --tip: #d97706;
-      --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
-      --radius: 12px; --radius-sm: 8px;
-    }
-
-    body.dark-mode {
-      --bg: #090d16; --panel: #111827; --text: #f8fafc; --text-muted: #94a3b8;
-      --border: #1f2937; --border-hover: #374151; --primary: #3b82f6; --primary-hover: #60a5fa;
-      --accent: #22c55e; --accent-hover: #4ade80; --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
-    }
-
+    :root { --bg: #f8fafc; --panel: #ffffff; --text: #0f172a; --text-muted: #64748b; --border: #e2e8f0; --border-hover: #cbd5e1; --primary: #2563eb; --primary-hover: #1d4ed8; --accent: #16a34a; --accent-hover: #15803d; --tip: #d97706; --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.05); --radius: 12px; --radius-sm: 8px; }
+    body.dark-mode { --bg: #090d16; --panel: #111827; --text: #f8fafc; --text-muted: #94a3b8; --border: #1f2937; --border-hover: #374151; --primary: #3b82f6; --primary-hover: #60a5fa; --accent: #22c55e; --accent-hover: #4ade80; --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
     body { background-color: var(--bg); color: var(--text); padding: 32px 16px 80px 16px; display: flex; justify-content: center; }
     .container { width: 100%; max-width: 980px; display: flex; flex-direction: column; gap: 20px; }
 
-    /* EFEK TOMBOL SELESAI (MENGKILAT) */
-    .btn-success-state {
-      background: #10b981 !important; 
-      color: #ffffff !important;
-      border-color: #10b981 !important;
-      transition: all 0.3s ease;
-    }
-    .btn-shiny {
-      position: relative;
-      overflow: hidden;
-    }
-    .btn-shiny::before {
-      content: '';
-      position: absolute;
-      top: 0; left: -100%;
-      width: 50%; height: 100%;
-      background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
-      transform: skewX(-25deg);
-      animation: shine 1.5s infinite;
-    }
+    .btn-success-state { background: #10b981 !important; color: #ffffff !important; border-color: #10b981 !important; transition: all 0.3s ease; }
+    .btn-shiny { position: relative; overflow: hidden; }
+    .btn-shiny::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%); transform: skewX(-25deg); animation: shine 1.5s infinite; }
     @keyframes shine { 0% { left: -100%; } 100% { left: 200%; } }
 
-    /* FLOATING TRAKTEER */
     .floating-bottom-left { position: fixed; bottom: 24px; left: 24px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
     .trakteer-msg { background: var(--panel); color: var(--text); padding: 14px 18px; border-radius: var(--radius); font-size: 0.8rem; font-weight: 500; line-height: 1.5; border: 1px solid var(--border); box-shadow: var(--shadow); max-width: 270px; opacity: 0; transform: translateY(15px) scale(0.95); visibility: hidden; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: bottom left; }
     .trakteer-msg strong { color: #ef4444; }
@@ -67,7 +37,6 @@
     .floating-bottom-left:hover .trakteer-msg { opacity: 1; transform: translateY(0) scale(1); visibility: visible; }
     @keyframes heartbeat { 0%, 100% { transform: scale(1); } 25% { transform: scale(1.15); } 50% { transform: scale(1); } 75% { transform: scale(1.15); } }
 
-    /* FLOATING MENU & JAM MEJA */
     .floating-top-right { position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; align-items: center; gap: 8px; background: var(--panel); padding: 8px 6px; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
     .floating-btn-v { width: 34px; height: 34px; border-radius: 50%; border: 1px solid transparent; background: transparent; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
     .floating-btn-v:hover { color: var(--text); background: var(--bg); }
@@ -139,7 +108,6 @@
 </head>
 <body oncontextmenu="return false;">
 
-<!-- FLOATING TRAKTEER KIRI BAWAH -->
 <div class="floating-bottom-left">
   <div class="trakteer-msg">
     <i>"Di balik kemudahan sebuah aplikasi, ada waktu dan dedikasi panjang yang dicurahkan."</i><br><br>
@@ -150,10 +118,7 @@
   </a>
 </div>
 
-<!-- FLOATING MENU KANAN ATAS -->
 <div class="floating-top-right">
-  
-  <!-- JAM MEJA FLIP -->
   <div class="desk-clock">
     <div class="flip-card" id="card-hr"><span id="flip-hr">--</span></div>
     <div class="clock-label">JAM</div>
@@ -162,7 +127,6 @@
     <div class="flip-card" id="card-sec"><span id="flip-sec">--</span></div>
     <div class="clock-label" id="clock-zone" style="color: var(--primary);">WIB</div>
   </div>
-
   <button class="floating-btn-v active" id="btnThemeAuto" title="Mode Auto" onclick="setAppTheme('auto')"><i class="ti ti-clock-play"></i></button>
   <button class="floating-btn-v" id="btnThemeLight" title="Mode Siang" onclick="setAppTheme('light')"><i class="ti ti-sun"></i></button>
   <button class="floating-btn-v" id="btnThemeDark" title="Mode Malam" onclick="setAppTheme('dark')"><i class="ti ti-moon"></i></button>
@@ -195,7 +159,6 @@
       <span><i class="ti ti-users"></i> Siswa Tampil: <strong id="statRows">0</strong></span>
     </div>
 
-    <!-- FORM GRID -->
     <div class="form-grid-4">
       <div class="form-group">
         <label><i class="ti ti-user-search"></i> Filter Pendamping</label>
@@ -324,12 +287,64 @@
   </div>
 
   <footer>
-    &copy; 2026 <strong>Andriadi, S.Kom</strong> &middot; All Rights Reserved<br>
+    &copy; <script>document.write(new Date().getFullYear())</script> <strong>Andriadi, S.Kom</strong> &middot; All Rights Reserved<br>
     SIKS Fasdik Report Generator &middot; Kementerian Sosial Republik Indonesia
   </footer>
 </div>
 
 <script>
+// ==================== ALGORITMA HARI EFEKTIF (DINAMIS 2027+) ====================
+let cachedHolidays = new Set(); 
+
+const FALLBACK_LIBUR_2026 = [ "2026-01-01", "2026-01-16", "2026-02-16", "2026-02-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-04-03", "2026-05-01", "2026-05-14", "2026-05-15", "2026-05-22", "2026-05-27", "2026-05-28", "2026-06-01", "2026-06-16", "2026-08-17", "2026-08-25", "2026-12-24", "2026-12-25" ];
+
+// Fungsi Fetching Tanggal Merah Indonesia secara Dinamis
+async function fetchHolidays(year) {
+  if (cachedHolidays.has(`fetched_${year}`)) return; 
+  try {
+    const res = await fetch(`https://api-hari-libur.vercel.app/api?year=${year}`);
+    if (!res.ok) throw new Error("API Utama Fail");
+    const data = await res.json();
+    data.forEach(item => { if (item.holiday_date) cachedHolidays.add(item.holiday_date); });
+    cachedHolidays.add(`fetched_${year}`);
+    console.log(`Berhasil sinkronisasi libur nasional tahun ${year}`);
+  } catch (e1) {
+    try {
+      const res2 = await fetch(`https://dayoffapi.vercel.app/api?year=${year}`);
+      if (!res2.ok) throw new Error("API Cadangan Fail");
+      const data2 = await res2.json();
+      data2.forEach(item => { if (item.tanggal) cachedHolidays.add(item.tanggal); });
+      cachedHolidays.add(`fetched_${year}`);
+    } catch (e2) {
+      console.warn("API libur nasional gangguan. Mode manual diaktifkan.");
+      if (year == 2026) FALLBACK_LIBUR_2026.forEach(tgl => cachedHolidays.add(tgl));
+      cachedHolidays.add(`fetched_${year}`);
+    }
+  }
+}
+
+const BULAN_INDEX = { "JANUARI":0, "FEBRUARI":1, "MARET":2, "APRIL":3, "MEI":4, "JUNI":5, "JULI":6, "AGUSTUS":7, "SEPTEMBER":8, "OKTOBER":9, "NOVEMBER":10, "DESEMBER":11 };
+
+function hitungHariEfektif(namaBulan, tahun) {
+  const bulan = BULAN_INDEX[namaBulan.toUpperCase()];
+  if (bulan === undefined) return "......"; 
+  const date = new Date(tahun, bulan, 1);
+  const nextMonth = new Date(tahun, bulan + 1, 1);
+  let efektif = 0;
+  while (date < nextMonth) {
+    const dayOfWeek = date.getDay();
+    if (dayOfWeek !== 0 && dayOfWeek !== 6) { 
+      const yyyy = date.getFullYear();
+      const mm = String(date.getMonth() + 1).padStart(2, '0');
+      const dd = String(date.getDate()).padStart(2, '0');
+      const dateStr = `${yyyy}-${mm}-${dd}`;
+      if (!cachedHolidays.has(dateStr)) efektif++; 
+    }
+    date.setDate(date.getDate() + 1);
+  }
+  return efektif;
+}
+
 // --- JAM MEJA & NTP SYNC ---
 let timeOffsetMs = 0;
 
@@ -340,9 +355,7 @@ async function syncNTP() {
     const serverTime = new Date(data.utc_datetime).getTime();
     const localTime = Date.now();
     timeOffsetMs = serverTime - localTime;
-  } catch (e) {
-    console.log("NTP Sync terganggu, kembali ke jam lokal.");
-  }
+  } catch (e) { console.log("NTP Sync terganggu, kembali ke jam lokal."); }
 }
 
 function updateCard(cardId, spanId, val) {
@@ -378,7 +391,7 @@ function updateClock() {
 syncNTP();
 setInterval(updateClock, 1000);
 
-// --- INISIALISASI TANGGAL ---
+// --- INISIALISASI TANGGAL & TEMA ---
 (function initDefaultDate() {
   const now = new Date();
   const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
@@ -387,7 +400,10 @@ setInterval(updateClock, 1000);
   const yearInp = document.getElementById('signYear');
   if (dayInp) dayInp.value = now.getDate();
   if (monthInp) monthInp.value = months[now.getMonth()];
-  if (yearInp) yearInp.value = now.getFullYear();
+  if (yearInp) { 
+    yearInp.value = now.getFullYear(); 
+    fetchHolidays(now.getFullYear()); // Fetch libur awal
+  }
 })();
 
 let currentThemeMode = localStorage.getItem('theme_preference') || 'auto';
@@ -426,6 +442,7 @@ function setAppTheme(mode) { currentThemeMode = mode; localStorage.setItem('them
 function setIndonesiaZone(zone) { currentZoneMode = zone; localStorage.setItem('zone_preference', zone); applyTheme(); updateClock(); }
 applyTheme();
 
+// --- SISTEM PARSING DATA ---
 let masterRows = [];
 let allRows = [];
 let groupedSchools = {};
@@ -617,19 +634,15 @@ function renderPreview() {
   html += '</tbody>'; table.innerHTML = html;
 }
 
-// --- EFEK BUTTON SELESAI ---
 function setButtonSuccess(btnId, originalHtml, successText) {
   const btn = document.getElementById(btnId);
   btn.innerHTML = `<i class="ti ti-check" style="font-size: 1.2rem;"></i> ${successText}`;
   btn.classList.add('btn-success-state', 'btn-shiny');
-  setTimeout(() => {
-    btn.innerHTML = originalHtml;
-    btn.classList.remove('btn-success-state', 'btn-shiny');
-  }, 3500);
+  setTimeout(() => { btn.innerHTML = originalHtml; btn.classList.remove('btn-success-state', 'btn-shiny'); }, 3500);
 }
 
-// --- FITUR LOG TELEGRAM ---
 function sendTelegramLog(aksi) {
+  // === GANTI TOKEN DAN CHAT ID DI BAWAH INI ===
   const botToken = "8924491429:AAGYVguWL4tDBsnbG8Gi5wMsdRgTa5-ab3k"; 
   const chatId = "7234580359";
   if (botToken.includes("MASUKKAN") || chatId.includes("MASUKKAN")) return;
@@ -645,7 +658,11 @@ function sendTelegramLog(aksi) {
 window.generatePDF = async function() {
   sendTelegramLog('Cetak PDF'); 
   const originalHtml = '<i class="ti ti-file-type-pdf" style="font-size: 1.2rem;"></i> Generate PDF (Auto Split &amp; Zip)';
-  btnPdf.innerText = 'Memproses PDF...'; btnPdf.disabled = true;
+  
+  const sYearInp = document.getElementById('signYear').value || new Date().getFullYear();
+  btnPdf.innerText = 'Mengunduh Kalender...'; btnPdf.disabled = true;
+  await fetchHolidays(sYearInp);
+  btnPdf.innerText = 'Memproses PDF...';
 
   try {
     const { jsPDF } = window.jspdf;
@@ -655,41 +672,37 @@ window.generatePDF = async function() {
     const nip = document.getElementById('signerNip').value.trim();
     const sDay = document.getElementById('signDay').value || new Date().getDate();
     const sMonth = document.getElementById('signMonth').value;
-    const sYear = document.getElementById('signYear').value || new Date().getFullYear();
     const sDesa = document.getElementById('signerDesa').value.trim();
     const sKec = document.getElementById('signerKecamatan').value.trim();
-    const formattedDate = (sDesa || sKec || 'Tempat') + ', ' + sDay + ' ' + sMonth + ' ' + sYear;
+    const formattedDate = (sDesa || sKec || 'Tempat') + ', ' + sDay + ' ' + sMonth + ' ' + sYearInp;
     const headName = document.getElementById('headmasterName').value.trim();
     const headNip = document.getElementById('headmasterNip').value.trim();
+    
     let months = periodType === 'triwulan' ? TW_PRESETS[selectedTw] : [document.getElementById('singleMonth').value];
     const pageSize = paper === 'f4' ? [330, 210] : 'a4';
     const schoolKeys = Object.keys(groupedSchools);
 
     if (schoolKeys.length === 1) {
-      const doc = buildOfficialDoc(schoolKeys[0], groupedSchools[schoolKeys[0]], pageSize, months, signer, nip, formattedDate, headName, headNip);
+      const doc = buildOfficialDoc(schoolKeys[0], groupedSchools[schoolKeys[0]], pageSize, months, signer, nip, formattedDate, headName, headNip, sYearInp);
       doc.save('Form_Verifikasi_' + schoolKeys[0].replace(/[^a-zA-Z0-9]/g, '_') + '.pdf');
     } else {
       btnPdf.innerText = 'Memproses ZIP PDF...'; 
       const zip = new JSZip();
       schoolKeys.forEach(sch => {
-        const doc = buildOfficialDoc(sch, groupedSchools[sch], pageSize, months, signer, nip, formattedDate, headName, headNip);
+        const doc = buildOfficialDoc(sch, groupedSchools[sch], pageSize, months, signer, nip, formattedDate, headName, headNip, sYearInp);
         zip.file('Form_Verifikasi_' + sch.replace(/[^a-zA-Z0-9]/g, '_') + '.pdf', doc.output('blob'));
       });
       const zipBlob = await zip.generateAsync({ type: 'blob' });
       const a = document.createElement('a'); a.href = URL.createObjectURL(zipBlob); a.download = 'Batch_Verifikasi_' + Date.now() + '.zip'; a.click();
     }
-    
-    // SUKSES
     setButtonSuccess('btnPdf', originalHtml, 'Berhasil Dibuat!');
   } catch (error) {
-    console.error(error);
-    alert('Terjadi kesalahan saat memproses PDF.');
-    btnPdf.innerHTML = originalHtml;
+    console.error(error); alert('Terjadi kesalahan saat memproses PDF.'); btnPdf.innerHTML = originalHtml;
   }
   btnPdf.disabled = false;
 };
 
-function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, formattedDate, headName, headNip) {
+function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, formattedDate, headName, headNip, reportYear) {
   const { jsPDF } = window.jspdf;
   const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: pageSize });
   list.sort((a, b) => a.tingkat.localeCompare(b.tingkat, undefined, { numeric: true }));
@@ -723,8 +736,14 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, forma
   months.forEach(m => { headRow1.push({ content: m, colSpan: 5, styles: { halign: 'center', valign: 'middle' } }); });
   headRow1.push({ content: 'NAMA PENDAMPING', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } });
 
-  const headRow2 = []; months.forEach(() => { headRow2.push({ content: 'Hari Efektif: ......', colSpan: 5, styles: { halign: 'center', valign: 'middle', fontSize: 6.5 } }); });
-  const headRow3 = []; months.forEach(() => { headRow3.push({ content: 'ALPA', styles: { halign: 'center', fontSize: 5.5 } }, { content: 'IZIN', styles: { halign: 'center', fontSize: 5.5 } }, { content: 'SAKIT', styles: { halign: 'center', fontSize: 5.5 } }, { content: 'JML', styles: { halign: 'center', fontSize: 5.5 } }, { content: '%', styles: { halign: 'center', fontSize: 5.5 } }); });
+  const headRow2 = []; 
+  months.forEach(m => { 
+    const hk = hitungHariEfektif(m, reportYear);
+    headRow2.push({ content: 'Hari Efektif: ' + hk, colSpan: 5, styles: { halign: 'center', valign: 'middle', fontSize: 6.5 } }); 
+  });
+  
+  const headRow3 = []; 
+  months.forEach(() => { headRow3.push({ content: 'ALPA', styles: { halign: 'center', fontSize: 5.5 } }, { content: 'IZIN', styles: { halign: 'center', fontSize: 5.5 } }, { content: 'SAKIT', styles: { halign: 'center', fontSize: 5.5 } }, { content: 'JML', styles: { halign: 'center', fontSize: 5.5 } }, { content: '%', styles: { halign: 'center', fontSize: 5.5 } }); });
 
   const body = list.map((r, i) => {
     let row = [i + 1, r.nikPengurus, r.pengurus, r.nisn, r.siswa, r.tingkat];
@@ -781,9 +800,8 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, forma
 }
 
 // ==================== GENERATE EXCEL SINGLE BATCH (HELPER) ====================
-async function buildSingleExcelBuffer(sch, list, months, formattedDate, headName, headNip, signer, nip) {
+async function buildSingleExcelBuffer(sch, list, months, formattedDate, headName, headNip, signer, nip, reportYear) {
   const wb = new ExcelJS.Workbook();
-  
   let logoId = null;
   if (customLogoData) {
     const base64Parts = customLogoData.base64.split(',');
@@ -797,31 +815,20 @@ async function buildSingleExcelBuffer(sch, list, months, formattedDate, headName
   const npsn = list[0].npsn || '-';
   const sheetName = sch.substring(0, 30).replace(/[:\\\/\?\*\[\]]/g, '');
   const ws = wb.addWorksheet(sheetName);
-
   const totalCols = 6 + (months.length * 5) + 1;
 
-  ws.getColumn(1).width = 5;  
-  ws.getColumn(2).width = 20; 
-  ws.getColumn(3).width = 28; 
-  ws.getColumn(4).width = 15; 
-  ws.getColumn(5).width = 28; 
-  ws.getColumn(6).width = 12; 
-  
+  ws.getColumn(1).width = 5; ws.getColumn(2).width = 20; ws.getColumn(3).width = 28; 
+  ws.getColumn(4).width = 15; ws.getColumn(5).width = 28; ws.getColumn(6).width = 12; 
   let cIdx = 7;
   months.forEach(() => { for(let j=0; j<5; j++) ws.getColumn(cIdx++).width = 6; });
   ws.getColumn(cIdx).width = 25; 
 
-  if (logoId !== null) {
-    ws.addImage(logoId, { tl: { col: 0.2, row: 0.2 }, ext: { width: 65, height: 65 } });
-  }
+  if (logoId !== null) { ws.addImage(logoId, { tl: { col: 0.2, row: 0.2 }, ext: { width: 65, height: 65 } }); }
 
   const titleStartCol = (logoId !== null) ? 3 : 1; 
-  ws.getCell(1, titleStartCol).value = 'KEMENTERIAN SOSIAL REPUBLIK INDONESIA';
-  ws.getCell(1, titleStartCol).font = { bold: true, size: 12 };
-  ws.getCell(2, titleStartCol).value = 'LEMBAR VERIFIKASI FASILITAS PENDIDIKAN (' + months.join(' - ') + ')';
-  ws.getCell(2, titleStartCol).font = { bold: true, size: 11 };
-  ws.getCell(3, titleStartCol).value = 'SEKOLAH: ' + sch + '   |   NPSN: ' + npsn;
-  ws.getCell(3, titleStartCol).font = { bold: true, size: 10 };
+  ws.getCell(1, titleStartCol).value = 'KEMENTERIAN SOSIAL REPUBLIK INDONESIA'; ws.getCell(1, titleStartCol).font = { bold: true, size: 12 };
+  ws.getCell(2, titleStartCol).value = 'LEMBAR VERIFIKASI FASILITAS PENDIDIKAN (' + months.join(' - ') + ')'; ws.getCell(2, titleStartCol).font = { bold: true, size: 11 };
+  ws.getCell(3, titleStartCol).value = 'SEKOLAH: ' + sch + '   |   NPSN: ' + npsn; ws.getCell(3, titleStartCol).font = { bold: true, size: 10 };
 
   let rHeader = 5;
   ws.getCell(rHeader, 1).value = 'NO'; ws.getCell(rHeader, 2).value = 'NIK PENGURUS'; ws.getCell(rHeader, 3).value = 'NAMA PENGURUS';
@@ -831,7 +838,8 @@ async function buildSingleExcelBuffer(sch, list, months, formattedDate, headName
   let mCol = 7;
   months.forEach(m => {
     ws.getCell(rHeader, mCol).value = m; ws.mergeCells(rHeader, mCol, rHeader, mCol + 4);
-    ws.getCell(rHeader + 1, mCol).value = 'Hari Efektif: ......'; ws.mergeCells(rHeader + 1, mCol, rHeader + 1, mCol + 4);
+    const hk = hitungHariEfektif(m, reportYear);
+    ws.getCell(rHeader + 1, mCol).value = 'Hari Efektif: ' + hk; ws.mergeCells(rHeader + 1, mCol, rHeader + 1, mCol + 4);
     ws.getCell(rHeader + 2, mCol).value = 'ALPA'; ws.getCell(rHeader + 2, mCol + 1).value = 'IZIN';
     ws.getCell(rHeader + 2, mCol + 2).value = 'SAKIT'; ws.getCell(rHeader + 2, mCol + 3).value = 'JML';
     ws.getCell(rHeader + 2, mCol + 4).value = '%';
@@ -854,19 +862,12 @@ async function buildSingleExcelBuffer(sch, list, months, formattedDate, headName
     row.getCell(1).value = i + 1; row.getCell(2).value = r.nikPengurus; row.getCell(3).value = r.pengurus;
     row.getCell(4).value = r.nisn; row.getCell(5).value = r.siswa; row.getCell(6).value = r.tingkat;
     row.getCell(totalCols).value = r.pendamping || signer;
-    
-    row.getCell(1).alignment = { vertical: 'middle', horizontal: 'center' };
-    row.getCell(2).alignment = { vertical: 'middle', horizontal: 'center' };
-    row.getCell(4).alignment = { vertical: 'middle', horizontal: 'center' };
-    row.getCell(6).alignment = { vertical: 'middle', horizontal: 'center' };
-    row.getCell(totalCols).alignment = { vertical: 'middle', horizontal: 'center' };
+    row.getCell(1).alignment = { vertical: 'middle', horizontal: 'center' }; row.getCell(2).alignment = { vertical: 'middle', horizontal: 'center' }; row.getCell(4).alignment = { vertical: 'middle', horizontal: 'center' }; row.getCell(6).alignment = { vertical: 'middle', horizontal: 'center' }; row.getCell(totalCols).alignment = { vertical: 'middle', horizontal: 'center' };
     rData++;
   });
 
   for (let r = rHeader; r < rData; r++) {
-    for (let c = 1; c <= totalCols; c++) {
-      ws.getCell(r, c).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } };
-    }
+    for (let c = 1; c <= totalCols; c++) { ws.getCell(r, c).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } }; }
   }
 
   let ttdRow = rData + 2;
@@ -882,11 +883,15 @@ async function buildSingleExcelBuffer(sch, list, months, formattedDate, headName
   return await wb.xlsx.writeBuffer();
 }
 
-// ==================== GENERATE EXCEL RAPI & BERLOGO ====================
+// ==================== GENERATE EXCEL ====================
 window.exportExcel = async function() {
   sendTelegramLog('Ekspor Excel (Rapi)'); 
   const originalHtml = '<i class="ti ti-file-spreadsheet" style="font-size: 1.2rem;"></i> Ekspor Excel (Sesuai PDF)';
-  btnExcel.innerText = 'Memproses Excel...'; btnExcel.disabled = true;
+  
+  const sYearInp = document.getElementById('signYear').value || new Date().getFullYear();
+  btnExcel.innerText = 'Mengunduh Kalender...'; btnExcel.disabled = true;
+  await fetchHolidays(sYearInp);
+  btnExcel.innerText = 'Memproses Excel...'; 
 
   try {
     const periodType = document.getElementById('periodType').value;
@@ -894,10 +899,9 @@ window.exportExcel = async function() {
     const nip = document.getElementById('signerNip').value.trim();
     const sDay = document.getElementById('signDay').value || new Date().getDate();
     const sMonth = document.getElementById('signMonth').value;
-    const sYear = document.getElementById('signYear').value || new Date().getFullYear();
     const sDesa = document.getElementById('signerDesa').value.trim();
     const sKec = document.getElementById('signerKecamatan').value.trim();
-    const formattedDate = (sDesa || sKec || 'Tempat') + ', ' + sDay + ' ' + sMonth + ' ' + sYear;
+    const formattedDate = (sDesa || sKec || 'Tempat') + ', ' + sDay + ' ' + sMonth + ' ' + sYearInp;
     const headName = document.getElementById('headmasterName').value.trim();
     const headNip = document.getElementById('headmasterNip').value.trim();
     let months = periodType === 'triwulan' ? TW_PRESETS[selectedTw] : [document.getElementById('singleMonth').value];
@@ -905,33 +909,24 @@ window.exportExcel = async function() {
     const schoolKeys = Object.keys(groupedSchools);
 
     if (schoolKeys.length === 1) {
-      // Hanya 1 Sekolah -> Buat 1 file XLSX biasa
       const sch = schoolKeys[0];
-      const buffer = await buildSingleExcelBuffer(sch, groupedSchools[sch], months, formattedDate, headName, headNip, signer, nip);
+      const buffer = await buildSingleExcelBuffer(sch, groupedSchools[sch], months, formattedDate, headName, headNip, signer, nip, sYearInp);
       saveAs(new Blob([buffer]), 'Form_Verifikasi_' + sch.replace(/[^a-zA-Z0-9]/g, '_') + '.xlsx');
     } else {
-      // Lebih dari 1 Sekolah -> Pecah per sekolah, lalu gabung jadi file ZIP
       btnExcel.innerText = 'Memproses ZIP Excel...';
       const zip = new JSZip();
-      
       for (const sch of schoolKeys) {
-        const buffer = await buildSingleExcelBuffer(sch, groupedSchools[sch], months, formattedDate, headName, headNip, signer, nip);
+        const buffer = await buildSingleExcelBuffer(sch, groupedSchools[sch], months, formattedDate, headName, headNip, signer, nip, sYearInp);
         zip.file('Form_Verifikasi_' + sch.replace(/[^a-zA-Z0-9]/g, '_') + '.xlsx', buffer);
       }
-      
       const zipBlob = await zip.generateAsync({ type: 'blob' });
       saveAs(zipBlob, 'Batch_Verifikasi_Excel_' + Date.now() + '.zip');
     }
 
-    // SUKSES
     setButtonSuccess('btnExcel', originalHtml, 'Berhasil Diekspor!');
-
   } catch (error) {
-    console.error(error);
-    alert('Terjadi kesalahan saat memproses Excel.');
-    btnExcel.innerHTML = originalHtml;
+    console.error(error); alert('Terjadi kesalahan saat memproses Excel.'); btnExcel.innerHTML = originalHtml;
   }
-
   btnExcel.disabled = false;
 };
 </script>
