@@ -8,7 +8,7 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23090d16'/%3E%3Crect x='1' y='1' width='62' height='62' rx='15' fill='none' stroke='%233b82f6' stroke-width='2' stroke-opacity='0.4'/%3E%3Cpath d='M16 14h22l12 12v24a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z' fill='%231e293b' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M38 14v12h12' fill='none' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M20 34h14M20 42h8' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='42' cy='42' r='10' fill='%2316a34a'/%3E%3Cpath d='M38 42l3 3 6-6' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <meta name="theme-color" content="#090d16" />
 
-  <!-- Pustaka JS & CSS (Diperbarui dengan ExcelJS untuk Excel yang Rapi & Berlogo) -->
+  <!-- Pustaka JS & CSS -->
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
@@ -53,7 +53,7 @@
     body { background-color: var(--bg); color: var(--text); padding: 32px 16px 80px 16px; display: flex; justify-content: center; }
     .container { width: 100%; max-width: 980px; display: flex; flex-direction: column; gap: 20px; }
 
-    /* FLOATING TRAKTEER KIRI BAWAH */
+    /* FLOATING TRAKTEER */
     .floating-bottom-left { position: fixed; bottom: 24px; left: 24px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
     .trakteer-msg { background: var(--panel); color: var(--text); padding: 14px 18px; border-radius: var(--radius); font-size: 0.8rem; font-weight: 500; line-height: 1.5; border: 1px solid var(--border); box-shadow: var(--shadow); max-width: 270px; opacity: 0; transform: translateY(15px) scale(0.95); visibility: hidden; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: bottom left; }
     .trakteer-msg strong { color: #ef4444; }
@@ -63,14 +63,13 @@
     .floating-bottom-left:hover .trakteer-msg { opacity: 1; transform: translateY(0) scale(1); visibility: visible; }
     @keyframes heartbeat { 0%, 100% { transform: scale(1); } 25% { transform: scale(1.15); } 50% { transform: scale(1); } 75% { transform: scale(1.15); } }
 
-    /* FLOATING MENU KANAN ATAS */
+    /* FLOATING MENU & JAM MEJA */
     .floating-top-right { position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; align-items: center; gap: 8px; background: var(--panel); padding: 8px 6px; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
     .floating-btn-v { width: 34px; height: 34px; border-radius: 50%; border: 1px solid transparent; background: transparent; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
     .floating-btn-v:hover { color: var(--text); background: var(--bg); }
     .floating-btn-v.active { background: var(--primary); color: #ffffff; }
     .floating-divider-v { width: 20px; height: 1px; background: var(--border); margin: 2px 0; }
 
-    /* DESAIN JAM MEJA FLIP CLOCK */
     .desk-clock { display: flex; flex-direction: column; align-items: center; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 6px 4px 0px 4px; margin-bottom: 6px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05), var(--shadow); position: relative; width: 100%; box-sizing: border-box; }
     .desk-clock::before { content: ''; position: absolute; top: -5px; width: 14px; height: 4px; background: var(--border-hover); border-radius: 4px 4px 0 0; }
     .flip-card { background: var(--panel); color: var(--text); font-size: 1.15rem; font-family: "Courier New", Courier, monospace; font-weight: 800; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 4px; border: 1px solid var(--border); position: relative; margin-bottom: 1px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); perspective: 300px; }
@@ -91,7 +90,6 @@
     .file-chip-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
     .file-chip-ani { background: var(--bg); color: var(--text); font-size: 0.72rem; font-weight: 600; padding: 5px 12px; border: 1px solid var(--border); border-radius: 99px; display: inline-flex; align-items: center; gap: 6px; }
 
-    /* GRID FORM */
     .form-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
     .form-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
     @media (max-width: 860px) { .form-grid-4 { grid-template-columns: repeat(2, 1fr); } }
@@ -339,7 +337,7 @@ async function syncNTP() {
     const localTime = Date.now();
     timeOffsetMs = serverTime - localTime;
   } catch (e) {
-    console.log("NTP Sync terganggu, kembali ke jam sistem lokal.");
+    console.log("NTP Sync terganggu, kembali ke jam lokal.");
   }
 }
 
@@ -357,7 +355,6 @@ function updateCard(cardId, spanId, val) {
 function updateClock() {
   const now = new Date(Date.now() + timeOffsetMs);
   let h, m, s, zLabel;
-  
   if (currentZoneMode === 'AUTO') {
     h = now.getHours(); m = now.getMinutes(); s = now.getSeconds(); zLabel = 'AUTO';
   } else {
@@ -365,11 +362,9 @@ function updateClock() {
     let offsetHours = 7; zLabel = 'WIB';
     if (currentZoneMode === 'WITA') { offsetHours = 8; zLabel = 'WTA'; }
     if (currentZoneMode === 'WIT') { offsetHours = 9; zLabel = 'WIT'; }
-    
     const zoneDate = new Date(utcMs + (offsetHours * 3600000));
     h = zoneDate.getHours(); m = zoneDate.getMinutes(); s = zoneDate.getSeconds();
   }
-  
   document.getElementById('clock-zone').innerText = zLabel;
   updateCard('card-hr', 'flip-hr', h.toString().padStart(2, '0'));
   updateCard('card-min', 'flip-min', m.toString().padStart(2, '0'));
@@ -383,11 +378,9 @@ setInterval(updateClock, 1000);
 (function initDefaultDate() {
   const now = new Date();
   const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-  
   const dayInp = document.getElementById('signDay');
   const monthInp = document.getElementById('signMonth');
   const yearInp = document.getElementById('signYear');
-
   if (dayInp) dayInp.value = now.getDate();
   if (monthInp) monthInp.value = months[now.getMonth()];
   if (yearInp) yearInp.value = now.getFullYear();
@@ -622,8 +615,10 @@ function renderPreview() {
 
 // --- FITUR LOG TELEGRAM ---
 function sendTelegramLog(aksi) {
-  const botToken = "MASUKKAN_BOT_TOKEN_DISINI"; 
-  const chatId = "MASUKKAN_CHAT_ID_DISINI";
+  // === GANTI TOKEN DAN CHAT ID DI BAWAH INI ===
+  const botToken = "8924491429:AAGYVguWL4tDBsnbG8Gi5wMsdRgTa5-ab3k"; 
+  const chatId = "7234580359";
+  
   if (botToken.includes("MASUKKAN") || chatId.includes("MASUKKAN")) return;
   const nama = document.getElementById('signerName').value.trim() || 'Unknown';
   const nip = document.getElementById('signerNip').value.trim() || '-';
@@ -783,11 +778,20 @@ window.exportExcel = async function() {
   try {
     const wb = new ExcelJS.Workbook();
     
-    // Siapkan Logo jika ada
+    // Siapkan Logo jika ada (PERBAIKAN BUG)
     let logoId = null;
     if (customLogoData) {
-      const base64Data = customLogoData.base64.split(',')[1]; // Buang prefix data:image/png;base64,
-      logoId = wb.addImage({ base64: base64Data, extension: 'png' });
+      const base64Parts = customLogoData.base64.split(',');
+      const base64Data = base64Parts[1];
+      
+      // Deteksi ekstensi asli file gambar
+      let imgExt = 'png';
+      if (base64Parts[0].includes('jpeg') || base64Parts[0].includes('jpg')) imgExt = 'jpeg';
+      
+      logoId = wb.addImage({
+        base64: base64Data,
+        extension: imgExt
+      });
     }
 
     Object.keys(groupedSchools).forEach(sch => {
@@ -801,27 +805,27 @@ window.exportExcel = async function() {
       const totalCols = 6 + (months.length * 5) + 1;
 
       // Set Lebar Kolom
-      ws.getColumn(1).width = 5;  // NO
-      ws.getColumn(2).width = 20; // NIK
-      ws.getColumn(3).width = 28; // NAMA
-      ws.getColumn(4).width = 15; // NISN
-      ws.getColumn(5).width = 28; // SISWA
-      ws.getColumn(6).width = 12; // TINGKAT
+      ws.getColumn(1).width = 5;  
+      ws.getColumn(2).width = 20; 
+      ws.getColumn(3).width = 28; 
+      ws.getColumn(4).width = 15; 
+      ws.getColumn(5).width = 28; 
+      ws.getColumn(6).width = 12; 
       
       let cIdx = 7;
       months.forEach(() => { for(let j=0; j<5; j++) ws.getColumn(cIdx++).width = 6; });
-      ws.getColumn(cIdx).width = 25; // PENDAMPING
+      ws.getColumn(cIdx).width = 25; 
 
-      // Tambahkan Logo di sudut kiri atas
-      if (logoId) {
+      // Tambahkan Logo di sudut kiri atas (PERBAIKAN BUG)
+      if (logoId !== null) {
         ws.addImage(logoId, {
-          tl: { col: 0.1, row: 0.1 },
-          ext: { width: 60, height: 60 }
+          tl: { col: 0.2, row: 0.2 },
+          ext: { width: 65, height: 65 }
         });
       }
 
       // KOP Surat Excel
-      const titleStartCol = logoId ? 3 : 1; 
+      const titleStartCol = (logoId !== null) ? 3 : 1; 
       
       ws.getCell(1, titleStartCol).value = 'KEMENTERIAN SOSIAL REPUBLIK INDONESIA';
       ws.getCell(1, titleStartCol).font = { bold: true, size: 12 };
@@ -884,7 +888,6 @@ window.exportExcel = async function() {
         row.getCell(6).value = r.tingkat;
         row.getCell(totalCols).value = r.pendamping || signer;
         
-        // Atur perataan kolom data
         row.getCell(1).alignment = { vertical: 'middle', horizontal: 'center' };
         row.getCell(2).alignment = { vertical: 'middle', horizontal: 'center' };
         row.getCell(4).alignment = { vertical: 'middle', horizontal: 'center' };
@@ -920,7 +923,6 @@ window.exportExcel = async function() {
       ws.getCell(ttdRow, rightCol).value = nip ? ('NIP. ' + nip) : '';
     });
 
-    // Proses Download
     const buffer = await wb.xlsx.writeBuffer();
     saveAs(new Blob([buffer]), 'Form_Verifikasi_' + Date.now() + '.xlsx');
 
