@@ -1,9 +1,8 @@
-const CACHE_NAME = 'siks-fasdik-pwa-v2';
+const CACHE_NAME = 'siks-fasdik-pwa-v3';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
-  // WAJIB CACHE SEMUA LIBRARY EXTERNAL AGAR BISA DIBUKA SAAT OFFLINE TOTAL
   'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
   'https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js',
   'https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js',
@@ -14,17 +13,21 @@ const ASSETS_TO_CACHE = [
 
 self.addEventListener('install', event => {
   event.waitUntil(
-    caches.open(CACHE_NAME)
-      .then(cache => {
-        console.log('Menyimpan file pendukung untuk mode offline...');
-        return cache.addAll(ASSETS_TO_CACHE);
-      })
-      .then(() => self.skipWaiting())
+    caches.open(CACHE_NAME).then(cache => {
+      // Fetch menggunakan 'no-cors' agar CDN eksternal mau disimpan ke cache
+      return Promise.all(
+        ASSETS_TO_CACHE.map(url => {
+          return fetch(new Request(url, { mode: 'no-cors' }))
+            .then(response => cache.put(url, response))
+            .catch(error => console.error('Gagal cache:', url, error));
+        })
+      );
+    }).then(() => self.skipWaiting())
   );
 });
 
 self.addEventListener('fetch', event => {
-  // Pengecualian: Jangan pernah cache request ke API Telegram, Jam, atau Hari Libur
+  // Pengecualian: Jangan cache API dinamis
   if (event.request.url.includes('api.telegram.org') || 
       event.request.url.includes('worldtimeapi.org') || 
       event.request.url.includes('vercel.app')) {
@@ -33,27 +36,20 @@ self.addEventListener('fetch', event => {
 
   event.respondWith(
     caches.match(event.request).then(cachedResponse => {
-      // 1. Jika file ada di memori cache (offline), gunakan itu!
       if (cachedResponse) {
         return cachedResponse;
       }
-      
-      // 2. Jika tidak ada di cache, coba download (jika sedang online)
       return fetch(event.request).then(response => {
-        // Jangan simpan response yang error
         if (!response || response.status !== 200 || response.type === 'opaque') {
           return response;
         }
-        
-        // Simpan file baru ke cache untuk penggunaan offline berikutnya
         const responseToCache = response.clone();
         caches.open(CACHE_NAME).then(cache => {
           cache.put(event.request, responseToCache);
         });
-        
         return response;
-      }).catch(err => {
-        console.log('Mode Offline Murni: Gagal memuat file dari internet', err);
+      }).catch(() => {
+        // Abaikan error saat offline total
       });
     })
   );
@@ -63,11 +59,7 @@ self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => Promise.all(
       cacheNames.map(name => {
-        // Hapus cache versi lama jika ada update
-        if (name !== CACHE_NAME) {
-          console.log('Menghapus cache versi lama:', name);
-          return caches.delete(name);
-        }
+        if (name !== CACHE_NAME) return caches.delete(name);
       })
     ))
   );
