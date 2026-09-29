@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SIKS Fasdik - Form Verifikasi Komitmen Pendidikan</title>
   
-  <!-- LINK MANIFEST PWA -->
   <link rel="manifest" href="./manifest.json" />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -43,24 +42,29 @@
     .floating-bottom-left:hover .trakteer-msg { opacity: 1; transform: translateY(0) scale(1); visibility: visible; }
     @keyframes heartbeat { 0%, 100% { transform: scale(1); } 25% { transform: scale(1.15); } 50% { transform: scale(1); } 75% { transform: scale(1.15); } }
 
-    .floating-top-right { position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; align-items: center; gap: 8px; background: var(--panel); padding: 8px 6px; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+    .floating-top-right { position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; align-items: center; gap: 8px; background: var(--panel); padding: 12px 6px; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
     
-    /* BADGE INDIKATOR JARINGAN */
-    .network-badge { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; padding: 6px 0; border-radius: 6px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; transition: all 0.3s ease; }
-    .network-badge.online { background: rgba(16, 185, 129, 0.15); color: #10b981; }
-    .network-badge.offline { background: rgba(239, 68, 68, 0.15); color: #ef4444; }
+    /* BADGE INDIKATOR JARINGAN DESAIN BARU (GLASSMORPHISM) */
+    .network-badge-wrap { display: flex; justify-content: center; width: 100%; margin-bottom: 4px; }
+    .network-badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 99px; font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); transition: all 0.3s ease; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid rgba(255,255,255,0.1); }
+    .network-badge.online { background: rgba(16, 185, 129, 0.15); color: #10b981; border-color: rgba(16, 185, 129, 0.2); }
+    .network-badge.offline { background: rgba(239, 68, 68, 0.15); color: #ef4444; border-color: rgba(239, 68, 68, 0.2); }
+    body.dark-mode .network-badge.online { background: rgba(16, 185, 129, 0.2); color: #34d399; }
+    body.dark-mode .network-badge.offline { background: rgba(239, 68, 68, 0.2); color: #f87171; }
     .pulse-dot { width: 6px; height: 6px; border-radius: 50%; }
     .network-badge.online .pulse-dot { background: #10b981; animation: pulseOnline 2s infinite; }
     .network-badge.offline .pulse-dot { background: #ef4444; animation: pulseOffline 2s infinite; }
+    body.dark-mode .network-badge.online .pulse-dot { background: #34d399; }
+    body.dark-mode .network-badge.offline .pulse-dot { background: #f87171; }
     @keyframes pulseOnline { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); } }
     @keyframes pulseOffline { 0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); } 100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
 
-    .floating-btn-v { width: 34px; height: 34px; border-radius: 50%; border: 1px solid transparent; background: transparent; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
-    .floating-btn-v:hover { color: var(--text); background: var(--bg); }
-    .floating-btn-v.active { background: var(--primary); color: #ffffff; }
-    .floating-divider-v { width: 20px; height: 1px; background: var(--border); margin: 2px 0; }
+    .floating-btn-v { width: 34px; height: 34px; border-radius: 50%; border: 1px solid transparent; background: transparent; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; transition: all 0.2s ease;}
+    .floating-btn-v:hover { color: var(--text); background: var(--bg); transform: scale(1.05); }
+    .floating-btn-v.active { background: var(--primary); color: #ffffff; box-shadow: 0 4px 10px rgba(37,99,235,0.2); }
+    .floating-divider-v { width: 20px; height: 1px; background: var(--border); margin: 4px 0; }
 
-    .desk-clock { display: flex; flex-direction: column; align-items: center; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 6px 4px 0px 4px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05), var(--shadow); position: relative; width: 100%; box-sizing: border-box; }
+    .desk-clock { display: flex; flex-direction: column; align-items: center; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 6px 4px 0px 4px; margin-bottom: 6px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05), var(--shadow); position: relative; width: 100%; box-sizing: border-box; }
     .desk-clock::before { content: ''; position: absolute; top: -5px; width: 14px; height: 4px; background: var(--border-hover); border-radius: 4px 4px 0 0; }
     .flip-card { background: var(--panel); color: var(--text); font-size: 1.15rem; font-family: "Courier New", Courier, monospace; font-weight: 800; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 4px; border: 1px solid var(--border); position: relative; margin-bottom: 1px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); perspective: 300px; }
     .flip-card::after { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(0,0,0,0.15); z-index: 2; }
@@ -88,7 +92,7 @@
     .form-group { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
     label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     label i { font-size: 0.95rem; color: var(--primary); }
-    select, input[type="text"], input[type="number"] { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); padding: 9px 11px; font-size: 0.83rem; outline: none; }
+    select, input[type="text"], input[type="number"] { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); padding: 9px 11px; font-size: 0.83rem; outline: none; transition: border-color 0.2s; }
     select:focus, input[type="text"]:focus, input[type="number"]:focus { border-color: var(--primary); }
 
     .date-row { display: flex; gap: 6px; width: 100%; }
@@ -98,21 +102,24 @@
 
     .logo-box-ani { display: flex; align-items: center; gap: 12px; background: var(--bg); padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); }
     .logo-preview-thumb { width: 38px; height: 38px; border-radius: 8px; object-fit: contain; border: 1px solid var(--border); background: var(--panel); }
-    .btn-ani-small { padding: 7px 14px; font-size: 0.78rem; font-weight: 600; color: var(--text); background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-ani-small { padding: 7px 14px; font-size: 0.78rem; font-weight: 600; color: var(--text); background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
+    .btn-ani-small:hover { border-color: var(--primary); color: var(--primary); }
 
     .tw-btn-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-    .btn-tw-ani { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 9px 4px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 700; cursor: pointer; text-align: center; }
-    .btn-tw-ani.active { background: var(--primary); border-color: var(--primary); color: #ffffff; }
+    .btn-tw-ani { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 9px 4px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 700; cursor: pointer; text-align: center; transition: all 0.2s;}
+    .btn-tw-ani:hover { border-color: var(--primary); }
+    .btn-tw-ani.active { background: var(--primary); border-color: var(--primary); color: #ffffff; box-shadow: 0 4px 10px rgba(37,99,235,0.2); }
     .btn-tw-ani span { display: block; font-size: 0.65rem; opacity: 0.8; font-weight: normal; margin-top: 2px; }
 
     .stats-bar-ani { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); padding: 12px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); }
     .stats-bar-ani strong { color: var(--primary); }
     
     .btn-group { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; }
-    button.action-btn-ani { flex: 1; min-width: 160px; padding: 13px 20px; border-radius: var(--radius); border: none; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-    button.action-btn-ani.btn-primary { background: var(--primary); color: #ffffff; }
-    button.action-btn-ani.btn-excel { background: var(--accent); color: #ffffff; }
-    button:disabled { opacity: 0.4; cursor: not-allowed; }
+    button.action-btn-ani { flex: 1; min-width: 160px; padding: 13px 20px; border-radius: var(--radius); border: none; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;}
+    button.action-btn-ani.btn-primary { background: var(--primary); color: #ffffff; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
+    button.action-btn-ani.btn-excel { background: var(--accent); color: #ffffff; box-shadow: 0 4px 12px rgba(22,163,74,0.3); }
+    button.action-btn-ani:hover:not(:disabled) { transform: translateY(-2px); }
+    button:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
 
     .preview-wrap-ani { border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: auto; max-height: 240px; background: var(--bg); }
     table { width: 100%; border-collapse: collapse; font-size: 0.75rem; text-align: left; }
@@ -137,13 +144,15 @@
 
 <div class="floating-top-right">
   
-  <!-- BADGE STATUS JARINGAN -->
-  <div id="network-status" class="network-badge online">
-    <span class="pulse-dot"></span> <span id="network-text">Online</span>
+  <!-- BADGE STATUS JARINGAN (Desain Baru Glassmorphism) -->
+  <div class="network-badge-wrap">
+    <div id="network-status" class="network-badge online">
+      <span class="pulse-dot"></span> <span id="network-text">Online</span>
+    </div>
   </div>
 
   <!-- Tombol Install PWA -->
-  <button class="floating-btn-v" id="btnInstallApp" title="Install Aplikasi ke HP/Laptop" style="display:none; background:#10b981; color:#fff;">
+  <button class="floating-btn-v" id="btnInstallApp" title="Install Aplikasi ke Layar Utama" style="display:none; background:#10b981; color:#fff;">
     <i class="ti ti-device-mobile"></i>
   </button>
   <div class="floating-divider-v" id="installDivider" style="display:none;"></div>
@@ -158,10 +167,14 @@
     <div class="clock-label" id="clock-zone" style="color: var(--primary);">WIB</div>
   </div>
 
+  <div class="floating-divider-v"></div>
+
   <button class="floating-btn-v active" id="btnThemeAuto" title="Mode Auto" onclick="setAppTheme('auto')"><i class="ti ti-clock-play"></i></button>
   <button class="floating-btn-v" id="btnThemeLight" title="Mode Siang" onclick="setAppTheme('light')"><i class="ti ti-sun"></i></button>
   <button class="floating-btn-v" id="btnThemeDark" title="Mode Malam" onclick="setAppTheme('dark')"><i class="ti ti-moon"></i></button>
+  
   <div class="floating-divider-v"></div>
+  
   <button class="floating-btn-v active" id="btnZoneAuto" title="Auto Zona" onclick="setIndonesiaZone('AUTO')"><i class="ti ti-map-pin"></i></button>
   <button class="floating-btn-v" id="btnZoneWIB" title="WIB" onclick="setIndonesiaZone('WIB')">WIB</button>
   <button class="floating-btn-v" id="btnZoneWITA" title="WITA" onclick="setIndonesiaZone('WITA')">WTA</button>
@@ -178,7 +191,7 @@
     <div class="dropzone-ani" id="dz" onclick="document.getElementById('csvFile').click()">
       <div class="icon-wrap-ani"><i class="ti ti-cloud-upload" style="font-size: 24px;"></i></div>
       <p id="dzText" style="font-weight:700; font-size:0.9rem;">Klik atau seret berkas <strong>.CSV SIKS</strong> ke sini</p>
-      <span style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; display:block;">Bisa digunakan saat Offline (Tanpa Internet)</span>
+      <span style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; display:block;">Bisa digunakan saat Offline (Tanpa Internet) setelah di-Install</span>
       <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" multiple style="display:none;" />
     </div>
 
@@ -329,16 +342,15 @@ function updateNetworkStatus() {
   const badge = document.getElementById('network-status');
   const text = document.getElementById('network-text');
   if (navigator.onLine) {
-    badge.className = 'network-badge online';
-    text.innerText = 'Online';
+    badge.className = 'network-badge online'; text.innerText = 'Online';
+    syncNTP(); // Coba sync waktu kembali saat online
   } else {
-    badge.className = 'network-badge offline';
-    text.innerText = 'Offline';
+    badge.className = 'network-badge offline'; text.innerText = 'Offline';
   }
 }
 window.addEventListener('online', updateNetworkStatus);
 window.addEventListener('offline', updateNetworkStatus);
-updateNetworkStatus(); // Inisialisasi awal saat web dimuat
+updateNetworkStatus(); 
 
 // ==================== REGISTRASI PWA (OFFLINE MODE) ====================
 if ('serviceWorker' in navigator) {
@@ -423,7 +435,7 @@ async function syncNTP() {
     const res = await fetch('https://worldtimeapi.org/api/timezone/Asia/Jakarta');
     const data = await res.json();
     timeOffsetMs = new Date(data.utc_datetime).getTime() - Date.now();
-  } catch (e) { console.log("NTP Sync terganggu, offline time."); }
+  } catch (e) { console.log("NTP Sync terganggu, pakai waktu lokal."); }
 }
 
 function updateCard(cardId, spanId, val) {
@@ -444,8 +456,7 @@ function updateClock() {
   document.getElementById('clock-zone').innerText = zLabel;
   updateCard('card-hr', 'flip-hr', h.toString().padStart(2, '0')); updateCard('card-min', 'flip-min', m.toString().padStart(2, '0')); updateCard('card-sec', 'flip-sec', s.toString().padStart(2, '0'));
 }
-
-syncNTP(); setInterval(updateClock, 1000);
+setInterval(updateClock, 1000);
 
 // --- INISIALISASI TANGGAL & TEMA ---
 (function initDefaultDate() {
@@ -580,9 +591,9 @@ function setButtonSuccess(btnId, originalHtml, successText) {
 }
 
 function sendTelegramLog(aksi) {
-  if (!navigator.onLine) return; // Jangan kirim log jika offline
-  const botToken = "8924491429:AAGYVguWL4tDBsnbG8Gi5wMsdRgTa5-ab3k"; 
-  const chatId = "7234580359";
+  if (!navigator.onLine) return; 
+  const botToken = "MASUKKAN_BOT_TOKEN_DISINI"; 
+  const chatId = "MASUKKAN_CHAT_ID_DISINI";
   if (botToken.includes("MASUKKAN") || chatId.includes("MASUKKAN")) return;
   const nama = document.getElementById('signerName').value.trim() || 'Unknown'; const nip = document.getElementById('signerNip').value.trim() || '-'; const jmlSiswa = document.getElementById('statRows').innerText; const jmlSekolah = document.getElementById('statSchools').innerText;
   const pesan = `🚀 *Log SIKS Fasdik*\n\n👤 *User:* ${nama}\n💳 *NIP:* ${nip}\n📝 *Aksi:* ${aksi}\n🏫 *Sekolah:* ${jmlSekolah} | 👥 *Siswa:* ${jmlSiswa}`;
@@ -595,10 +606,7 @@ window.generatePDF = async function() {
   const originalHtml = '<i class="ti ti-file-type-pdf" style="font-size: 1.2rem;"></i> Generate PDF (Auto Split &amp; Zip)';
   
   const sYearInp = document.getElementById('signYear').value || new Date().getFullYear();
-  if (navigator.onLine) {
-    btnPdf.innerText = 'Menyinkronkan Kalender...'; btnPdf.disabled = true;
-    await fetchHolidays(sYearInp);
-  }
+  if (navigator.onLine) { btnPdf.innerText = 'Menyinkronkan Kalender...'; btnPdf.disabled = true; await fetchHolidays(sYearInp); }
   btnPdf.innerText = 'Memproses PDF...'; btnPdf.disabled = true;
 
   try {
@@ -748,10 +756,7 @@ window.exportExcel = async function() {
   const originalHtml = '<i class="ti ti-file-spreadsheet" style="font-size: 1.2rem;"></i> Ekspor Excel (Sesuai PDF)';
   
   const sYearInp = document.getElementById('signYear').value || new Date().getFullYear();
-  if (navigator.onLine) {
-    btnExcel.innerText = 'Menyinkronkan Kalender...'; btnExcel.disabled = true;
-    await fetchHolidays(sYearInp);
-  }
+  if (navigator.onLine) { btnExcel.innerText = 'Menyinkronkan Kalender...'; btnExcel.disabled = true; await fetchHolidays(sYearInp); }
   btnExcel.innerText = 'Memproses Excel...'; btnExcel.disabled = true;
 
   try {
