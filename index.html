@@ -44,17 +44,19 @@
 
     .floating-top-right { position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; align-items: center; gap: 8px; background: var(--panel); padding: 12px 6px; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
     
-    /* BADGE INDIKATOR JARINGAN DESAIN KAPSUL 3D */
-    .network-badge-wrap { display: flex; justify-content: center; width: 100%; margin-bottom: 6px; }
-    .network-badge { display: flex; align-items: center; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); transition: all 0.3s ease; }
-    .nb-icon { display: flex; align-items: center; justify-content: center; padding: 6px 8px; color: white; }
-    .nb-text { padding: 6px 12px 6px 8px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: white; }
+    /* BADGE INDIKATOR JARINGAN DESAIN MINIMALIS (GAMBAR REFERENSI) */
+    .network-badge-wrap { display: flex; justify-content: center; width: 100%; margin-bottom: 8px; }
+    .network-badge { display: flex; flex-direction: column; align-items: center; gap: 2px; transition: all 0.3s ease; }
+    .nb-icon i { font-size: 1.8rem; font-weight: bold; }
+    .nb-text { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
     
-    .network-badge.online { background: #16a34a; }
-    .network-badge.online .nb-icon { background: #15803d; }
+    /* Palet Warna Biru Cerah untuk Online */
+    .network-badge.online .nb-icon i { color: #0ea5e9; } 
+    .network-badge.online .nb-text { color: #0ea5e9; }
     
-    .network-badge.offline { background: #e11d48; }
-    .network-badge.offline .nb-icon { background: #be123c; }
+    /* Palet Warna Merah untuk Offline */
+    .network-badge.offline .nb-icon i { color: #e11d48; } 
+    .network-badge.offline .nb-text { color: #e11d48; }
 
     .floating-btn-v { width: 34px; height: 34px; border-radius: 50%; border: 1px solid transparent; background: transparent; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; transition: all 0.2s ease;}
     .floating-btn-v:hover { color: var(--text); background: var(--bg); transform: scale(1.05); }
@@ -141,7 +143,7 @@
 
 <div class="floating-top-right">
   
-  <!-- BADGE STATUS JARINGAN (Desain Kapsul 3D) -->
+  <!-- BADGE STATUS JARINGAN (Desain Minimalis Ikon & Teks) -->
   <div class="network-badge-wrap">
     <div id="network-status" class="network-badge online">
       <div class="nb-icon"><i id="network-icon" class="ti ti-wifi"></i></div>
@@ -335,7 +337,7 @@
 </div>
 
 <script>
-// ==================== DETEKSI ONLINE / OFFLINE (DESAIN KAPSUL 3D) ====================
+// ==================== DETEKSI ONLINE / OFFLINE (DESAIN MINIMALIS) ====================
 function updateNetworkStatus() {
   const badge = document.getElementById('network-status');
   const text = document.getElementById('network-text');
