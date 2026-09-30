@@ -13,7 +13,7 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23090d16'/%3E%3Crect x='1' y='1' width='62' height='62' rx='15' fill='none' stroke='%233b82f6' stroke-width='2' stroke-opacity='0.4'/%3E%3Cpath d='M16 14h22l12 12v24a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z' fill='%231e293b' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M38 14v12h12' fill='none' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M20 34h14M20 42h8' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='42' cy='42' r='10' fill='%2316a34a'/%3E%3Cpath d='M38 42l3 3 6-6' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <meta name="theme-color" content="#090d16" />
 
-  <!-- Pustaka JS & CSS dengan atribut crossorigin agar PWA bisa caching -->
+  <!-- Pustaka JS & CSS -->
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" crossorigin="anonymous"></script>
@@ -25,18 +25,27 @@
     :root { --bg: #f8fafc; --panel: #ffffff; --text: #0f172a; --text-muted: #64748b; --border: #e2e8f0; --border-hover: #cbd5e1; --primary: #2563eb; --primary-hover: #1d4ed8; --accent: #16a34a; --accent-hover: #15803d; --tip: #d97706; --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.05); --radius: 12px; --radius-sm: 8px; }
     body.dark-mode { --bg: #090d16; --panel: #111827; --text: #f8fafc; --text-muted: #94a3b8; --border: #1f2937; --border-hover: #374151; --primary: #3b82f6; --primary-hover: #60a5fa; --accent: #22c55e; --accent-hover: #4ade80; --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); }
     
-    /* EFEK FONT MACBOOK & ANTI-ALIASING UNTUK MENCEGAH MATA LELAH */
-    * { 
-      box-sizing: border-box; 
-      margin: 0; 
-      padding: 0; 
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-    
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
     body { background-color: var(--bg); color: var(--text); padding: 32px 16px 80px 16px; display: flex; justify-content: center; }
     .container { width: 100%; max-width: 980px; display: flex; flex-direction: column; gap: 20px; }
+
+    /* --- POPUP UPDATE DINAMIS --- */
+    .update-popup { position: fixed; top: -150%; left: 50%; transform: translateX(-50%); background: var(--panel); border: 2px solid var(--primary); border-radius: var(--radius); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4); z-index: 9999; width: 340px; max-width: 90vw; transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); overflow: hidden; }
+    .update-popup.show { top: 24px; }
+    .update-header { display: flex; justify-content: space-between; align-items: center; background: var(--primary); color: #fff; padding: 12px 16px; }
+    .update-title { font-weight: 800; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
+    .update-title span { font-weight: 800; }
+    .update-close { background: rgba(255,255,255,0.2); border: none; color: white; width: 26px; height: 26px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
+    .update-close:hover { background: #ef4444; transform: rotate(90deg); }
+    .update-body { padding: 16px; font-size: 0.78rem; color: var(--text); line-height: 1.5; }
+    .update-body ul { padding-left: 20px; margin: 0; }
+    .update-body li { margin-bottom: 6px; }
+    .update-body li strong { color: var(--primary); }
+    .update-progress-bg { width: 100%; height: 4px; background: var(--border); }
+    .update-progress-bar { height: 100%; background: var(--primary); width: 100%; transform-origin: left; }
+    .update-popup.show .update-progress-bar { animation: progressShrink 3.5s linear forwards; }
+    .update-popup:hover .update-progress-bar { animation-play-state: paused; }
+    @keyframes progressShrink { from { transform: scaleX(1); } to { transform: scaleX(0); } }
 
     .btn-success-state { background: #10b981 !important; color: #ffffff !important; border-color: #10b981 !important; transition: all 0.3s ease; }
     .btn-shiny { position: relative; overflow: hidden; }
@@ -54,17 +63,12 @@
 
     .floating-top-right { position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; align-items: center; gap: 8px; background: var(--panel); padding: 12px 6px; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
     
-    /* BADGE INDIKATOR JARINGAN DESAIN MINIMALIS (GAMBAR REFERENSI) */
     .network-badge-wrap { display: flex; justify-content: center; width: 100%; margin-bottom: 8px; }
     .network-badge { display: flex; flex-direction: column; align-items: center; gap: 2px; transition: all 0.3s ease; }
     .nb-icon i { font-size: 1.8rem; font-weight: bold; }
     .nb-text { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
-    
-    /* Palet Warna Biru Cerah untuk Online */
     .network-badge.online .nb-icon i { color: #0ea5e9; } 
     .network-badge.online .nb-text { color: #0ea5e9; }
-    
-    /* Palet Warna Merah untuk Offline */
     .network-badge.offline .nb-icon i { color: #e11d48; } 
     .network-badge.offline .nb-text { color: #e11d48; }
 
@@ -141,6 +145,20 @@
 </head>
 <body oncontextmenu="return false;">
 
+<!-- POPUP UPDATE DINAMIS (Akan diisi otomatis oleh Javascript) -->
+<div id="updatePopup" class="update-popup">
+  <div class="update-header">
+    <div class="update-title"><i class="ti ti-rocket"></i> <span id="popupTitle">Update Terbaru!</span></div>
+    <button class="update-close" onclick="closeUpdatePopup()"><i class="ti ti-x"></i></button>
+  </div>
+  <div class="update-body">
+    <ul id="updateList"></ul>
+  </div>
+  <div class="update-progress-bg">
+    <div class="update-progress-bar" id="updateProgressBar"></div>
+  </div>
+</div>
+
 <div class="floating-bottom-left">
   <div class="trakteer-msg">
     <i>"Di balik kemudahan sebuah aplikasi, ada waktu dan dedikasi panjang yang dicurahkan."</i><br><br>
@@ -153,7 +171,6 @@
 
 <div class="floating-top-right">
   
-  <!-- BADGE STATUS JARINGAN (Desain Minimalis Ikon & Teks) -->
   <div class="network-badge-wrap">
     <div id="network-status" class="network-badge online">
       <div class="nb-icon"><i id="network-icon" class="ti ti-wifi"></i></div>
@@ -161,13 +178,11 @@
     </div>
   </div>
 
-  <!-- Tombol Install PWA -->
   <button class="floating-btn-v" id="btnInstallApp" title="Install Aplikasi ke Layar Utama" style="display:none; background:#10b981; color:#fff;">
     <i class="ti ti-device-mobile"></i>
   </button>
   <div class="floating-divider-v" id="installDivider" style="display:none;"></div>
 
-  <!-- JAM MEJA FLIP -->
   <div class="desk-clock">
     <div class="flip-card" id="card-hr"><span id="flip-hr">--</span></div>
     <div class="clock-label">JAM</div>
@@ -178,13 +193,10 @@
   </div>
 
   <div class="floating-divider-v"></div>
-
   <button class="floating-btn-v active" id="btnThemeAuto" title="Mode Auto" onclick="setAppTheme('auto')"><i class="ti ti-clock-play"></i></button>
   <button class="floating-btn-v" id="btnThemeLight" title="Mode Siang" onclick="setAppTheme('light')"><i class="ti ti-sun"></i></button>
   <button class="floating-btn-v" id="btnThemeDark" title="Mode Malam" onclick="setAppTheme('dark')"><i class="ti ti-moon"></i></button>
-  
   <div class="floating-divider-v"></div>
-  
   <button class="floating-btn-v active" id="btnZoneAuto" title="Auto Zona" onclick="setIndonesiaZone('AUTO')"><i class="ti ti-map-pin"></i></button>
   <button class="floating-btn-v" id="btnZoneWIB" title="WIB" onclick="setIndonesiaZone('WIB')">WIB</button>
   <button class="floating-btn-v" id="btnZoneWITA" title="WITA" onclick="setIndonesiaZone('WITA')">WTA</button>
@@ -347,7 +359,61 @@
 </div>
 
 <script>
-// ==================== DETEKSI ONLINE / OFFLINE (DESAIN MINIMALIS) ====================
+// ==================== KONFIGURASI VERSI & RELEASE NOTES (EDIT DI SINI) ====================
+// Jika ada penambahan fitur, cukup ubah APP_VERSION dan isi APP_UPDATE_NOTES.
+// Popup akan otomatis dibuat dan dimunculkan ke user.
+const APP_VERSION = "v3.0.0";
+const APP_UPDATE_NOTES = [
+  "✅ <strong>PWA Offline:</strong> Web kini bisa dibuka tanpa kuota internet!",
+  "✅ <strong>Smart Badge:</strong> Indikator sinyal WiFi (Online/Offline) elegan.",
+  "✅ <strong>Tabel Pro Excel:</strong> Hasil ekspor Excel super rapi &amp; berlogo.",
+  "✅ <strong>Auto-Libur Dinamis:</strong> Hari efektif langsung disesuaikan dengan kalender libur tahun berjalan."
+];
+
+let updateTimer;
+window.addEventListener('DOMContentLoaded', () => {
+  // Cek apakah versi ini sudah dilihat user
+  const lastSeenVersion = localStorage.getItem('seen_version');
+  
+  if (lastSeenVersion !== APP_VERSION) {
+    // 1. Render isi List secara dinamis
+    const ul = document.getElementById('updateList');
+    ul.innerHTML = '';
+    APP_UPDATE_NOTES.forEach(note => {
+      const li = document.createElement('li');
+      li.innerHTML = note;
+      ul.appendChild(li);
+    });
+    document.getElementById('popupTitle').innerText = `Update Baru! (${APP_VERSION})`;
+
+    // 2. Munculkan popup dengan animasi
+    const popup = document.getElementById('updatePopup');
+    setTimeout(() => { popup.classList.add('show'); }, 600);
+    
+    // 3. Auto-hide 3.5 detik
+    updateTimer = setTimeout(() => { closeUpdatePopup(); }, 3500);
+
+    // 4. Smart Hover (Pause saat dibaca)
+    popup.addEventListener('mouseenter', () => {
+      clearTimeout(updateTimer);
+      document.getElementById('updateProgressBar').style.animationPlayState = 'paused';
+    });
+    popup.addEventListener('mouseleave', () => {
+      document.getElementById('updateProgressBar').style.animationPlayState = 'running';
+      updateTimer = setTimeout(() => { closeUpdatePopup(); }, 2000);
+    });
+  }
+});
+
+function closeUpdatePopup() {
+  const popup = document.getElementById('updatePopup');
+  if(popup) popup.classList.remove('show');
+  clearTimeout(updateTimer);
+  // Simpan ke memori agar tidak muncul lagi saat di-refresh
+  localStorage.setItem('seen_version', APP_VERSION);
+}
+
+// ==================== DETEKSI ONLINE / OFFLINE ====================
 function updateNetworkStatus() {
   const badge = document.getElementById('network-status');
   const text = document.getElementById('network-text');
@@ -450,7 +516,7 @@ async function syncNTP() {
     const res = await fetch('https://worldtimeapi.org/api/timezone/Asia/Jakarta');
     const data = await res.json();
     timeOffsetMs = new Date(data.utc_datetime).getTime() - Date.now();
-  } catch (e) { console.log("NTP Sync terganggu, offline time."); }
+  } catch (e) { console.log("NTP Sync terganggu, pakai waktu lokal."); }
 }
 
 function updateCard(cardId, spanId, val) {
