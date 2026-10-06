@@ -5,199 +5,384 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SIKS Fasdik - Form Verifikasi Komitmen Pendidikan</title>
   
-  <link rel="manifest" href="./manifest.json" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="SIKS Fasdik">
-  
+  <!-- FAVICON & WEB ICON EKSKLUSIF (INLINE SVG) -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23090d16'/%3E%3Crect x='1' y='1' width='62' height='62' rx='15' fill='none' stroke='%233b82f6' stroke-width='2' stroke-opacity='0.4'/%3E%3Cpath d='M16 14h22l12 12v24a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z' fill='%231e293b' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M38 14v12h12' fill='none' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M20 34h14M20 42h8' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='42' cy='42' r='10' fill='%2316a34a'/%3E%3Cpath d='M38 42l3 3 6-6' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23090d16'/%3E%3Crect x='1' y='1' width='62' height='62' rx='15' fill='none' stroke='%233b82f6' stroke-width='2' stroke-opacity='0.4'/%3E%3Cpath d='M16 14h22l12 12v24a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z' fill='%231e293b' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M38 14v12h12' fill='none' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M20 34h14M20 42h8' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='42' cy='42' r='10' fill='%2316a34a'/%3E%3Cpath d='M38 42l3 3 6-6' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <meta name="theme-color" content="#090d16" />
 
-  <!-- Pustaka JS & CSS -->
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" crossorigin="anonymous">
+  <!-- Pustaka Dokumen & Tabler Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
 
   <style>
-    :root { --bg: #f8fafc; --panel: #ffffff; --text: #0f172a; --text-muted: #64748b; --border: #e2e8f0; --border-hover: #cbd5e1; --primary: #2563eb; --primary-hover: #1d4ed8; --accent: #16a34a; --accent-hover: #15803d; --tip: #d97706; --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.05); --radius: 12px; --radius-sm: 8px; }
-    body.dark-mode { --bg: #090d16; --panel: #111827; --text: #f8fafc; --text-muted: #94a3b8; --border: #1f2937; --border-hover: #374151; --primary: #3b82f6; --primary-hover: #60a5fa; --accent: #22c55e; --accent-hover: #4ade80; --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); }
+    :root {
+      --bg: #f8fafc;
+      --panel: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --border-hover: #cbd5e1;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --accent: #16a34a;
+      --accent-hover: #15803d;
+      --tip: #d97706;
+      --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    body.dark-mode {
+      --bg: #090d16;
+      --panel: #111827;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #1f2937;
+      --border-hover: #374151;
+      --primary: #3b82f6;
+      --primary-hover: #60a5fa;
+      --accent: #22c55e;
+      --accent-hover: #4ade80;
+      --tip: #fbbf24;
+      --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+    }
+
+    body { 
+      background-color: var(--bg); 
+      color: var(--text); 
+      padding: 32px 16px 80px 16px; 
+      display: flex; 
+      justify-content: center; 
+    }
+    .container { 
+      width: 100%; 
+      max-width: 980px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 20px; 
+    }
+
+    .floating-top-right {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      background: var(--panel);
+      padding: 8px 6px;
+      border-radius: 99px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+    }
+    .floating-btn-v {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid transparent;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+    .floating-btn-v:hover {
+      color: var(--text);
+      background: var(--bg);
+    }
+    .floating-btn-v.active {
+      background: var(--primary);
+      color: #ffffff;
+    }
+    .floating-divider-v {
+      width: 20px;
+      height: 1px;
+      background: var(--border);
+      margin: 2px 0;
+    }
+
+    header h1 { 
+      font-size: 1.6rem; 
+      font-weight: 800; 
+      letter-spacing: -0.5px; 
+    }
+    header p { 
+      color: var(--text-muted); 
+      font-size: 0.85rem; 
+      margin-top: 4px; 
+    }
     
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
-    body { background-color: var(--bg); color: var(--text); padding: 32px 16px 80px 16px; display: flex; justify-content: center; }
-    .container { width: 100%; max-width: 980px; display: flex; flex-direction: column; gap: 20px; }
-
-    /* --- POPUP UPDATE DINAMIS --- */
-    .update-popup { position: fixed; top: -150%; left: 50%; transform: translateX(-50%); background: var(--panel); border: 2px solid var(--primary); border-radius: var(--radius); box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4); z-index: 9999; width: 340px; max-width: 90vw; transition: all 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55); overflow: hidden; }
-    .update-popup.show { top: 24px; }
-    .update-header { display: flex; justify-content: space-between; align-items: center; background: var(--primary); color: #fff; padding: 12px 16px; }
-    .update-title { font-weight: 800; font-size: 0.9rem; display: flex; align-items: center; gap: 8px; }
-    .update-title span { font-weight: 800; }
-    .update-close { background: rgba(255,255,255,0.2); border: none; color: white; width: 26px; height: 26px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: 0.2s; }
-    .update-close:hover { background: #ef4444; transform: rotate(90deg); }
-    .update-body { padding: 16px; font-size: 0.78rem; color: var(--text); line-height: 1.5; }
-    .update-body ul { padding-left: 20px; margin: 0; }
-    .update-body li { margin-bottom: 6px; }
-    .update-body li strong { color: var(--primary); }
-    .update-progress-bg { width: 100%; height: 4px; background: var(--border); }
-    .update-progress-bar { height: 100%; background: var(--primary); width: 100%; transform-origin: left; }
-    .update-popup.show .update-progress-bar { animation: progressShrink 3.5s linear forwards; }
-    .update-popup:hover .update-progress-bar { animation-play-state: paused; }
-    @keyframes progressShrink { from { transform: scaleX(1); } to { transform: scaleX(0); } }
-
-    .btn-success-state { background: #10b981 !important; color: #ffffff !important; border-color: #10b981 !important; transition: all 0.3s ease; }
-    .btn-shiny { position: relative; overflow: hidden; }
-    .btn-shiny::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%); transform: skewX(-25deg); animation: shine 1.5s infinite; }
-    @keyframes shine { 0% { left: -100%; } 100% { left: 200%; } }
-
-    .floating-bottom-left { position: fixed; bottom: 24px; left: 24px; z-index: 1000; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; }
-    .trakteer-msg { background: var(--panel); color: var(--text); padding: 14px 18px; border-radius: var(--radius); font-size: 0.8rem; font-weight: 500; line-height: 1.5; border: 1px solid var(--border); box-shadow: var(--shadow); max-width: 270px; opacity: 0; transform: translateY(15px) scale(0.95); visibility: hidden; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); transform-origin: bottom left; }
-    .trakteer-msg strong { color: #ef4444; }
-    .trakteer-btn { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #ef4444, #b91c1c); color: #ffffff; padding: 12px 22px; border-radius: 99px; font-weight: 700; font-size: 0.9rem; text-decoration: none; box-shadow: 0 10px 25px -5px rgba(239, 68, 68, 0.4), 0 8px 10px -6px rgba(239, 68, 68, 0.3); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); }
-    .trakteer-btn:hover { transform: translateY(-4px) scale(1.03); box-shadow: 0 14px 30px -5px rgba(239, 68, 68, 0.6); color: #ffffff; }
-    .trakteer-btn i { font-size: 1.3rem; animation: heartbeat 1.5s infinite; }
-    .floating-bottom-left:hover .trakteer-msg { opacity: 1; transform: translateY(0) scale(1); visibility: visible; }
-    @keyframes heartbeat { 0%, 100% { transform: scale(1); } 25% { transform: scale(1.15); } 50% { transform: scale(1); } 75% { transform: scale(1.15); } }
-
-    .floating-top-right { position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; flex-direction: column; align-items: center; gap: 8px; background: var(--panel); padding: 12px 6px; border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+    .card-ani { 
+      background: var(--panel); 
+      border: 1px solid var(--border);
+      border-radius: var(--radius); 
+      padding: 24px; 
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
     
-    .network-badge-wrap { display: flex; justify-content: center; width: 100%; margin-bottom: 8px; }
-    .network-badge { display: flex; flex-direction: column; align-items: center; gap: 2px; transition: all 0.3s ease; }
-    .nb-icon i { font-size: 1.8rem; font-weight: bold; }
-    .nb-text { font-size: 0.65rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
-    .network-badge.online .nb-icon i { color: #0ea5e9; } 
-    .network-badge.online .nb-text { color: #0ea5e9; }
-    .network-badge.offline .nb-icon i { color: #e11d48; } 
-    .network-badge.offline .nb-text { color: #e11d48; }
-
-    .floating-btn-v { width: 34px; height: 34px; border-radius: 50%; border: 1px solid transparent; background: transparent; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; transition: all 0.2s ease;}
-    .floating-btn-v:hover { color: var(--text); background: var(--bg); transform: scale(1.05); }
-    .floating-btn-v.active { background: var(--primary); color: #ffffff; box-shadow: 0 4px 10px rgba(37,99,235,0.2); }
-    .floating-divider-v { width: 20px; height: 1px; background: var(--border); margin: 4px 0; }
-
-    .desk-clock { display: flex; flex-direction: column; align-items: center; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 6px 4px 0px 4px; margin-bottom: 6px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05), var(--shadow); position: relative; width: 100%; box-sizing: border-box; }
-    .desk-clock::before { content: ''; position: absolute; top: -5px; width: 14px; height: 4px; background: var(--border-hover); border-radius: 4px 4px 0 0; }
-    .flip-card { background: var(--panel); color: var(--text); font-size: 1.15rem; font-family: "Courier New", Courier, monospace; font-weight: 800; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 4px; border: 1px solid var(--border); position: relative; margin-bottom: 1px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); perspective: 300px; }
-    .flip-card::after { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(0,0,0,0.15); z-index: 2; }
-    .flip-card span { position: relative; z-index: 3; }
-    .clock-label { font-size: 0.5rem; text-transform: uppercase; font-weight: 800; color: var(--text-muted); margin-bottom: 6px; letter-spacing: 0.5px; }
-    .flip-anim { animation: flipDown 0.35s ease-in-out; }
-    @keyframes flipDown { 0% { transform: rotateX(0deg); } 50% { transform: rotateX(90deg); opacity: 0.5; } 100% { transform: rotateX(0deg); opacity: 1; } }
-
-    header h1 { font-size: 1.6rem; font-weight: 800; letter-spacing: -0.5px; }
-    header p { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
-    
-    .card-ani { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 18px; }
-    .dropzone-ani { border: 2px dashed var(--border); border-radius: var(--radius); padding: 30px 16px; text-align: center; cursor: pointer; background: var(--bg); transition: all 0.2s ease; }
-    .dropzone-ani:hover { border-color: var(--primary); background: rgba(37, 99, 235, 0.02); }
-    .icon-wrap-ani { display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px; border-radius: 14px; background: var(--panel); border: 1px solid var(--border); color: var(--primary); margin-bottom: 10px; }
+    .dropzone-ani {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 30px 16px;
+      text-align: center;
+      cursor: pointer;
+      background: var(--bg);
+      transition: all 0.2s ease;
+    }
+    .dropzone-ani:hover {
+      border-color: var(--primary);
+    }
+    .icon-wrap-ani {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      margin-bottom: 10px;
+    }
     
     .file-chip-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
-    .file-chip-ani { background: var(--bg); color: var(--text); font-size: 0.72rem; font-weight: 600; padding: 5px 12px; border: 1px solid var(--border); border-radius: 99px; display: inline-flex; align-items: center; gap: 6px; }
+    .file-chip-ani { 
+      background: var(--bg); 
+      color: var(--text); 
+      font-size: 0.72rem; 
+      font-weight: 600;
+      padding: 5px 12px; 
+      border: 1px solid var(--border);
+      border-radius: 99px; 
+      display: inline-flex; 
+      align-items: center; 
+      gap: 6px; 
+    }
 
-    .form-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
-    .form-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
-    @media (max-width: 860px) { .form-grid-4 { grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 520px) { .form-grid-4, .form-grid-2 { grid-template-columns: 1fr; } .trakteer-msg { display: none; } }
+    .form-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+    }
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    @media (max-width: 860px) {
+      .form-grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 520px) {
+      .form-grid-4, .form-grid-2 { grid-template-columns: 1fr; }
+    }
 
-    .form-group { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-    label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .form-group { 
+      display: flex; 
+      flex-direction: column; 
+      gap: 6px; 
+      min-width: 0; 
+    }
+    label { 
+      font-size: 0.75rem; 
+      font-weight: 700; 
+      color: var(--text-muted); 
+      display: flex; 
+      align-items: center; 
+      gap: 6px; 
+      text-transform: uppercase; 
+    }
     label i { font-size: 0.95rem; color: var(--primary); }
-    select, input[type="text"], input[type="number"] { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); padding: 9px 11px; font-size: 0.83rem; outline: none; transition: border-color 0.2s; }
-    select:focus, input[type="text"]:focus, input[type="number"]:focus { border-color: var(--primary); }
+    
+    select, input[type="text"], input[type="number"] { 
+      width: 100%;
+      background: var(--bg); 
+      border: 1px solid var(--border); 
+      border-radius: var(--radius-sm); 
+      color: var(--text); 
+      padding: 9px 11px; 
+      font-size: 0.83rem; 
+      outline: none; 
+      transition: all 0.2s ease;
+    }
+    select:focus, input[type="text"]:focus, input[type="number"]:focus { 
+      border-color: var(--primary);
+    }
 
-    .date-row { display: flex; gap: 6px; width: 100%; }
-    .date-row input[type="number"]#signDay { width: 54px; flex-shrink: 0; text-align: center; }
-    .date-row select#signMonth { flex: 1; min-width: 0; }
-    .date-row input[type="number"]#signYear { width: 68px; flex-shrink: 0; text-align: center; }
+    .date-row {
+      display: flex;
+      gap: 6px;
+      width: 100%;
+    }
+    .date-row input[type="number"]#signDay {
+      width: 54px;
+      flex-shrink: 0;
+      text-align: center;
+    }
+    .date-row select#signMonth {
+      flex: 1;
+      min-width: 0;
+    }
+    .date-row input[type="number"]#signYear {
+      width: 68px;
+      flex-shrink: 0;
+      text-align: center;
+    }
 
-    .logo-box-ani { display: flex; align-items: center; gap: 12px; background: var(--bg); padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); }
-    .logo-preview-thumb { width: 38px; height: 38px; border-radius: 8px; object-fit: contain; border: 1px solid var(--border); background: var(--panel); }
-    .btn-ani-small { padding: 7px 14px; font-size: 0.78rem; font-weight: 600; color: var(--text); background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; transition: all 0.2s; }
-    .btn-ani-small:hover { border-color: var(--primary); color: var(--primary); }
+    .logo-box-ani {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg);
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .logo-preview-thumb {
+      width: 38px;
+      height: 38px;
+      border-radius: 8px;
+      object-fit: contain;
+      border: 1px solid var(--border);
+      background: var(--panel);
+    }
+    .btn-ani-small {
+      padding: 7px 14px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
 
     .tw-btn-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-    .btn-tw-ani { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 9px 4px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 700; cursor: pointer; text-align: center; transition: all 0.2s;}
-    .btn-tw-ani:hover { border-color: var(--primary); }
-    .btn-tw-ani.active { background: var(--primary); border-color: var(--primary); color: #ffffff; box-shadow: 0 4px 10px rgba(37,99,235,0.2); }
+    .btn-tw-ani {
+      background: var(--bg); 
+      border: 1px solid var(--border); 
+      color: var(--text);
+      padding: 9px 4px; 
+      border-radius: var(--radius-sm); 
+      font-size: 0.75rem; 
+      font-weight: 700;
+      cursor: pointer; 
+      text-align: center; 
+      transition: all 0.2s ease;
+    }
+    .btn-tw-ani.active {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #ffffff;
+    }
     .btn-tw-ani span { display: block; font-size: 0.65rem; opacity: 0.8; font-weight: normal; margin-top: 2px; }
 
-    .stats-bar-ani { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); padding: 12px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+    .stats-bar-ani { 
+      display: flex; 
+      justify-content: space-between; 
+      font-size: 0.8rem; 
+      color: var(--text-muted); 
+      padding: 12px 16px; 
+      background: var(--bg); 
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm); 
+    }
     .stats-bar-ani strong { color: var(--primary); }
     
     .btn-group { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; }
-    button.action-btn-ani { flex: 1; min-width: 160px; padding: 13px 20px; border-radius: var(--radius); border: none; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;}
-    button.action-btn-ani.btn-primary { background: var(--primary); color: #ffffff; box-shadow: 0 4px 12px rgba(37,99,235,0.3); }
-    button.action-btn-ani.btn-excel { background: var(--accent); color: #ffffff; box-shadow: 0 4px 12px rgba(22,163,74,0.3); }
-    button.action-btn-ani:hover:not(:disabled) { transform: translateY(-2px); }
-    button:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+    button.action-btn-ani {
+      flex: 1; 
+      min-width: 160px; 
+      padding: 13px 20px; 
+      border-radius: var(--radius); 
+      border: none;
+      font-weight: 700; 
+      font-size: 0.85rem; 
+      cursor: pointer; 
+      display: inline-flex; 
+      align-items: center; 
+      justify-content: center; 
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    button.action-btn-ani.btn-primary { 
+      background: var(--primary); 
+      color: #ffffff; 
+    }
+    button.action-btn-ani.btn-excel { 
+      background: var(--accent); 
+      color: #ffffff; 
+    }
+    button:disabled { 
+      opacity: 0.4; 
+      cursor: not-allowed; 
+    }
 
-    .preview-wrap-ani { border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: auto; max-height: 240px; background: var(--bg); }
+    .preview-wrap-ani { 
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm); 
+      overflow: auto; 
+      max-height: 240px; 
+      background: var(--bg);
+    }
     table { width: 100%; border-collapse: collapse; font-size: 0.75rem; text-align: left; }
     th, td { padding: 9px 12px; border-bottom: 1px solid var(--border); white-space: nowrap; }
     th { background: var(--panel); color: var(--primary); position: sticky; top: 0; font-weight: 700; }
 
-    footer { text-align: center; margin-top: 10px; padding: 16px 8px; font-size: 0.78rem; color: var(--text-muted); border-top: 1px solid var(--border); }
+    footer {
+      text-align: center;
+      margin-top: 10px;
+      padding: 16px 8px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
     footer strong { color: var(--text); }
+    
+    /* Animasi Loading Spin pada Tombol */
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    .ti-loader { animation: spin 1.2s linear infinite; display: inline-block; }
   </style>
 </head>
 <body oncontextmenu="return false;">
 
-<!-- POPUP UPDATE DINAMIS (Akan diisi otomatis oleh Javascript) -->
-<div id="updatePopup" class="update-popup">
-  <div class="update-header">
-    <div class="update-title"><i class="ti ti-rocket"></i> <span id="popupTitle">Update Terbaru!</span></div>
-    <button class="update-close" onclick="closeUpdatePopup()"><i class="ti ti-x"></i></button>
-  </div>
-  <div class="update-body">
-    <ul id="updateList"></ul>
-  </div>
-  <div class="update-progress-bg">
-    <div class="update-progress-bar" id="updateProgressBar"></div>
-  </div>
-</div>
-
-<div class="floating-bottom-left">
-  <div class="trakteer-msg">
-    <i>"Di balik kemudahan sebuah aplikasi, ada waktu dan dedikasi panjang yang dicurahkan."</i><br><br>
-    Mari <strong>hargai jerih payah Developer</strong> dengan secangkir semangat agar aplikasi ini terus bermanfaat! ❤️
-  </div>
-  <a href="https://trakteer.id/bukit_santuai_korcam/tip?open=true" target="_blank" rel="noopener noreferrer" class="trakteer-btn">
-    <i class="ti ti-cup"></i> Dukung Developer
-  </a>
-</div>
-
+<!-- FLOATING MENU KANAN ATAS -->
 <div class="floating-top-right">
-  
-  <div class="network-badge-wrap">
-    <div id="network-status" class="network-badge online">
-      <div class="nb-icon"><i id="network-icon" class="ti ti-wifi"></i></div>
-      <div class="nb-text" id="network-text">ONLINE</div>
-    </div>
-  </div>
-
-  <button class="floating-btn-v" id="btnInstallApp" title="Install Aplikasi ke Layar Utama" style="display:none; background:#10b981; color:#fff;">
-    <i class="ti ti-device-mobile"></i>
+  <button class="floating-btn-v active" id="btnThemeAuto" title="Mode Auto" onclick="setAppTheme('auto')">
+    <i class="ti ti-clock-play"></i>
   </button>
-  <div class="floating-divider-v" id="installDivider" style="display:none;"></div>
-
-  <div class="desk-clock">
-    <div class="flip-card" id="card-hr"><span id="flip-hr">--</span></div>
-    <div class="clock-label">JAM</div>
-    <div class="flip-card" id="card-min"><span id="flip-min">--</span></div>
-    <div class="clock-label">MNT</div>
-    <div class="flip-card" id="card-sec"><span id="flip-sec">--</span></div>
-    <div class="clock-label" id="clock-zone" style="color: var(--primary);">WIB</div>
-  </div>
-
+  <button class="floating-btn-v" id="btnThemeLight" title="Mode Siang" onclick="setAppTheme('light')">
+    <i class="ti ti-sun"></i>
+  </button>
+  <button class="floating-btn-v" id="btnThemeDark" title="Mode Malam" onclick="setAppTheme('dark')">
+    <i class="ti ti-moon"></i>
+  </button>
   <div class="floating-divider-v"></div>
-  <button class="floating-btn-v active" id="btnThemeAuto" title="Mode Auto" onclick="setAppTheme('auto')"><i class="ti ti-clock-play"></i></button>
-  <button class="floating-btn-v" id="btnThemeLight" title="Mode Siang" onclick="setAppTheme('light')"><i class="ti ti-sun"></i></button>
-  <button class="floating-btn-v" id="btnThemeDark" title="Mode Malam" onclick="setAppTheme('dark')"><i class="ti ti-moon"></i></button>
-  <div class="floating-divider-v"></div>
-  <button class="floating-btn-v active" id="btnZoneAuto" title="Auto Zona" onclick="setIndonesiaZone('AUTO')"><i class="ti ti-map-pin"></i></button>
+  <button class="floating-btn-v active" id="btnZoneAuto" title="Auto Zona" onclick="setIndonesiaZone('AUTO')">
+    <i class="ti ti-map-pin"></i>
+  </button>
   <button class="floating-btn-v" id="btnZoneWIB" title="WIB" onclick="setIndonesiaZone('WIB')">WIB</button>
   <button class="floating-btn-v" id="btnZoneWITA" title="WITA" onclick="setIndonesiaZone('WITA')">WTA</button>
   <button class="floating-btn-v" id="btnZoneWIT" title="WIT" onclick="setIndonesiaZone('WIT')">WIT</button>
@@ -211,9 +396,11 @@
 
   <div class="card-ani">
     <div class="dropzone-ani" id="dz" onclick="document.getElementById('csvFile').click()">
-      <div class="icon-wrap-ani"><i class="ti ti-cloud-upload" style="font-size: 24px;"></i></div>
+      <div class="icon-wrap-ani">
+        <i class="ti ti-cloud-upload" style="font-size: 24px;"></i>
+      </div>
       <p id="dzText" style="font-weight:700; font-size:0.9rem;">Klik atau seret berkas <strong>.CSV SIKS</strong> ke sini</p>
-      <span style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; display:block;">Bisa digunakan saat Offline (Tanpa Internet) setelah di-Install</span>
+      <span style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; display:block;">Mendukung multi-file batch otomatis pecah sekolah</span>
       <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" multiple style="display:none;" />
     </div>
 
@@ -222,7 +409,7 @@
     <div class="stats-bar-ani" id="statsBar" style="display:none;">
       <span><i class="ti ti-files"></i> Berkas: <strong id="statFileName">0 Berkas</strong></span>
       <span><i class="ti ti-school"></i> Sekolah: <strong id="statSchools">0</strong></span>
-      <span><i class="ti ti-users"></i> Siswa Tampil: <strong id="statRows">0</strong></span>
+      <span><i class="ti ti-users"></i> Siswa: <strong id="statRows">0</strong></span>
     </div>
 
     <div class="form-grid-4">
@@ -232,6 +419,7 @@
           <option value="ALL">-- Semua Pendamping --</option>
         </select>
       </div>
+
       <div class="form-group">
         <label><i class="ti ti-file-text"></i> Ukuran Kertas</label>
         <select id="paperSize">
@@ -239,6 +427,7 @@
           <option value="a4">A4 (297 × 210 mm)</option>
         </select>
       </div>
+
       <div class="form-group">
         <label><i class="ti ti-calendar-stats"></i> Format Periode</label>
         <select id="periodType" onchange="togglePeriodType()">
@@ -246,6 +435,7 @@
           <option value="bulanan">Bulanan (1 Bulan)</option>
         </select>
       </div>
+
       <div class="form-group">
         <label><i class="ti ti-user"></i> Nama Petugas</label>
         <input type="text" id="signerName" value="Andriadi, S.Kom" placeholder="Nama Petugas" />
@@ -257,6 +447,7 @@
         <label><i class="ti ti-id"></i> NIP Petugas</label>
         <input type="text" id="signerNip" value="198208042025210058" placeholder="NIP Petugas" />
       </div>
+
       <div class="form-group">
         <label><i class="ti ti-calendar-event"></i> Tanggal TTD Dokumen</label>
         <div class="date-row">
@@ -278,10 +469,12 @@
           <input type="number" id="signYear" min="2020" max="2050" placeholder="Thn" />
         </div>
       </div>
+
       <div class="form-group">
         <label><i class="ti ti-building-community"></i> Kecamatan</label>
         <input type="text" id="signerKecamatan" value="Bukit Santuai" placeholder="Kecamatan" />
       </div>
+
       <div class="form-group">
         <label><i class="ti ti-map-pin"></i> Desa / Kelurahan</label>
         <input type="text" id="signerDesa" value="Lunuk Bagantung" placeholder="Desa" />
@@ -293,6 +486,7 @@
         <label><i class="ti ti-user-check"></i> Nama Kepala Sekolah</label>
         <input type="text" id="headmasterName" placeholder="Nama Kepala Sekolah (Opsional)" />
       </div>
+
       <div class="form-group">
         <label><i class="ti ti-id-badge"></i> NIP Kepala Sekolah</label>
         <input type="text" id="headmasterNip" placeholder="NIP Kepala Sekolah (Opsional)" />
@@ -353,208 +547,32 @@
   </div>
 
   <footer>
-    &copy; <script>document.write(new Date().getFullYear())</script> <strong>Andriadi, S.Kom</strong> &middot; All Rights Reserved<br>
+    &copy; 2026 <strong>Andriadi, S.Kom</strong> &middot; All Rights Reserved<br>
     SIKS Fasdik Report Generator &middot; Kementerian Sosial Republik Indonesia
   </footer>
 </div>
 
 <script>
-// ==================== KONFIGURASI VERSI & RELEASE NOTES (EDIT DI SINI) ====================
-// Jika ada penambahan fitur, cukup ubah APP_VERSION dan isi APP_UPDATE_NOTES.
-// Popup akan otomatis dibuat dan dimunculkan ke user.
-const APP_VERSION = "v3.0.0";
-const APP_UPDATE_NOTES = [
-  "✅ <strong>PWA Offline:</strong> Web kini bisa dibuka tanpa kuota internet!",
-  "✅ <strong>Smart Badge:</strong> Indikator sinyal WiFi (Online/Offline) elegan.",
-  "✅ <strong>Tabel Pro Excel:</strong> Hasil ekspor Excel super rapi &amp; berlogo.",
-  "✅ <strong>Auto-Libur Dinamis:</strong> Hari efektif langsung disesuaikan dengan kalender libur tahun berjalan."
-];
-
-let updateTimer;
-window.addEventListener('DOMContentLoaded', () => {
-  // Cek apakah versi ini sudah dilihat user
-  const lastSeenVersion = localStorage.getItem('seen_version');
-  
-  if (lastSeenVersion !== APP_VERSION) {
-    // 1. Render isi List secara dinamis
-    const ul = document.getElementById('updateList');
-    ul.innerHTML = '';
-    APP_UPDATE_NOTES.forEach(note => {
-      const li = document.createElement('li');
-      li.innerHTML = note;
-      ul.appendChild(li);
-    });
-    document.getElementById('popupTitle').innerText = `Update Baru! (${APP_VERSION})`;
-
-    // 2. Munculkan popup dengan animasi
-    const popup = document.getElementById('updatePopup');
-    setTimeout(() => { popup.classList.add('show'); }, 600);
-    
-    // 3. Auto-hide 3.5 detik
-    updateTimer = setTimeout(() => { closeUpdatePopup(); }, 3500);
-
-    // 4. Smart Hover (Pause saat dibaca)
-    popup.addEventListener('mouseenter', () => {
-      clearTimeout(updateTimer);
-      document.getElementById('updateProgressBar').style.animationPlayState = 'paused';
-    });
-    popup.addEventListener('mouseleave', () => {
-      document.getElementById('updateProgressBar').style.animationPlayState = 'running';
-      updateTimer = setTimeout(() => { closeUpdatePopup(); }, 2000);
-    });
-  }
-});
-
-function closeUpdatePopup() {
-  const popup = document.getElementById('updatePopup');
-  if(popup) popup.classList.remove('show');
-  clearTimeout(updateTimer);
-  // Simpan ke memori agar tidak muncul lagi saat di-refresh
-  localStorage.setItem('seen_version', APP_VERSION);
-}
-
-// ==================== DETEKSI ONLINE / OFFLINE ====================
-function updateNetworkStatus() {
-  const badge = document.getElementById('network-status');
-  const text = document.getElementById('network-text');
-  const icon = document.getElementById('network-icon');
-  if (navigator.onLine) {
-    badge.className = 'network-badge online';
-    text.innerText = 'ONLINE';
-    icon.className = 'ti ti-wifi';
-    syncNTP(); 
-  } else {
-    badge.className = 'network-badge offline';
-    text.innerText = 'OFFLINE';
-    icon.className = 'ti ti-wifi-off';
-  }
-}
-window.addEventListener('online', updateNetworkStatus);
-window.addEventListener('offline', updateNetworkStatus);
-updateNetworkStatus(); 
-
-// ==================== REGISTRASI PWA (OFFLINE MODE) ====================
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js')
-      .then(reg => console.log('Mode Offline Siap (SW Terdaftar)'))
-      .catch(err => console.log('Mode Offline Gagal:', err));
-  });
-}
-
-let deferredPrompt;
-const btnInstallApp = document.getElementById('btnInstallApp');
-const installDivider = document.getElementById('installDivider');
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault(); deferredPrompt = e;
-  btnInstallApp.style.display = 'flex'; installDivider.style.display = 'block';
-});
-
-btnInstallApp.addEventListener('click', async () => {
-  if (deferredPrompt) {
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') { btnInstallApp.style.display = 'none'; installDivider.style.display = 'none'; }
-    deferredPrompt = null;
-  }
-});
-
-// ==================== ALGORITMA HARI EFEKTIF (DINAMIS) ====================
-let cachedHolidays = new Set(); 
-const FALLBACK_LIBUR_2026 = [ "2026-01-01", "2026-01-16", "2026-02-16", "2026-02-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-04-03", "2026-05-01", "2026-05-14", "2026-05-15", "2026-05-22", "2026-05-27", "2026-05-28", "2026-06-01", "2026-06-16", "2026-08-17", "2026-08-25", "2026-12-24", "2026-12-25" ];
-
-async function fetchHolidays(year) {
-  if (!navigator.onLine || cachedHolidays.has(`fetched_${year}`)) return; 
-  try {
-    const res = await fetch(`https://api-hari-libur.vercel.app/api?year=${year}`);
-    if (!res.ok) throw new Error("API Utama Fail");
-    const data = await res.json();
-    data.forEach(item => { if (item.holiday_date) cachedHolidays.add(item.holiday_date); });
-    cachedHolidays.add(`fetched_${year}`);
-  } catch (e1) {
-    try {
-      const res2 = await fetch(`https://dayoffapi.vercel.app/api?year=${year}`);
-      if (!res2.ok) throw new Error("API Cadangan Fail");
-      const data2 = await res2.json();
-      data2.forEach(item => { if (item.tanggal) cachedHolidays.add(item.tanggal); });
-      cachedHolidays.add(`fetched_${year}`);
-    } catch (e2) {
-      if (year == 2026) FALLBACK_LIBUR_2026.forEach(tgl => cachedHolidays.add(tgl));
-      cachedHolidays.add(`fetched_${year}`);
-    }
-  }
-}
-
-const BULAN_INDEX = { "JANUARI":0, "FEBRUARI":1, "MARET":2, "APRIL":3, "MEI":4, "JUNI":5, "JULI":6, "AGUSTUS":7, "SEPTEMBER":8, "OKTOBER":9, "NOVEMBER":10, "DESEMBER":11 };
-
-function hitungHariEfektif(namaBulan, tahun) {
-  const bulan = BULAN_INDEX[namaBulan.toUpperCase()];
-  if (bulan === undefined) return "......"; 
-  const date = new Date(tahun, bulan, 1);
-  const nextMonth = new Date(tahun, bulan + 1, 1);
-  let efektif = 0;
-  while (date < nextMonth) {
-    const dayOfWeek = date.getDay();
-    if (dayOfWeek !== 0 && dayOfWeek !== 6) { 
-      const yyyy = date.getFullYear();
-      const mm = String(date.getMonth() + 1).padStart(2, '0');
-      const dd = String(date.getDate()).padStart(2, '0');
-      const dateStr = `${yyyy}-${mm}-${dd}`;
-      if (!cachedHolidays.has(dateStr)) efektif++; 
-    }
-    date.setDate(date.getDate() + 1);
-  }
-  return efektif;
-}
-
-// --- JAM MEJA & NTP SYNC ---
-let timeOffsetMs = 0;
-async function syncNTP() {
-  if (!navigator.onLine) return;
-  try {
-    const res = await fetch('https://worldtimeapi.org/api/timezone/Asia/Jakarta');
-    const data = await res.json();
-    timeOffsetMs = new Date(data.utc_datetime).getTime() - Date.now();
-  } catch (e) { console.log("NTP Sync terganggu, pakai waktu lokal."); }
-}
-
-function updateCard(cardId, spanId, val) {
-  const span = document.getElementById(spanId); const card = document.getElementById(cardId);
-  if (span.innerText !== val) { span.innerText = val; card.classList.remove('flip-anim'); void card.offsetWidth; card.classList.add('flip-anim'); }
-}
-
-function updateClock() {
-  const now = new Date(Date.now() + timeOffsetMs);
-  let h, m, s, zLabel;
-  if (currentZoneMode === 'AUTO') { h = now.getHours(); m = now.getMinutes(); s = now.getSeconds(); zLabel = 'AUTO';
-  } else {
-    const utcMs = now.getTime() + (now.getTimezoneOffset() * 60000); let offsetHours = 7; zLabel = 'WIB';
-    if (currentZoneMode === 'WITA') { offsetHours = 8; zLabel = 'WTA'; } if (currentZoneMode === 'WIT') { offsetHours = 9; zLabel = 'WIT'; }
-    const zoneDate = new Date(utcMs + (offsetHours * 3600000));
-    h = zoneDate.getHours(); m = zoneDate.getMinutes(); s = zoneDate.getSeconds();
-  }
-  document.getElementById('clock-zone').innerText = zLabel;
-  updateCard('card-hr', 'flip-hr', h.toString().padStart(2, '0')); updateCard('card-min', 'flip-min', m.toString().padStart(2, '0')); updateCard('card-sec', 'flip-sec', s.toString().padStart(2, '0'));
-}
-setInterval(updateClock, 1000);
-
-// --- INISIALISASI TANGGAL & TEMA ---
 (function initDefaultDate() {
   const now = new Date();
   const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-  const dayInp = document.getElementById('signDay'); const monthInp = document.getElementById('signMonth'); const yearInp = document.getElementById('signYear');
+  
+  const dayInp = document.getElementById('signDay');
+  const monthInp = document.getElementById('signMonth');
+  const yearInp = document.getElementById('signYear');
+
   if (dayInp) dayInp.value = now.getDate();
   if (monthInp) monthInp.value = months[now.getMonth()];
-  if (yearInp) { yearInp.value = now.getFullYear(); fetchHolidays(now.getFullYear()); }
+  if (yearInp) yearInp.value = now.getFullYear();
 })();
 
 let currentThemeMode = localStorage.getItem('theme_preference') || 'auto';
 let currentZoneMode = localStorage.getItem('zone_preference') || 'AUTO';
 
 function getZoneHour() {
-  const d = new Date(Date.now() + timeOffsetMs);
+  const d = new Date();
   const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+  
   if (currentZoneMode === 'WIB') return new Date(utc + 25200000).getHours();
   if (currentZoneMode === 'WITA') return new Date(utc + 28800000).getHours();
   if (currentZoneMode === 'WIT') return new Date(utc + 32400000).getHours();
@@ -562,318 +580,700 @@ function getZoneHour() {
 }
 
 function applyTheme() {
-  const body = document.body; const hour = getZoneHour();
-  if (currentThemeMode === 'auto') { const isNight = (hour >= 18 || hour < 6); body.classList.toggle('dark-mode', isNight); } else if (currentThemeMode === 'dark') { body.classList.add('dark-mode'); } else { body.classList.remove('dark-mode'); }
-  document.getElementById('btnThemeAuto').classList.toggle('active', currentThemeMode === 'auto'); document.getElementById('btnThemeLight').classList.toggle('active', currentThemeMode === 'light'); document.getElementById('btnThemeDark').classList.toggle('active', currentThemeMode === 'dark'); document.getElementById('btnZoneAuto').classList.toggle('active', currentZoneMode === 'AUTO'); document.getElementById('btnZoneWIB').classList.toggle('active', currentZoneMode === 'WIB'); document.getElementById('btnZoneWITA').classList.toggle('active', currentZoneMode === 'WITA'); document.getElementById('btnZoneWIT').classList.toggle('active', currentZoneMode === 'WIT');
+  const body = document.body;
+  const hour = getZoneHour();
+
+  if (currentThemeMode === 'auto') {
+    const isNight = (hour >= 18 || hour < 6);
+    body.classList.toggle('dark-mode', isNight);
+  } else if (currentThemeMode === 'dark') {
+    body.classList.add('dark-mode');
+  } else {
+    body.classList.remove('dark-mode');
+  }
+
+  document.getElementById('btnThemeAuto').classList.toggle('active', currentThemeMode === 'auto');
+  document.getElementById('btnThemeLight').classList.toggle('active', currentThemeMode === 'light');
+  document.getElementById('btnThemeDark').classList.toggle('active', currentThemeMode === 'dark');
+
+  document.getElementById('btnZoneAuto').classList.toggle('active', currentZoneMode === 'AUTO');
+  document.getElementById('btnZoneWIB').classList.toggle('active', currentZoneMode === 'WIB');
+  document.getElementById('btnZoneWITA').classList.toggle('active', currentZoneMode === 'WITA');
+  document.getElementById('btnZoneWIT').classList.toggle('active', currentZoneMode === 'WIT');
 }
 
-function setAppTheme(mode) { currentThemeMode = mode; localStorage.setItem('theme_preference', mode); applyTheme(); }
-function setIndonesiaZone(zone) { currentZoneMode = zone; localStorage.setItem('zone_preference', zone); applyTheme(); updateClock(); }
+function setAppTheme(mode) {
+  currentThemeMode = mode;
+  localStorage.setItem('theme_preference', mode);
+  applyTheme();
+}
+
+function setIndonesiaZone(zone) {
+  currentZoneMode = zone;
+  localStorage.setItem('zone_preference', zone);
+  applyTheme();
+}
+
 applyTheme();
 
-// --- SISTEM PARSING DATA ---
-let masterRows = []; let allRows = []; let groupedSchools = {}; let uploadedFiles = []; let customLogoData = null; let pendampingList = new Set(); let processedRowsSet = new Set();
+let masterRows = [];
+let allRows = [];
+let groupedSchools = {};
+let uploadedFiles = [];
+let customLogoData = null;
+let pendampingList = new Set();
 
-window.addEventListener('DOMContentLoaded', () => { const savedLogo = localStorage.getItem('custom_kemensos_logo'); if (savedLogo) loadLogoImage(savedLogo); });
-window.handleLogoUpload = function(e) { const file = e.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(evt) { const base64 = evt.target.result; localStorage.setItem('custom_kemensos_logo', base64); loadLogoImage(base64); }; reader.readAsDataURL(file); };
+window.addEventListener('DOMContentLoaded', () => {
+  const savedLogo = localStorage.getItem('custom_kemensos_logo');
+  if (savedLogo) loadLogoImage(savedLogo);
+});
+
+window.handleLogoUpload = function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt) {
+    const base64 = evt.target.result;
+    localStorage.setItem('custom_kemensos_logo', base64);
+    loadLogoImage(base64);
+  };
+  reader.readAsDataURL(file);
+};
 
 function loadLogoImage(base64) {
   const img = new Image();
-  img.onload = function() { customLogoData = { base64: base64, width: img.naturalWidth, height: img.naturalHeight, aspectRatio: img.naturalWidth / img.naturalHeight }; const thumb = document.getElementById('logoThumb'); thumb.src = base64; thumb.style.display = 'block'; document.getElementById('logoStatus').innerText = 'Logo dimuat (' + img.naturalWidth + 'x' + img.naturalHeight + ' px)'; document.getElementById('btnResetLogo').style.display = 'inline-flex'; };
+  img.onload = function() {
+    customLogoData = {
+      base64: base64,
+      width: img.naturalWidth,
+      height: img.naturalHeight,
+      aspectRatio: img.naturalWidth / img.naturalHeight
+    };
+    const thumb = document.getElementById('logoThumb');
+    thumb.src = base64;
+    thumb.style.display = 'block';
+    document.getElementById('logoStatus').innerText = 'Logo dimuat (' + img.naturalWidth + 'x' + img.naturalHeight + ' px)';
+    document.getElementById('btnResetLogo').style.display = 'inline-flex';
+  };
   img.src = base64;
 }
 
-window.resetLogo = function() { localStorage.removeItem('custom_kemensos_logo'); customLogoData = null; document.getElementById('logoThumb').style.display = 'none'; document.getElementById('logoStatus').innerText = 'Belum ada logo kustom'; document.getElementById('btnResetLogo').style.display = 'none'; document.getElementById('logoInput').value = ''; };
+window.resetLogo = function() {
+  localStorage.removeItem('custom_kemensos_logo');
+  customLogoData = null;
+  document.getElementById('logoThumb').style.display = 'none';
+  document.getElementById('logoStatus').innerText = 'Belum ada logo kustom';
+  document.getElementById('btnResetLogo').style.display = 'none';
+  document.getElementById('logoInput').value = '';
+};
 
-const TW_PRESETS = { TW1: ['JANUARI', 'FEBRUARI', 'MARET'], TW2: ['APRIL', 'MEI', 'JUNI'], TW3: ['JULI', 'AGUSTUS', 'SEPTEMBER'], TW4: ['OKTOBER', 'NOVEMBER', 'DESEMBER'] };
+const TW_PRESETS = {
+  TW1: ['JANUARI', 'FEBRUARI', 'MARET'],
+  TW2: ['APRIL', 'MEI', 'JUNI'],
+  TW3: ['JULI', 'AGUSTUS', 'SEPTEMBER'],
+  TW4: ['OKTOBER', 'NOVEMBER', 'DESEMBER']
+};
 let selectedTw = 'TW4';
-window.selectTw = function(twKey) { selectedTw = twKey; document.querySelectorAll('.btn-tw-ani').forEach(btn => { btn.classList.toggle('active', btn.getAttribute('data-tw') === twKey); }); };
-window.togglePeriodType = function() { const type = document.getElementById('periodType').value; document.getElementById('twContainer').style.display = type === 'triwulan' ? 'flex' : 'none'; document.getElementById('monthContainer').style.display = type === 'triwulan' ? 'none' : 'flex'; };
 
-const fileInput = document.getElementById('csvFile'); const dz = document.getElementById('dz'); const dzText = document.getElementById('dzText'); const statsBar = document.getElementById('statsBar'); const fileListWrap = document.getElementById('fileListWrap'); const btnPdf = document.getElementById('btnPdf'); const btnExcel = document.getElementById('btnExcel'); const filterSelect = document.getElementById('filterPendamping');
+window.selectTw = function(twKey) {
+  selectedTw = twKey;
+  document.querySelectorAll('.btn-tw-ani').forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-tw') === twKey);
+  });
+};
 
-dz.addEventListener('dragover', (e) => { e.preventDefault(); }); dz.addEventListener('drop', (e) => { e.preventDefault(); if (e.dataTransfer.files.length) handleMultipleFiles(Array.from(e.dataTransfer.files)); }); fileInput.addEventListener('change', (e) => { if (e.target.files.length) handleMultipleFiles(Array.from(e.target.files)); });
+window.togglePeriodType = function() {
+  const type = document.getElementById('periodType').value;
+  document.getElementById('twContainer').style.display = type === 'triwulan' ? 'flex' : 'none';
+  document.getElementById('monthContainer').style.display = type === 'triwulan' ? 'none' : 'flex';
+};
+
+const fileInput = document.getElementById('csvFile');
+const dz = document.getElementById('dz');
+const dzText = document.getElementById('dzText');
+const statsBar = document.getElementById('statsBar');
+const fileListWrap = document.getElementById('fileListWrap');
+const btnPdf = document.getElementById('btnPdf');
+const btnExcel = document.getElementById('btnExcel');
+const filterSelect = document.getElementById('filterPendamping');
+
+dz.addEventListener('dragover', (e) => { e.preventDefault(); });
+dz.addEventListener('drop', (e) => {
+  e.preventDefault();
+  if (e.dataTransfer.files.length) handleMultipleFiles(Array.from(e.dataTransfer.files));
+});
+fileInput.addEventListener('change', (e) => {
+  if (e.target.files.length) handleMultipleFiles(Array.from(e.target.files));
+});
 
 function handleMultipleFiles(files) {
   uploadedFiles = files.filter(f => f.name.toLowerCase().endsWith('.csv') || f.type.includes('csv') || f.type.includes('plain'));
-  if (uploadedFiles.length === 0) { alert('Harap pilih berkas dengan format .csv'); return; }
-  dzText.innerText = 'Memproses ' + uploadedFiles.length + ' berkas CSV...';
-  fileListWrap.innerHTML = uploadedFiles.map(f => '<div class="file-chip-ani"><i class="ti ti-file-text"></i><span>' + f.name + '</span></div>').join(''); fileListWrap.style.display = 'flex';
-  masterRows = []; pendampingList.clear(); processedRowsSet.clear();
+  if (uploadedFiles.length === 0) {
+    alert('Harap pilih berkas dengan format .csv');
+    return;
+  }
 
-  const promises = uploadedFiles.map(file => { return new Promise((resolve) => { const reader = new FileReader(); reader.onload = (e) => { parseSIKSCsvContent(e.target.result, file.name); resolve(); }; reader.readAsText(file, 'ISO-8859-1'); }); });
+  dzText.innerText = 'Memproses ' + uploadedFiles.length + ' berkas CSV...';
+  fileListWrap.innerHTML = uploadedFiles.map(f => '<div class="file-chip-ani"><i class="ti ti-file-text"></i><span>' + f.name + '</span></div>').join('');
+  fileListWrap.style.display = 'flex';
+
+  masterRows = [];
+  pendampingList.clear();
+
+  const promises = uploadedFiles.map(file => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        parseSIKSCsvContent(e.target.result, file.name);
+        resolve();
+      };
+      reader.readAsText(file, 'ISO-8859-1');
+    });
+  });
 
   Promise.all(promises).then(() => {
     filterSelect.innerHTML = '<option value="ALL">-- Semua Pendamping --</option>';
-    Array.from(pendampingList).sort().forEach(p => { if (p && p !== '-' && p !== 'Andriadi, S.Kom') { const opt = document.createElement('option'); opt.value = p; opt.textContent = p; filterSelect.appendChild(opt); } });
-    applyPendampingFilter(); dzText.innerHTML = 'Berhasil memuat <strong>' + uploadedFiles.length + ' berkas</strong>'; btnPdf.disabled = false; btnExcel.disabled = false;
+    Array.from(pendampingList).sort().forEach(p => {
+      if (p && p !== '-' && p !== 'Andriadi, S.Kom') {
+        const opt = document.createElement('option');
+        opt.value = p;
+        opt.textContent = p;
+        filterSelect.appendChild(opt);
+      }
+    });
+
+    applyPendampingFilter();
+    dzText.innerHTML = 'Berhasil memuat <strong>' + uploadedFiles.length + ' berkas</strong>';
+    btnPdf.disabled = false;
+    btnExcel.disabled = false;
   });
 }
 
 window.applyPendampingFilter = function() {
   const selected = filterSelect.value;
-  if (selected === 'ALL') { allRows = [...masterRows]; } else { allRows = masterRows.filter(r => r.pendamping === selected); document.getElementById('signerName').value = selected; }
-  groupedSchools = {}; allRows.forEach(rowObj => { const sName = rowObj.sekolah; if (!groupedSchools[sName]) groupedSchools[sName] = []; groupedSchools[sName].push(rowObj); });
-  document.getElementById('statFileName').innerText = uploadedFiles.length + ' Berkas'; document.getElementById('statSchools').innerText = Object.keys(groupedSchools).length; document.getElementById('statRows').innerText = allRows.length; statsBar.style.display = 'flex'; renderPreview();
+  if (selected === 'ALL') {
+    allRows = [...masterRows];
+  } else {
+    allRows = masterRows.filter(r => r.pendamping === selected);
+    document.getElementById('signerName').value = selected;
+  }
+
+  groupedSchools = {};
+  allRows.forEach(rowObj => {
+    const sName = rowObj.sekolah;
+    if (!groupedSchools[sName]) groupedSchools[sName] = [];
+    groupedSchools[sName].push(rowObj);
+  });
+
+  document.getElementById('statFileName').innerText = uploadedFiles.length + ' Berkas';
+  document.getElementById('statSchools').innerText = Object.keys(groupedSchools).length;
+  document.getElementById('statRows').innerText = allRows.length;
+  statsBar.style.display = 'flex';
+
+  renderPreview();
 };
 
-function cleanStr(s) { return (s || '').toString().trim().replace(/^["']|["']$/g, ''); }
-function normKey(s) { return cleanStr(s).toUpperCase().replace(/[^A-Z0-9]/g, ''); }
+function cleanStr(s) {
+  return (s || '').toString().trim().replace(/^["']|["']$/g, '');
+}
 
-function parseRobustCSV(text) {
-  const sep = (text.slice(0, 500).split(';').length > text.slice(0, 500).split(',').length) ? ';' : ','; const rows = []; let curRow = [], curCell = '', inQuotes = false;
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i];
-    if (c === '"') { if (inQuotes && text[i+1] === '"') { curCell += '"'; i++; } else { inQuotes = !inQuotes; } } else if (c === sep && !inQuotes) { curRow.push(curCell.trim()); curCell = ''; } else if (c === '\n' && !inQuotes) { curRow.push(curCell.trim()); rows.push(curRow); curRow = []; curCell = ''; } else if (c === '\r' && !inQuotes) {} else { curCell += c; }
-  }
-  if (curCell !== '' || curRow.length > 0) { curRow.push(curCell.trim()); rows.push(curRow); }
-  return rows;
+function normKey(s) {
+  return cleanStr(s).toUpperCase().replace(/[^A-Z0-9]/g, '');
 }
 
 function parseSIKSCsvContent(text, fileName) {
-  const linesForMeta = text.split(/\r?\n/).slice(0, 20); let metaSchool = '', metaNpsn = '';
-  linesForMeta.forEach(line => { const lUpper = line.toUpperCase(); if ((lUpper.includes('SEKOLAH') || lUpper.includes('SEKOLA')) && lUpper.includes(':')) { metaSchool = cleanStr(line.split(':')[1].split(/[,;]/)[0]); } if (lUpper.includes('NPSN') && lUpper.includes(':')) { metaNpsn = cleanStr(line.split(':')[1].split(/[,;]/)[0]).replace(/\D/g, ''); } });
+  const rawLines = text.split(/\r?\n/).map(l => l.trim()).filter(l => l.length > 0);
+  if (rawLines.length < 2) return;
 
-  const rawRows = parseRobustCSV(text); if (rawRows.length < 2) return;
-  let headerIndex = -1, headers = [];
-  for (let i = 0; i < Math.min(rawRows.length, 50); i++) { const cols = rawRows[i].map(normKey); if (cols.some(c => c.includes('PENGURUS')) && cols.some(c => c.includes('SISWA') || c.includes('NISN'))) { headerIndex = i; headers = rawRows[i].map(cleanStr); break; } }
-  if (headerIndex === -1) { headerIndex = 0; headers = rawRows[0].map(cleanStr); }
+  const sep = (rawLines.slice(0, 15).join(' ').split(';').length > rawLines.slice(0, 15).join(' ').split(',').length) ? ';' : ',';
 
-  const findCol = (exactKeywords) => headers.findIndex(h => { const clean = normKey(h); return exactKeywords.some(kw => clean === normKey(kw) || clean.includes(normKey(kw))); });
+  let metaSchool = '', metaNpsn = '';
+  for (let i = 0; i < Math.min(rawLines.length, 20); i++) {
+    const lUpper = rawLines[i].toUpperCase();
+    if ((lUpper.includes('SEKOLAH') || lUpper.includes('SEKOLA')) && lUpper.includes(':')) {
+      const parts = rawLines[i].split(':');
+      if (parts[1]) metaSchool = cleanStr(parts[1].split(sep)[0]);
+    }
+    if (lUpper.includes('NPSN') && lUpper.includes(':')) {
+      const parts = rawLines[i].split(':');
+      if (parts[1]) metaNpsn = cleanStr(parts[1].split(sep)[0]).replace(/\D/g, '');
+    }
+  }
 
-  let idxNikPengurus = findCol(['NIKPENGURUS', 'NIK_PENGURUS']); let idxNamaPengurus = findCol(['NAMAPENGURUS', 'NAMA_PENGURUS']); let idxNisn = findCol(['NISN']); let idxNamaSiswa = findCol(['NAMASISWA', 'NAMA_SISWA', 'NAMAANAK']); let idxNikSiswa = findCol(['NIKSISWA', 'NIK_SISWA']); let idxTingkat = findCol(['TINGKAT', 'KELAS', 'ROMBEL']); let idxSekolah = findCol(['NAMASEKOLAH', 'SEKOLAH']); let idxNpsn = findCol(['NPSN']); let idxPendamping = findCol(['NAMAPENDAMPING', 'PENDAMPING', 'PETUGAS']);
+  let headerIndex = -1;
+  let headers = [];
+  for (let i = 0; i < rawLines.length; i++) {
+    const cols = rawLines[i].split(sep).map(normKey);
+    if (cols.some(c => c.includes('PENGURUS')) && cols.some(c => c.includes('SISWA') || c.includes('NISN'))) {
+      headerIndex = i;
+      headers = rawLines[i].split(sep).map(cleanStr);
+      break;
+    }
+  }
 
-  for (let i = headerIndex + 1; i < rawRows.length; i++) {
-    const cols = rawRows[i].map(cleanStr); if (cols.length < 5) continue; 
-    let nikPengurus = idxNikPengurus !== -1 ? cols[idxNikPengurus] : cols[1]; let namaPengurus = idxNamaPengurus !== -1 ? cols[idxNamaPengurus] : cols[2]; let nisn = idxNisn !== -1 ? cols[idxNisn] : cols[4]; let namaSiswa = idxNamaSiswa !== -1 ? cols[idxNamaSiswa] : cols[5]; let nikSiswa = idxNikSiswa !== -1 ? cols[idxNikSiswa] : cols[6]; let tingkat = idxTingkat !== -1 ? cols[idxTingkat] : cols[7]; let sekolah = idxSekolah !== -1 ? cols[idxSekolah] : ''; let npsn = idxNpsn !== -1 ? cols[idxNpsn] : ''; let pendamping = idxPendamping !== -1 ? cols[idxPendamping] : 'Andriadi, S.Kom';
+  if (headerIndex === -1) {
+    headerIndex = 0;
+    headers = rawLines[0].split(sep).map(cleanStr);
+  }
 
-    if (/^\d{16}$/.test(namaPengurus) && cols[2] && !/^\d{16}$/.test(cols[2])) { namaPengurus = cols[2]; }
-    if (/^\d{15,16}$/.test(namaSiswa)) { const textCol = cols.find((c, cIdx) => cIdx > 2 && cIdx < 8 && isNaN(c) && c.length > 2); if (textCol) namaSiswa = textCol; }
-    if (!sekolah && metaSchool) sekolah = metaSchool; if (!npsn && metaNpsn) npsn = metaNpsn;
-    if (nikPengurus.startsWith('202') && nikPengurus.includes('-')) continue; if (namaPengurus.startsWith('202') && namaPengurus.includes('-')) continue;
-    const test = normKey(namaPengurus + namaSiswa); if (!test || test.includes('NAMAPENGURUS') || test.includes('TINGKATPENDIDIKAN')) continue;
+  const findCol = (exactKeywords) => {
+    return headers.findIndex(h => {
+      const clean = normKey(h);
+      return exactKeywords.some(kw => clean === normKey(kw) || clean.includes(normKey(kw)));
+    });
+  };
 
-    const checkStr = [nikPengurus, nisn, namaSiswa, tingkat, sekolah].join('|').replace(/\s/g, ''); if (processedRowsSet.has(checkStr)) continue; processedRowsSet.add(checkStr);
+  let idxNikPengurus = findCol(['NIKPENGURUS', 'NIK_PENGURUS']);
+  let idxNamaPengurus = findCol(['NAMAPENGURUS', 'NAMA_PENGURUS']);
+  let idxNisn = findCol(['NISN']);
+  let idxNamaSiswa = findCol(['NAMASISWA', 'NAMA_SISWA', 'NAMAANAK']);
+  let idxNikSiswa = findCol(['NIKSISWA', 'NIK_SISWA']);
+  let idxTingkat = findCol(['TINGKAT', 'KELAS', 'ROMBEL']);
+  let idxSekolah = findCol(['NAMASEKOLAH', 'SEKOLAH']);
+  let idxNpsn = findCol(['NPSN']);
+  let idxPendamping = findCol(['NAMAPENDAMPING', 'PENDAMPING', 'PETUGAS']);
+
+  for (let i = headerIndex + 1; i < rawLines.length; i++) {
+    const cols = rawLines[i].split(sep).map(cleanStr);
+    if (cols.length < 5) continue;
+
+    let nikPengurus = idxNikPengurus !== -1 ? cols[idxNikPengurus] : cols[1];
+    let namaPengurus = idxNamaPengurus !== -1 ? cols[idxNamaPengurus] : cols[2];
+    let nisn = idxNisn !== -1 ? cols[idxNisn] : cols[4];
+    let namaSiswa = idxNamaSiswa !== -1 ? cols[idxNamaSiswa] : cols[5];
+    let nikSiswa = idxNikSiswa !== -1 ? cols[idxNikSiswa] : cols[6];
+    let tingkat = idxTingkat !== -1 ? cols[idxTingkat] : cols[7];
+    let sekolah = idxSekolah !== -1 ? cols[idxSekolah] : '';
+    let npsn = idxNpsn !== -1 ? cols[idxNpsn] : '';
+    let pendamping = idxPendamping !== -1 ? cols[idxPendamping] : 'Andriadi, S.Kom';
+
+    if (/^\d{16}$/.test(namaPengurus) && cols[2] && !/^\d{16}$/.test(cols[2])) {
+      namaPengurus = cols[2];
+    }
+    if (/^\d{15,16}$/.test(namaSiswa)) {
+      const textCol = cols.find((c, cIdx) => cIdx > 2 && cIdx < 8 && isNaN(c) && c.length > 2);
+      if (textCol) namaSiswa = textCol;
+    }
+
+    if (!sekolah && metaSchool) sekolah = metaSchool;
+    if (!npsn && metaNpsn) npsn = metaNpsn;
+
+    if (nikPengurus.startsWith('202') && nikPengurus.includes('-')) continue;
+    if (namaPengurus.startsWith('202') && namaPengurus.includes('-')) continue;
+    const test = normKey(namaPengurus + namaSiswa);
+    if (!test || test.includes('NAMAPENGURUS') || test.includes('TINGKATPENDIDIKAN')) continue;
+
+    const checkKey = (nikPengurus + nisn + namaSiswa + tingkat).replace(/[^A-Za-z0-9]/g, '');
+    if (masterRows.some(r => (r.nikPengurus + r.nisn + r.siswa + r.tingkat).replace(/[^A-Za-z0-9]/g, '') === checkKey)) continue;
+
     if (pendamping && pendamping !== '-') pendampingList.add(pendamping);
 
-    masterRows.push({ nikPengurus: nikPengurus || '-', pengurus: namaPengurus || '-', nisn: nisn || '-', siswa: namaSiswa || '-', tingkat: tingkat || '-', sekolah: sekolah || 'SEKOLAH', npsn: npsn || '-', pendamping: pendamping || 'Andriadi, S.Kom' });
+    const rowObj = {
+      nikPengurus: nikPengurus || '-',
+      pengurus: namaPengurus || '-',
+      nisn: nisn || '-',
+      siswa: namaSiswa || '-',
+      tingkat: tingkat || '-',
+      sekolah: sekolah || 'SEKOLAH',
+      npsn: npsn || '-',
+      pendamping: pendamping || 'Andriadi, S.Kom'
+    };
+
+    masterRows.push(rowObj);
   }
 }
 
 function renderPreview() {
-  const wrap = document.getElementById('previewWrap'); const table = document.getElementById('previewTable'); wrap.style.display = 'block';
+  const wrap = document.getElementById('previewWrap');
+  const table = document.getElementById('previewTable');
+  wrap.style.display = 'block';
+
   let html = '<thead><tr><th>NO</th><th>NIK PENGURUS</th><th>NAMA PENGURUS</th><th>NISN</th><th>NAMA SISWA</th><th>TINGKAT</th><th>SEKOLAH</th><th>PENDAMPING</th></tr></thead><tbody>';
-  allRows.slice(0, 5).forEach((r, i) => { html += '<tr><td>' + (i+1) + '</td><td>' + r.nikPengurus + '</td><td>' + r.pengurus + '</td><td>' + r.nisn + '</td><td>' + r.siswa + '</td><td>' + r.tingkat + '</td><td>' + r.sekolah + '</td><td>' + r.pendamping + '</td></tr>'; });
-  html += '</tbody>'; table.innerHTML = html;
+  allRows.slice(0, 5).forEach((r, i) => {
+    html += '<tr><td>' + (i+1) + '</td><td>' + r.nikPengurus + '</td><td>' + r.pengurus + '</td><td>' + r.nisn + '</td><td>' + r.siswa + '</td><td>' + r.tingkat + '</td><td>' + r.sekolah + '</td><td>' + r.pendamping + '</td></tr>';
+  });
+  html += '</tbody>';
+  table.innerHTML = html;
 }
 
-function setButtonSuccess(btnId, originalHtml, successText) {
-  const btn = document.getElementById(btnId); btn.innerHTML = `<i class="ti ti-check" style="font-size: 1.2rem;"></i> ${successText}`; btn.classList.add('btn-success-state', 'btn-shiny'); setTimeout(() => { btn.innerHTML = originalHtml; btn.classList.remove('btn-success-state', 'btn-shiny'); }, 3500);
-}
+function drawDynamicWatermark(doc) {
+  if (!customLogoData) return;
+  const pageW = doc.internal.pageSize.width;
+  const pageH = doc.internal.pageSize.height;
 
-function sendTelegramLog(aksi) {
-  if (!navigator.onLine) return; 
-  const botToken = "8924491429:AAGYVguWL4tDBsnbG8Gi5wMsdRgTa5-ab3k"; 
-  const chatId = "7234580359";
-  if (botToken.includes("MASUKKAN") || chatId.includes("MASUKKAN")) return;
-  const nama = document.getElementById('signerName').value.trim() || 'Unknown'; const nip = document.getElementById('signerNip').value.trim() || '-'; const jmlSiswa = document.getElementById('statRows').innerText; const jmlSekolah = document.getElementById('statSchools').innerText;
-  const pesan = `🚀 *Log SIKS Fasdik*\n\n👤 *User:* ${nama}\n💳 *NIP:* ${nip}\n📝 *Aksi:* ${aksi}\n🏫 *Sekolah:* ${jmlSekolah} | 👥 *Siswa:* ${jmlSiswa}`;
-  fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: chatId, text: pesan, parse_mode: 'Markdown' }) }).catch(err => console.log('Silent log failed')); 
-}
+  let targetH = 100;
+  let targetW = targetH * customLogoData.aspectRatio;
 
-// ==================== GENERATE PDF ====================
-window.generatePDF = async function() {
-  sendTelegramLog('Cetak PDF'); 
-  const originalHtml = '<i class="ti ti-file-type-pdf" style="font-size: 1.2rem;"></i> Generate PDF (Auto Split &amp; Zip)';
-  
-  const sYearInp = document.getElementById('signYear').value || new Date().getFullYear();
-  if (navigator.onLine) { btnPdf.innerText = 'Menyinkronkan Kalender...'; btnPdf.disabled = true; await fetchHolidays(sYearInp); }
-  btnPdf.innerText = 'Memproses PDF...'; btnPdf.disabled = true;
-
-  try {
-    const { jsPDF } = window.jspdf;
-    const paper = document.getElementById('paperSize').value;
-    const periodType = document.getElementById('periodType').value;
-    const signer = document.getElementById('signerName').value.trim() || 'Andriadi, S.Kom';
-    const nip = document.getElementById('signerNip').value.trim();
-    const sDay = document.getElementById('signDay').value || new Date().getDate();
-    const sMonth = document.getElementById('signMonth').value;
-    const sDesa = document.getElementById('signerDesa').value.trim();
-    const sKec = document.getElementById('signerKecamatan').value.trim();
-    const formattedDate = (sDesa || sKec || 'Tempat') + ', ' + sDay + ' ' + sMonth + ' ' + sYearInp;
-    const headName = document.getElementById('headmasterName').value.trim();
-    const headNip = document.getElementById('headmasterNip').value.trim();
-    let months = periodType === 'triwulan' ? TW_PRESETS[selectedTw] : [document.getElementById('singleMonth').value];
-    const pageSize = paper === 'f4' ? [330, 210] : 'a4';
-    const schoolKeys = Object.keys(groupedSchools);
-
-    if (schoolKeys.length === 1) {
-      const doc = buildOfficialDoc(schoolKeys[0], groupedSchools[schoolKeys[0]], pageSize, months, signer, nip, formattedDate, headName, headNip, sYearInp);
-      doc.save('Form_Verifikasi_' + schoolKeys[0].replace(/[^a-zA-Z0-9]/g, '_') + '.pdf');
-    } else {
-      btnPdf.innerText = 'Memproses ZIP PDF...'; 
-      const zip = new JSZip();
-      schoolKeys.forEach(sch => {
-        const doc = buildOfficialDoc(sch, groupedSchools[sch], pageSize, months, signer, nip, formattedDate, headName, headNip, sYearInp);
-        zip.file('Form_Verifikasi_' + sch.replace(/[^a-zA-Z0-9]/g, '_') + '.pdf', doc.output('blob'));
-      });
-      const zipBlob = await zip.generateAsync({ type: 'blob' });
-      const a = document.createElement('a'); a.href = URL.createObjectURL(zipBlob); a.download = 'Batch_Verifikasi_' + Date.now() + '.zip'; a.click();
-    }
-    setButtonSuccess('btnPdf', originalHtml, 'Berhasil Dibuat!');
-  } catch (error) { console.error(error); alert('Terjadi kesalahan saat memproses PDF.'); btnPdf.innerHTML = originalHtml; }
-  btnPdf.disabled = false;
-};
-
-function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, formattedDate, headName, headNip, reportYear) {
-  const { jsPDF } = window.jspdf; const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: pageSize });
-  list.sort((a, b) => a.tingkat.localeCompare(b.tingkat, undefined, { numeric: true })); const npsn = list[0].npsn || '-';
-
-  if (customLogoData) {
-    const pageW = doc.internal.pageSize.width; const pageH = doc.internal.pageSize.height; let targetH = 100; let targetW = targetH * customLogoData.aspectRatio;
-    if (targetW > pageW - 40) { targetW = pageW - 40; targetH = targetW / customLogoData.aspectRatio; }
-    doc.saveGraphicsState(); if (doc.GState) doc.setGState(new doc.GState({ opacity: 0.08 }));
-    doc.addImage(customLogoData.base64, 'PNG', (pageW - targetW) / 2, (pageH - targetH) / 2 + 5, targetW, targetH); doc.restoreGraphicsState();
+  if (targetW > pageW - 40) {
+    targetW = pageW - 40;
+    targetH = targetW / customLogoData.aspectRatio;
   }
 
+  const x = (pageW - targetW) / 2;
+  const y = (pageH - targetH) / 2 + 5;
+
+  doc.saveGraphicsState();
+  if (doc.GState) doc.setGState(new doc.GState({ opacity: 0.08 }));
+  doc.addImage(customLogoData.base64, 'PNG', x, y, targetW, targetH);
+  doc.restoreGraphicsState();
+}
+
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+window.generatePDF = async function() {
+  const paper = document.getElementById('paperSize').value;
+  const periodType = document.getElementById('periodType').value;
+  const signer = document.getElementById('signerName').value.trim() || 'Andriadi, S.Kom';
+  const nip = document.getElementById('signerNip').value.trim();
+
+  const sDay = document.getElementById('signDay').value || new Date().getDate();
+  const sMonth = document.getElementById('signMonth').value;
+  const sYear = document.getElementById('signYear').value || new Date().getFullYear();
+  const sDesa = document.getElementById('signerDesa').value.trim();
+  const sKec = document.getElementById('signerKecamatan').value.trim();
+  const formattedDate = (sDesa || sKec || 'Tempat') + ', ' + sDay + ' ' + sMonth + ' ' + sYear;
+
+  const headName = document.getElementById('headmasterName').value.trim();
+  const headNip = document.getElementById('headmasterNip').value.trim();
+
+  let months = periodType === 'triwulan' ? TW_PRESETS[selectedTw] : [document.getElementById('singleMonth').value];
+  const pageSize = paper === 'f4' ? [330, 210] : 'a4';
+  const schoolKeys = Object.keys(groupedSchools);
+
+  if (schoolKeys.length === 1) {
+    btnPdf.innerHTML = '<i class="ti ti-loader"></i> Menyimpan PDF...';
+    btnPdf.disabled = true;
+    
+    await sleep(100);
+    const doc = buildOfficialDoc(schoolKeys[0], groupedSchools[schoolKeys[0]], pageSize, months, signer, nip, formattedDate, headName, headNip);
+    doc.save('Form_Verifikasi_' + schoolKeys[0].replace(/[^a-zA-Z0-9]/g, '_') + '.pdf');
+    
+    btnPdf.innerHTML = '<i class="ti ti-file-type-pdf" style="font-size: 1.2rem;"></i> Generate PDF (Auto Split &amp; Zip)';
+    btnPdf.disabled = false;
+  } else {
+    btnPdf.disabled = true;
+    const zip = new JSZip();
+
+    for (let i = 0; i < schoolKeys.length; i++) {
+      const sch = schoolKeys[i];
+      btnPdf.innerHTML = '<i class="ti ti-loader"></i> Memproses PDF ' + (i + 1) + ' / ' + schoolKeys.length;
+      await sleep(50); // Jeda anti-memory leak
+      
+      const doc = buildOfficialDoc(sch, groupedSchools[sch], pageSize, months, signer, nip, formattedDate, headName, headNip);
+      zip.file('Form_Verifikasi_' + sch.replace(/[^a-zA-Z0-9]/g, '_') + '.pdf', doc.output('blob'));
+    }
+
+    btnPdf.innerHTML = '<i class="ti ti-archive"></i> Membungkus ZIP...';
+    await sleep(100);
+
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(zipBlob);
+    a.download = 'Batch_Verifikasi_' + Date.now() + '.zip';
+    a.click();
+
+    btnPdf.innerHTML = '<i class="ti ti-file-type-pdf" style="font-size: 1.2rem;"></i> Generate PDF (Auto Split &amp; Zip)';
+    btnPdf.disabled = false;
+  }
+};
+
+function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, formattedDate, headName, headNip) {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: pageSize });
+
+  list.sort((a, b) => a.tingkat.localeCompare(b.tingkat, undefined, { numeric: true }));
+  const npsn = list[0].npsn || '-';
+
+  drawDynamicWatermark(doc);
+
   let textLeftOffset = 14;
-  if (customLogoData) { const kopH = 15; const kopW = kopH * customLogoData.aspectRatio; doc.addImage(customLogoData.base64, 'PNG', 14, 6, kopW, kopH); textLeftOffset = 14 + kopW + 3; }
+  if (customLogoData) {
+    const kopH = 15;
+    const kopW = kopH * customLogoData.aspectRatio;
+    doc.addImage(customLogoData.base64, 'PNG', 14, 6, kopW, kopH);
+    textLeftOffset = 14 + kopW + 3;
+  }
 
-  doc.setFontSize(10.5); doc.setFont('helvetica', 'bold'); doc.text('KEMENTERIAN SOSIAL REPUBLIK INDONESIA', textLeftOffset, 10.5);
-  doc.setFontSize(11); doc.text('LEMBAR VERIFIKASI FASILITAS PENDIDIKAN (' + months.join(' - ') + ')', textLeftOffset, 15.5);
-  doc.setFontSize(8.5); doc.setFont('helvetica', 'bold'); doc.text('SEKOLAH: ' + schoolName + '   |   NPSN: ' + npsn, textLeftOffset, 20.5);
-  doc.setLineWidth(0.4); doc.line(14, 23.5, doc.internal.pageSize.width - 14, 23.5);
+  doc.setFontSize(10.5);
+  doc.setFont('helvetica', 'bold');
+  doc.text('KEMENTERIAN SOSIAL REPUBLIK INDONESIA', textLeftOffset, 10.5);
+  doc.setFontSize(11);
+  doc.text('LEMBAR VERIFIKASI FASILITAS PENDIDIKAN (' + months.join(' - ') + ')', textLeftOffset, 15.5);
+  doc.setFontSize(8.5);
+  doc.setFont('helvetica', 'bold');
+  doc.text('SEKOLAH: ' + schoolName + '   |   NPSN: ' + npsn, textLeftOffset, 20.5);
 
-  const headRow1 = [{ content: 'NO', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } }, { content: 'NIK PENGURUS', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } }, { content: 'NAMA PENGURUS', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } }, { content: 'NISN', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } }, { content: 'NAMA SISWA', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } }, { content: 'TINGKAT', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } }];
-  months.forEach(m => { headRow1.push({ content: m, colSpan: 5, styles: { halign: 'center', valign: 'middle' } }); }); headRow1.push({ content: 'NAMA PENDAMPING', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } });
+  doc.setLineWidth(0.4);
+  doc.line(14, 23.5, doc.internal.pageSize.width - 14, 23.5);
 
-  const headRow2 = []; 
-  months.forEach(m => { const hk = hitungHariEfektif(m, reportYear); headRow2.push({ content: 'Hari Efektif: ' + hk, colSpan: 5, styles: { halign: 'center', valign: 'middle', fontSize: 6.5 } }); });
-  const headRow3 = []; months.forEach(() => { headRow3.push({ content: 'ALPA', styles: { halign: 'center', fontSize: 5.5 } }, { content: 'IZIN', styles: { halign: 'center', fontSize: 5.5 } }, { content: 'SAKIT', styles: { halign: 'center', fontSize: 5.5 } }, { content: 'JML', styles: { halign: 'center', fontSize: 5.5 } }, { content: '%', styles: { halign: 'center', fontSize: 5.5 } }); });
+  const headRow1 = [
+    { content: 'NO', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
+    { content: 'NIK PENGURUS', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
+    { content: 'NAMA PENGURUS', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
+    { content: 'NISN', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
+    { content: 'NAMA SISWA', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } },
+    { content: 'TINGKAT', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } }
+  ];
 
-  const body = list.map((r, i) => { let row = [i + 1, r.nikPengurus, r.pengurus, r.nisn, r.siswa, r.tingkat]; months.forEach(() => { row.push('', '', '', '', ''); }); row.push(r.pendamping || signer); return row; });
+  months.forEach(m => {
+    headRow1.push({ content: m, colSpan: 5, styles: { halign: 'center', valign: 'middle' } });
+  });
+  headRow1.push({ content: 'NAMA PENDAMPING', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } });
 
-  let colStyles = { 0: { cellWidth: 8, halign: 'center' }, 1: { cellWidth: 28, halign: 'center' }, 2: { cellWidth: 'auto' }, 3: { cellWidth: 22, halign: 'center' }, 4: { cellWidth: 'auto' }, 5: { cellWidth: 16, halign: 'center' } };
-  let colIdx = 6; months.forEach(() => { colStyles[colIdx++] = { cellWidth: months.length === 1 ? 14 : 8.5, halign: 'center' }; colStyles[colIdx++] = { cellWidth: months.length === 1 ? 14 : 8.5, halign: 'center' }; colStyles[colIdx++] = { cellWidth: months.length === 1 ? 14 : 8.5, halign: 'center' }; colStyles[colIdx++] = { cellWidth: months.length === 1 ? 14 : 8.5, halign: 'center' }; colStyles[colIdx++] = { cellWidth: months.length === 1 ? 12 : 7.5, halign: 'center' }; }); colStyles[colIdx] = { cellWidth: 28, halign: 'center' };
+  const headRow2 = [];
+  months.forEach(() => {
+    headRow2.push({ content: 'Hari Efektif: ......', colSpan: 5, styles: { halign: 'center', valign: 'middle', fontSize: 6.5 } });
+  });
+
+  const headRow3 = [];
+  months.forEach(() => {
+    headRow3.push(
+      { content: 'ALPA', styles: { halign: 'center', fontSize: 5.5 } },
+      { content: 'IZIN', styles: { halign: 'center', fontSize: 5.5 } },
+      { content: 'SAKIT', styles: { halign: 'center', fontSize: 5.5 } },
+      { content: 'JML', styles: { halign: 'center', fontSize: 5.5 } },
+      { content: '%', styles: { halign: 'center', fontSize: 5.5 } }
+    );
+  });
+
+  const body = list.map((r, i) => {
+    let row = [i + 1, r.nikPengurus, r.pengurus, r.nisn, r.siswa, r.tingkat];
+    months.forEach(() => { row.push('', '', '', '', ''); });
+    row.push(r.pendamping || signer);
+    return row;
+  });
+
+  const isSingle = (months.length === 1);
+  let colStyles = {
+    0: { cellWidth: 8, halign: 'center' },
+    1: { cellWidth: 28, halign: 'center' },
+    2: { cellWidth: 'auto' },
+    3: { cellWidth: 22, halign: 'center' },
+    4: { cellWidth: 'auto' },
+    5: { cellWidth: 16, halign: 'center' }
+  };
+
+  let colIdx = 6;
+  months.forEach(() => {
+    colStyles[colIdx++] = { cellWidth: isSingle ? 14 : 8.5, halign: 'center' };
+    colStyles[colIdx++] = { cellWidth: isSingle ? 14 : 8.5, halign: 'center' };
+    colStyles[colIdx++] = { cellWidth: isSingle ? 14 : 8.5, halign: 'center' };
+    colStyles[colIdx++] = { cellWidth: isSingle ? 14 : 8.5, halign: 'center' };
+    colStyles[colIdx++] = { cellWidth: isSingle ? 12 : 7.5, halign: 'center' };
+  });
+  colStyles[colIdx] = { cellWidth: 28, halign: 'center' };
 
   doc.autoTable({
-    startY: 25.5, head: [headRow1, headRow2, headRow3], body: body, theme: 'plain', tableLineColor: [0, 0, 0], tableLineWidth: 0.25,
+    startY: 25.5,
+    head: [headRow1, headRow2, headRow3],
+    body: body,
+    theme: 'plain',
+    tableLineColor: [0, 0, 0],
+    tableLineWidth: 0.25,
     styles: { fontSize: 7, cellPadding: 1.5, lineColor: [0, 0, 0], lineWidth: 0.2, textColor: [0, 0, 0] },
     headStyles: { fillColor: [255, 255, 255], textColor: [0, 0, 0], fontStyle: 'bold', lineColor: [0, 0, 0], lineWidth: 0.25 },
-    columnStyles: colStyles, showHead: 'everyPage', pageBreak: 'auto', rowPageBreak: 'auto', margin: { top: 25.5, bottom: 15, left: 14, right: 14 },
+    columnStyles: colStyles,
+    showHead: 'everyPage',
+    pageBreak: 'auto',
+    rowPageBreak: 'auto',
+    margin: { top: 25.5, bottom: 15, left: 14, right: 14 },
     didDrawPage: (data) => {
       if (data.pageNumber > 1) {
-        if (customLogoData) { const w = doc.internal.pageSize.width; const h = doc.internal.pageSize.height; let th = 100; let tw = th * customLogoData.aspectRatio; if (tw > w - 40) { tw = w - 40; th = tw / customLogoData.aspectRatio; } doc.saveGraphicsState(); if (doc.GState) doc.setGState(new doc.GState({ opacity: 0.08 })); doc.addImage(customLogoData.base64, 'PNG', (w - tw) / 2, (h - th) / 2 + 5, tw, th); doc.restoreGraphicsState(); }
-        doc.setFontSize(8); doc.setFont('helvetica', 'bold'); doc.text('LEMBAR VERIFIKASI FASILITAS PENDIDIKAN - ' + schoolName + ' (Lanjutan)', 14, 12); doc.setLineWidth(0.3); doc.line(14, 15, doc.internal.pageSize.width - 14, 15);
+        drawDynamicWatermark(doc);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'bold');
+        doc.text('LEMBAR VERIFIKASI FASILITAS PENDIDIKAN - ' + schoolName + ' (Lanjutan)', 14, 12);
+        doc.setLineWidth(0.3);
+        doc.line(14, 15, doc.internal.pageSize.width - 14, 15);
       }
-      doc.setFontSize(7.5); doc.setFont('helvetica', 'normal'); doc.text('Hal. ' + doc.internal.getNumberOfPages(), doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 5);
+      const total = doc.internal.getNumberOfPages();
+      doc.setFontSize(7.5);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Hal. ' + total, doc.internal.pageSize.width - 20, doc.internal.pageSize.height - 5);
     }
   });
 
-  const finalY = doc.lastAutoTable.finalY || 140; const pageH = doc.internal.pageSize.height; if (finalY + 38 > pageH) { doc.addPage(); }
-  const yPos = (finalY + 38 > pageH) ? 22 : finalY + 8; const xLeft = 25, xRight = doc.internal.pageSize.width - 75;
-  doc.setFontSize(8.5); doc.setFont('helvetica', 'normal'); doc.text('Mengetahui,', xLeft, yPos + 4); doc.text('Kepala ' + schoolName, xLeft, yPos + 8);
-  if (headName) { doc.setFont('helvetica', 'bold'); doc.text(headName, xLeft, yPos + 26); doc.setFont('helvetica', 'normal'); doc.text(headNip ? ('NIP. ' + headNip) : 'NIP. .............................................', xLeft, yPos + 30); } else { doc.text('( .................................................... )', xLeft, yPos + 26); doc.text('NIP. .............................................', xLeft, yPos + 30); }
-  doc.text(formattedDate, xRight, yPos); doc.text('Petugas Verifikasi,', xRight, yPos + 4); doc.setFont('helvetica', 'bold'); doc.text(signer, xRight, yPos + 26);
-  if (nip) { doc.setFont('helvetica', 'normal'); doc.text('NIP. ' + nip, xRight, yPos + 30); }
+  const finalY = doc.lastAutoTable.finalY || 140;
+  const pageH = doc.internal.pageSize.height;
+  
+  if (finalY + 38 > pageH) {
+    doc.addPage();
+    drawDynamicWatermark(doc);
+  }
+
+  const yPos = (finalY + 38 > pageH) ? 22 : finalY + 8;
+  const xLeft = 25;
+  const xRight = doc.internal.pageSize.width - 75;
+
+  doc.setFontSize(8.5);
+  doc.setFont('helvetica', 'normal');
+
+  doc.text('Mengetahui,', xLeft, yPos + 4);
+  doc.text('Kepala ' + schoolName, xLeft, yPos + 8);
+  if (headName) {
+    doc.setFont('helvetica', 'bold');
+    doc.text(headName, xLeft, yPos + 26);
+    doc.setFont('helvetica', 'normal');
+    doc.text(headNip ? ('NIP. ' + headNip) : 'NIP. .............................................', xLeft, yPos + 30);
+  } else {
+    doc.text('( .................................................... )', xLeft, yPos + 26);
+    doc.text('NIP. .............................................', xLeft, yPos + 30);
+  }
+
+  doc.text(formattedDate, xRight, yPos);
+  doc.text('Petugas Verifikasi,', xRight, yPos + 4);
+  doc.setFont('helvetica', 'bold');
+  doc.text(signer, xRight, yPos + 26);
+  if (nip) {
+    doc.setFont('helvetica', 'normal');
+    doc.text('NIP. ' + nip, xRight, yPos + 30);
+  }
+
   return doc;
 }
 
-// ==================== GENERATE EXCEL SINGLE BATCH (HELPER) ====================
-async function buildSingleExcelBuffer(sch, list, months, formattedDate, headName, headNip, signer, nip, reportYear) {
-  const wb = new ExcelJS.Workbook();
-  let logoId = null;
-  if (customLogoData) { const base64Parts = customLogoData.base64.split(','); const base64Data = base64Parts[1]; let imgExt = 'png'; if (base64Parts[0].includes('jpeg') || base64Parts[0].includes('jpg')) imgExt = 'jpeg'; logoId = wb.addImage({ base64: base64Data, extension: imgExt }); }
-
-  list.sort((a, b) => a.tingkat.localeCompare(b.tingkat, undefined, { numeric: true })); const npsn = list[0].npsn || '-'; const sheetName = sch.substring(0, 30).replace(/[:\\\/\?\*\[\]]/g, ''); const ws = wb.addWorksheet(sheetName); const totalCols = 6 + (months.length * 5) + 1;
-
-  ws.getColumn(1).width = 5; ws.getColumn(2).width = 20; ws.getColumn(3).width = 28; ws.getColumn(4).width = 15; ws.getColumn(5).width = 28; ws.getColumn(6).width = 12; 
-  let cIdx = 7; months.forEach(() => { for(let j=0; j<5; j++) ws.getColumn(cIdx++).width = 6; }); ws.getColumn(cIdx).width = 25; 
-
-  if (logoId !== null) { ws.addImage(logoId, { tl: { col: 0.2, row: 0.2 }, ext: { width: 65, height: 65 } }); }
-
-  const titleStartCol = (logoId !== null) ? 3 : 1; 
-  ws.getCell(1, titleStartCol).value = 'KEMENTERIAN SOSIAL REPUBLIK INDONESIA'; ws.getCell(1, titleStartCol).font = { bold: true, size: 12 };
-  ws.getCell(2, titleStartCol).value = 'LEMBAR VERIFIKASI FASILITAS PENDIDIKAN (' + months.join(' - ') + ')'; ws.getCell(2, titleStartCol).font = { bold: true, size: 11 };
-  ws.getCell(3, titleStartCol).value = 'SEKOLAH: ' + sch + '   |   NPSN: ' + npsn; ws.getCell(3, titleStartCol).font = { bold: true, size: 10 };
-
-  let rHeader = 5;
-  ws.getCell(rHeader, 1).value = 'NO'; ws.getCell(rHeader, 2).value = 'NIK PENGURUS'; ws.getCell(rHeader, 3).value = 'NAMA PENGURUS'; ws.getCell(rHeader, 4).value = 'NISN'; ws.getCell(rHeader, 5).value = 'NAMA SISWA'; ws.getCell(rHeader, 6).value = 'TINGKAT';
-  for (let c=1; c<=6; c++) ws.mergeCells(rHeader, c, rHeader + 2, c);
-
-  let mCol = 7;
-  months.forEach(m => {
-    ws.getCell(rHeader, mCol).value = m; ws.mergeCells(rHeader, mCol, rHeader, mCol + 4);
-    const hk = hitungHariEfektif(m, reportYear);
-    ws.getCell(rHeader + 1, mCol).value = 'Hari Efektif: ' + hk; ws.mergeCells(rHeader + 1, mCol, rHeader + 1, mCol + 4);
-    ws.getCell(rHeader + 2, mCol).value = 'ALPA'; ws.getCell(rHeader + 2, mCol + 1).value = 'IZIN'; ws.getCell(rHeader + 2, mCol + 2).value = 'SAKIT'; ws.getCell(rHeader + 2, mCol + 3).value = 'JML'; ws.getCell(rHeader + 2, mCol + 4).value = '%';
-    mCol += 5;
-  });
-  ws.getCell(rHeader, mCol).value = 'NAMA PENDAMPING'; ws.mergeCells(rHeader, mCol, rHeader + 2, mCol);
-
-  for(let r = rHeader; r <= rHeader+2; r++) { const row = ws.getRow(r); for(let c = 1; c <= totalCols; c++) { const cell = row.getCell(c); cell.font = { bold: true, size: 9 }; cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: true }; } }
-
-  let rData = rHeader + 3;
-  list.forEach((r, i) => {
-    const row = ws.getRow(rData);
-    row.getCell(1).value = i + 1; row.getCell(2).value = r.nikPengurus; row.getCell(3).value = r.pengurus; row.getCell(4).value = r.nisn; row.getCell(5).value = r.siswa; row.getCell(6).value = r.tingkat; row.getCell(totalCols).value = r.pendamping || signer;
-    row.getCell(1).alignment = { vertical: 'middle', horizontal: 'center' }; row.getCell(2).alignment = { vertical: 'middle', horizontal: 'center' }; row.getCell(4).alignment = { vertical: 'middle', horizontal: 'center' }; row.getCell(6).alignment = { vertical: 'middle', horizontal: 'center' }; row.getCell(totalCols).alignment = { vertical: 'middle', horizontal: 'center' };
-    rData++;
-  });
-
-  for (let r = rHeader; r < rData; r++) { for (let c = 1; c <= totalCols; c++) { ws.getCell(r, c).border = { top: { style: 'thin' }, left: { style: 'thin' }, bottom: { style: 'thin' }, right: { style: 'thin' } }; } }
-
-  let ttdRow = rData + 2; const rightCol = totalCols - 3 > 0 ? totalCols - 3 : totalCols;
-  ws.getCell(ttdRow, rightCol).value = formattedDate; ttdRow++; ws.getCell(ttdRow, 2).value = 'Mengetahui,'; ws.getCell(ttdRow, rightCol).value = 'Petugas Verifikasi,'; ttdRow++; ws.getCell(ttdRow, 2).value = 'Kepala ' + sch; ttdRow += 4;
-  ws.getCell(ttdRow, 2).value = headName ? headName : '( .................................................... )'; ws.getCell(ttdRow, 2).font = { bold: true }; ws.getCell(ttdRow, rightCol).value = signer; ws.getCell(ttdRow, rightCol).font = { bold: true }; ttdRow++;
-  ws.getCell(ttdRow, 2).value = headNip ? ('NIP. ' + headNip) : 'NIP. .............................................'; ws.getCell(ttdRow, rightCol).value = nip ? ('NIP. ' + nip) : '';
-
-  return await wb.xlsx.writeBuffer();
-}
-
-// ==================== GENERATE EXCEL ====================
 window.exportExcel = async function() {
-  sendTelegramLog('Ekspor Excel (Rapi)'); 
-  const originalHtml = '<i class="ti ti-file-spreadsheet" style="font-size: 1.2rem;"></i> Ekspor Excel (Sesuai PDF)';
-  
-  const sYearInp = document.getElementById('signYear').value || new Date().getFullYear();
-  if (navigator.onLine) { btnExcel.innerText = 'Menyinkronkan Kalender...'; btnExcel.disabled = true; await fetchHolidays(sYearInp); }
-  btnExcel.innerText = 'Memproses Excel...'; btnExcel.disabled = true;
+  btnExcel.innerHTML = '<i class="ti ti-loader"></i> Memproses Excel...';
+  btnExcel.disabled = true;
+  await sleep(100);
 
-  try {
-    const periodType = document.getElementById('periodType').value;
-    const signer = document.getElementById('signerName').value.trim() || 'Andriadi, S.Kom';
-    const nip = document.getElementById('signerNip').value.trim();
-    const sDay = document.getElementById('signDay').value || new Date().getDate();
-    const sMonth = document.getElementById('signMonth').value;
-    const sDesa = document.getElementById('signerDesa').value.trim();
-    const sKec = document.getElementById('signerKecamatan').value.trim();
-    const formattedDate = (sDesa || sKec || 'Tempat') + ', ' + sDay + ' ' + sMonth + ' ' + sYearInp;
-    const headName = document.getElementById('headmasterName').value.trim();
-    const headNip = document.getElementById('headmasterNip').value.trim();
-    let months = periodType === 'triwulan' ? TW_PRESETS[selectedTw] : [document.getElementById('singleMonth').value];
-    
-    const schoolKeys = Object.keys(groupedSchools);
+  const periodType = document.getElementById('periodType').value;
+  const signer = document.getElementById('signerName').value.trim() || 'Andriadi, S.Kom';
+  const nip = document.getElementById('signerNip').value.trim();
 
-    if (schoolKeys.length === 1) {
-      const sch = schoolKeys[0];
-      const buffer = await buildSingleExcelBuffer(sch, groupedSchools[sch], months, formattedDate, headName, headNip, signer, nip, sYearInp);
-      saveAs(new Blob([buffer]), 'Form_Verifikasi_' + sch.replace(/[^a-zA-Z0-9]/g, '_') + '.xlsx');
-    } else {
-      btnExcel.innerText = 'Memproses ZIP Excel...';
-      const zip = new JSZip();
-      for (const sch of schoolKeys) {
-        const buffer = await buildSingleExcelBuffer(sch, groupedSchools[sch], months, formattedDate, headName, headNip, signer, nip, sYearInp);
-        zip.file('Form_Verifikasi_' + sch.replace(/[^a-zA-Z0-9]/g, '_') + '.xlsx', buffer);
-      }
-      const zipBlob = await zip.generateAsync({ type: 'blob' });
-      saveAs(zipBlob, 'Batch_Verifikasi_Excel_' + Date.now() + '.zip');
+  const sDay = document.getElementById('signDay').value || new Date().getDate();
+  const sMonth = document.getElementById('signMonth').value;
+  const sYear = document.getElementById('signYear').value || new Date().getFullYear();
+  const sDesa = document.getElementById('signerDesa').value.trim();
+  const sKec = document.getElementById('signerKecamatan').value.trim();
+  const formattedDate = (sDesa || sKec || 'Tempat') + ', ' + sDay + ' ' + sMonth + ' ' + sYear;
+
+  const headName = document.getElementById('headmasterName').value.trim();
+  const headNip = document.getElementById('headmasterNip').value.trim();
+
+  let months = periodType === 'triwulan' ? TW_PRESETS[selectedTw] : [document.getElementById('singleMonth').value];
+  const wb = XLSX.utils.book_new();
+
+  Object.keys(groupedSchools).forEach(sch => {
+    const list = [...groupedSchools[sch]];
+    list.sort((a, b) => a.tingkat.localeCompare(b.tingkat, undefined, { numeric: true }));
+    const npsn = list[0].npsn || '-';
+
+    const ws_data = [];
+    const merges = [];
+
+    ws_data.push(['KEMENTERIAN SOSIAL REPUBLIK INDONESIA']);
+    ws_data.push(['LEMBAR VERIFIKASI FASILITAS PENDIDIKAN (' + months.join(' - ') + ')']);
+    ws_data.push(['SEKOLAH: ' + sch + '   |   NPSN: ' + npsn]);
+    ws_data.push([]);
+
+    const r4 = ['NO', 'NIK PENGURUS', 'NAMA PENGURUS', 'NISN', 'NAMA SISWA', 'TINGKAT'];
+    months.forEach(m => { r4.push(m, '', '', '', ''); });
+    r4.push('NAMA PENDAMPING');
+    ws_data.push(r4);
+
+    const r5 = ['', '', '', '', '', ''];
+    months.forEach(() => { r5.push('Hari Efektif: ......', '', '', '', ''); });
+    r5.push('');
+    ws_data.push(r5);
+
+    const r6 = ['', '', '', '', '', ''];
+    months.forEach(() => { r6.push('ALPA', 'IZIN', 'SAKIT', 'JML', '%'); });
+    r6.push('');
+    ws_data.push(r6);
+
+    const totalCols = 6 + (months.length * 5) + 1;
+
+    merges.push({ s: { r: 0, c: 0 }, e: { r: 0, c: totalCols - 1 } });
+    merges.push({ s: { r: 1, c: 0 }, e: { r: 1, c: totalCols - 1 } });
+    merges.push({ s: { r: 2, c: 0 }, e: { r: 2, c: totalCols - 1 } });
+
+    for (let c = 0; c < 6; c++) {
+      merges.push({ s: { r: 4, c: c }, e: { r: 6, c: c } });
     }
 
-    setButtonSuccess('btnExcel', originalHtml, 'Berhasil Diekspor!');
-  } catch (error) { console.error(error); alert('Terjadi kesalahan saat memproses Excel.'); btnExcel.innerHTML = originalHtml; }
+    months.forEach((m, mIdx) => {
+      const startCol = 6 + (mIdx * 5);
+      merges.push({ s: { r: 4, c: startCol }, e: { r: 4, c: startCol + 4 } });
+      merges.push({ s: { r: 5, c: startCol }, e: { r: 5, c: startCol + 4 } });
+    });
+
+    merges.push({ s: { r: 4, c: totalCols - 1 }, e: { r: 6, c: totalCols - 1 } });
+
+    list.forEach((r, i) => {
+      const row = [
+        i + 1,
+        { t: 's', v: r.nikPengurus },
+        r.pengurus,
+        { t: 's', v: r.nisn },
+        r.siswa,
+        r.tingkat
+      ];
+      months.forEach(() => { row.push('', '', '', '', ''); });
+      row.push(r.pendamping || signer);
+      ws_data.push(row);
+    });
+
+    ws_data.push([]);
+    ws_data.push([]);
+
+    const rightCol = totalCols - 5;
+
+    const rowTtd1 = new Array(totalCols).fill('');
+    rowTtd1[rightCol] = formattedDate;
+    ws_data.push(rowTtd1);
+
+    const rowTtd2 = new Array(totalCols).fill('');
+    rowTtd2[1] = 'Mengetahui,';
+    rowTtd2[rightCol] = 'Petugas Verifikasi,';
+    ws_data.push(rowTtd2);
+
+    const rowTtd3 = new Array(totalCols).fill('');
+    rowTtd3[1] = 'Kepala ' + sch;
+    ws_data.push(rowTtd3);
+
+    ws_data.push([]);
+    ws_data.push([]);
+    ws_data.push([]);
+
+    const rowTtd4 = new Array(totalCols).fill('');
+    rowTtd4[1] = headName ? headName : '( .................................................... )';
+    rowTtd4[rightCol] = signer;
+    ws_data.push(rowTtd4);
+
+    const rowTtd5 = new Array(totalCols).fill('');
+    rowTtd5[1] = headNip ? ('NIP. ' + headNip) : 'NIP. .............................................';
+    rowTtd5[rightCol] = nip ? ('NIP. ' + nip) : '';
+    ws_data.push(rowTtd5);
+
+    const ws = XLSX.utils.aoa_to_sheet(ws_data);
+    ws['!merges'] = merges;
+
+    const colWidths = [
+      { wch: 6 },
+      { wch: 22 },
+      { wch: 28 },
+      { wch: 14 },
+      { wch: 28 },
+      { wch: 12 }
+    ];
+    months.forEach(() => {
+      colWidths.push({ wch: 6 }, { wch: 6 }, { wch: 6 }, { wch: 6 }, { wch: 6 });
+    });
+    colWidths.push({ wch: 26 });
+    ws['!cols'] = colWidths;
+
+    const sheetName = sch.substring(0, 30).replace(/[:\\\/\?\*\[\]]/g, '');
+    XLSX.utils.book_append_sheet(wb, ws, sheetName);
+  });
+
+  XLSX.writeFile(wb, 'Form_Verifikasi_' + Date.now() + '.xlsx');
+
+  btnExcel.innerHTML = '<i class="ti ti-file-spreadsheet" style="font-size: 1.2rem;"></i> Ekspor Excel (Sesuai PDF)';
   btnExcel.disabled = false;
 };
 </script>
+<!-- /End Unobfuscated Script Block -->
+
 </body>
 </html>
