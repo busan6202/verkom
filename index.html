@@ -5,14 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SIKS Fasdik - Form Verifikasi Komitmen Pendidikan</title>
   
+  <!-- FAVICON SVG -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23090d16'/%3E%3Crect x='1' y='1' width='62' height='62' rx='15' fill='none' stroke='%233b82f6' stroke-width='2' stroke-opacity='0.4'/%3E%3Cpath d='M16 14h22l12 12v24a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z' fill='%231e293b' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M38 14v12h12' fill='none' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M20 34h14M20 42h8' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='42' cy='42' r='10' fill='%2316a34a'/%3E%3Cpath d='M38 42l3 3 6-6' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <meta name="theme-color" content="#090d16" />
 
-  <!-- Library Utama -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <!-- Pustaka PDF & Excel (JS) -->
+  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 
   <style>
     :root {
@@ -28,6 +29,7 @@
       --accent-hover: #15803d;
       --tip: #d97706;
       --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
+      --shadow-hover: 0 20px 30px -10px rgba(37, 99, 235, 0.15);
       --radius: 12px;
       --radius-sm: 8px;
     }
@@ -45,14 +47,34 @@
       --accent-hover: #4ade80;
       --tip: #fbbf24;
       --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      --shadow-hover: 0 20px 30px -10px rgba(59, 130, 246, 0.25);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    
-    body { background-color: var(--bg); color: var(--text); padding: 32px 16px 80px 16px; display: flex; justify-content: center; transition: background-color 0.3s, color 0.3s; }
-    .container { width: 100%; max-width: 980px; display: flex; flex-direction: column; gap: 20px; }
+    * { 
+      box-sizing: border-box; 
+      margin: 0; 
+      padding: 0; 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+      transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
 
-    /* FLOATING ACTION BAR KANAN ATAS */
+    body { 
+      background-color: var(--bg); 
+      color: var(--text); 
+      padding: 32px 16px 80px 16px; 
+      display: flex; 
+      justify-content: center; 
+    }
+    
+    .container { 
+      width: 100%; 
+      max-width: 980px; 
+      display: flex; 
+      flex-direction: column; 
+      gap: 20px; 
+    }
+
+    /* FLOATING MENU KANAN ATAS VERTIKAL */
     .floating-top-right {
       position: fixed; top: 20px; right: 20px; z-index: 1000;
       display: flex; flex-direction: column; align-items: center; gap: 8px;
@@ -63,12 +85,13 @@
       width: 36px; height: 36px; border-radius: 50%; border: 1px solid transparent;
       background: transparent; color: var(--text-muted); cursor: pointer;
       display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;
-      position: relative; transition: all 0.2s;
+      position: relative;
     }
-    .floating-btn-v:hover { color: var(--text); background: var(--bg); }
-    .floating-btn-v.active { background: var(--primary); color: #ffffff; }
+    .floating-btn-v:hover { color: var(--text); background: var(--bg); transform: scale(1.08); }
+    .floating-btn-v.active { background: var(--primary); color: #ffffff; box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35); }
     .floating-divider-v { width: 20px; height: 1px; background: var(--border); margin: 2px 0; }
     
+    /* Tooltip Kiri dari Floating Button */
     .floating-btn-v::after {
       content: attr(data-tooltip); position: absolute; right: 46px;
       background: var(--panel); color: var(--text); border: 1px solid var(--border);
@@ -82,78 +105,74 @@
     
     .card-ani { 
       background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); 
-      padding: 24px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 18px; 
+      padding: 26px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 20px; 
     }
+    .card-ani:hover { box-shadow: var(--shadow-hover); border-color: var(--border-hover); }
     
     .dropzone-ani {
-      border: 2px dashed var(--border); border-radius: var(--radius); padding: 30px 16px;
-      text-align: center; cursor: pointer; background: var(--bg); transition: border-color 0.2s;
+      border: 2px dashed var(--border); border-radius: var(--radius); padding: 32px 16px;
+      text-align: center; cursor: pointer; background: var(--bg); transition: all 0.25s ease;
     }
-    .dropzone-ani:hover { border-color: var(--primary); }
+    .dropzone-ani:hover, .dropzone-ani.dragover { border-color: var(--primary); background: rgba(37, 99, 235, 0.03); transform: translateY(-2px); }
+    
     .icon-wrap-ani {
       display: inline-flex; align-items: center; justify-content: center; width: 48px; height: 48px;
-      border-radius: 14px; background: var(--panel); border: 1px solid var(--border); color: var(--primary); margin-bottom: 10px;
+      border-radius: 14px; background: var(--panel); border: 1px solid var(--border); color: var(--primary); 
+      margin-bottom: 12px; box-shadow: var(--shadow);
     }
+    .dropzone-ani:hover .icon-wrap-ani { transform: scale(1.1) rotate(5deg); }
     
-    .file-chip-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+    .file-chip-wrap { display: flex; flex-wrap: wrap; gap: 8px; max-height: 90px; overflow-y: auto; }
     .file-chip-ani { 
       background: var(--bg); color: var(--text); font-size: 0.72rem; font-weight: 600;
       padding: 5px 12px; border: 1px solid var(--border); border-radius: 99px; display: inline-flex; align-items: center; gap: 6px; 
     }
+    .file-chip-ani svg { color: var(--primary); }
 
+    /* Layout Grid 4 Kolom Responsive */
     .form-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
     .form-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
     @media (max-width: 860px) { .form-grid-4 { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 520px) { .form-grid-4, .form-grid-2 { grid-template-columns: 1fr; } }
 
     .form-group { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
-    label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px; text-transform: uppercase; }
+    label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); display: flex; align-items: center; gap: 6px; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    label svg { color: var(--primary); flex-shrink: 0; }
     
     select, input[type="text"], input[type="number"] { 
       width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); 
-      color: var(--text); padding: 9px 11px; font-size: 0.83rem; outline: none; transition: border-color 0.2s;
+      color: var(--text); padding: 9px 11px; font-size: 0.83rem; outline: none; 
     }
-    select:focus, input[type="text"]:focus, input[type="number"]:focus { border-color: var(--primary); }
+    select:focus, input[type="text"]:focus, input[type="number"]:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); }
 
     .date-row { display: flex; gap: 6px; width: 100%; }
-    .date-row input[type="number"]#signDay { width: 54px; flex-shrink: 0; text-align: center; }
+    .date-row input[type="number"]#signDay { width: 54px; flex-shrink: 0; text-align: center; -moz-appearance: textfield; }
+    .date-row input[type="number"]#signDay::-webkit-outer-spin-button, .date-row input[type="number"]#signDay::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
     .date-row select#signMonth { flex: 1; min-width: 0; }
-    .date-row input[type="number"]#signYear { width: 68px; flex-shrink: 0; text-align: center; }
+    .date-row input[type="number"]#signYear { width: 68px; flex-shrink: 0; text-align: center; -moz-appearance: textfield; }
+    .date-row input[type="number"]#signYear::-webkit-outer-spin-button, .date-row input[type="number"]#signYear::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
-    .logo-box-ani {
-      display: flex; align-items: center; gap: 12px; background: var(--bg); padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm);
-    }
+    .logo-box-ani { display: flex; align-items: center; gap: 12px; background: var(--bg); padding: 10px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); }
     .logo-preview-thumb { width: 38px; height: 38px; border-radius: 8px; object-fit: contain; border: 1px solid var(--border); background: var(--panel); }
-    .btn-ani-small {
-      padding: 7px 14px; font-size: 0.78rem; font-weight: 600; color: var(--text); background: var(--panel); border: 1px solid var(--border);
-      border-radius: var(--radius-sm); cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
-    }
-    .btn-ani-small:hover { border-color: var(--primary); color: var(--primary); }
+    .btn-ani-small { padding: 7px 14px; font-size: 0.78rem; font-weight: 600; color: var(--text); background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius-sm); cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
+    .btn-ani-small:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
 
     .tw-btn-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-    .btn-tw-ani {
-      background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 9px 4px; border-radius: var(--radius-sm); 
-      font-size: 0.75rem; font-weight: 700; cursor: pointer; text-align: center; transition: all 0.2s;
-    }
-    .btn-tw-ani.active { background: var(--primary); border-color: var(--primary); color: #ffffff; }
+    .btn-tw-ani { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 9px 4px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 700; cursor: pointer; text-align: center; }
+    .btn-tw-ani:hover { border-color: var(--primary); color: var(--primary); transform: translateY(-1px); }
+    .btn-tw-ani.active { background: var(--primary); border-color: var(--primary); color: #ffffff; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3); }
     .btn-tw-ani span { display: block; font-size: 0.65rem; opacity: 0.8; font-weight: normal; margin-top: 2px; }
 
-    .stats-bar-ani { 
-      display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); 
-      padding: 12px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); 
-    }
+    .stats-bar-ani { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); padding: 12px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); }
     .stats-bar-ani strong { color: var(--primary); }
     
-    .btn-group { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; }
-    button.action-btn-ani {
-      flex: 1; min-width: 160px; padding: 13px 20px; border-radius: var(--radius); border: none;
-      font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s;
-    }
+    .btn-group { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 4px; }
+    button.action-btn-ani { flex: 1; min-width: 160px; padding: 13px 20px; border-radius: var(--radius); border: none; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; box-shadow: var(--shadow); }
     button.action-btn-ani.btn-primary { background: var(--primary); color: #ffffff; }
-    button.action-btn-ani.btn-primary:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-1px); }
+    button.action-btn-ani.btn-primary:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(37, 99, 235, 0.4); }
     button.action-btn-ani.btn-excel { background: var(--accent); color: #ffffff; }
-    button.action-btn-ani.btn-excel:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-1px); }
-    button:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    button.action-btn-ani.btn-excel:hover:not(:disabled) { background: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 10px 20px -5px rgba(22, 163, 74, 0.4); }
+    button:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
 
     .preview-wrap-ani { border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: auto; max-height: 240px; background: var(--bg); }
     table { width: 100%; border-collapse: collapse; font-size: 0.75rem; text-align: left; }
@@ -161,7 +180,32 @@
     th { background: var(--panel); color: var(--primary); position: sticky; top: 0; font-weight: 700; }
 
     footer { text-align: center; margin-top: 10px; padding: 16px 8px; font-size: 0.78rem; color: var(--text-muted); border-top: 1px solid var(--border); }
-    footer strong { color: var(--text); }
+    footer strong { color: var(--text); font-weight: 600; }
+
+    /* FLOATING TIP KANAN BAWAH */
+    .floating-tip-container {
+      position: fixed; right: 24px; bottom: 24px; z-index: 999; display: flex; flex-direction: column; align-items: flex-end;
+    }
+    .floating-tip-popover-ani {
+      visibility: hidden; opacity: 0; width: 270px; background: var(--panel); color: var(--text); padding: 14px 16px;
+      border: 1px solid var(--border); border-radius: var(--radius); font-size: 0.78rem; line-height: 1.45; box-shadow: var(--shadow);
+      margin-bottom: 12px; transform: translateY(8px); transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1); pointer-events: none;
+    }
+    .floating-tip-popover-ani strong { color: var(--tip); }
+    .floating-tip-container:hover .floating-tip-popover-ani { visibility: visible; opacity: 1; transform: translateY(0); }
+    
+    .floating-tip-btn-ani {
+      display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; background: var(--tip); color: #ffffff;
+      text-decoration: none; font-size: 0.8rem; font-weight: 700; border-radius: 99px; box-shadow: 0 8px 20px -4px rgba(217, 119, 6, 0.5); transition: all 0.2s ease;
+    }
+    .floating-tip-btn-ani:hover { transform: translateY(-3px) scale(1.03); box-shadow: 0 12px 25px -4px rgba(217, 119, 6, 0.7); }
+    
+    .floating-tip-dot { width: 8px; height: 8px; background: #ffffff; border-radius: 50%; animation: pulseDot 2s infinite; }
+    @keyframes pulseDot {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+      70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(255, 255, 255, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+    }
     
     @keyframes spin { 100% { transform: rotate(360deg); } }
     .icon-spin { animation: spin 1.2s linear infinite; }
@@ -169,20 +213,20 @@
 </head>
 <body oncontextmenu="return false;">
 
-<!-- FLOATING MENU KANAN ATAS DENGAN INLINE SVG -->
+<!-- FLOATING MENU KANAN ATAS (VERTIKAL) -->
 <div class="floating-top-right">
-  <button class="floating-btn-v active" id="btnThemeAuto" data-tooltip="Mode Auto (Waktu)" onclick="setAppTheme('auto')">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
+  <button class="floating-btn-v active" id="btnThemeAuto" data-tooltip="Mode Auto" onclick="setAppTheme('auto')">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>
   </button>
-  <button class="floating-btn-v" id="btnThemeLight" data-tooltip="Mode Siang (Terang)" onclick="setAppTheme('light')">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+  <button class="floating-btn-v" id="btnThemeLight" data-tooltip="Mode Siang" onclick="setAppTheme('light')">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
   </button>
-  <button class="floating-btn-v" id="btnThemeDark" data-tooltip="Mode Malam (Gelap)" onclick="setAppTheme('dark')">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+  <button class="floating-btn-v" id="btnThemeDark" data-tooltip="Mode Malam" onclick="setAppTheme('dark')">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
   </button>
   <div class="floating-divider-v"></div>
   <button class="floating-btn-v active" id="btnZoneAuto" data-tooltip="Auto Zona" onclick="setIndonesiaZone('AUTO')">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
   </button>
   <button class="floating-btn-v" id="btnZoneWIB" data-tooltip="WIB" onclick="setIndonesiaZone('WIB')">WIB</button>
   <button class="floating-btn-v" id="btnZoneWITA" data-tooltip="WITA" onclick="setIndonesiaZone('WITA')">WTA</button>
@@ -198,9 +242,9 @@
   <div class="card-ani">
     <div class="dropzone-ani" id="dz" onclick="document.getElementById('csvFile').click()">
       <div class="icon-wrap-ani">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
       </div>
-      <p id="dzText" style="font-weight:700; font-size:0.9rem;">Klik atau seret berkas <strong>.CSV SIKS</strong> ke sini</p>
+      <p id="dzText" style="font-weight:700; font-size:0.95rem;">Klik atau seret berkas <strong>.CSV SIKS</strong> ke sini</p>
       <span style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; display:block;">Mendukung multi-file batch otomatis pecah sekolah</span>
       <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" multiple style="display:none;" />
     </div>
@@ -208,22 +252,22 @@
     <div class="file-chip-wrap" id="fileListWrap" style="display:none;"></div>
 
     <div class="stats-bar-ani" id="statsBar" style="display:none;">
-      <span>Berkas: <strong id="statFileName">0 Berkas</strong></span>
-      <span>Sekolah: <strong id="statSchools">0</strong></span>
-      <span>Siswa: <strong id="statRows">0</strong></span>
+      <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg> Berkas: <strong id="statFileName">0 Berkas</strong></span>
+      <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 9L12 5 2 9l10 4 10-4v6"/><path d="M6 10.6V16a6 3 0 0 0 12 0v-5.4"/></svg> Sekolah: <strong id="statSchools">0</strong></span>
+      <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 7a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/><path d="M3 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/><path d="M21 21v-2a4 4 0 0 0-3-3.85"/></svg> Siswa Tampil: <strong id="statRows">0</strong></span>
     </div>
 
-    <!-- BARIS 1: 4 KOLOM -->
+    <!-- FORM GRID RAPI -->
     <div class="form-grid-4">
       <div class="form-group">
-        <label>Filter Pendamping</label>
+        <label><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M10 10a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="18" cy="18" r="3"/><line x1="20.2" y1="20.2" x2="22" y2="22"/></svg> Filter Pendamping</label>
         <select id="filterPendamping" onchange="applyPendampingFilter()">
           <option value="ALL">-- Semua Pendamping --</option>
         </select>
       </div>
 
       <div class="form-group">
-        <label>Ukuran Kertas</label>
+        <label><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg> Ukuran Kertas</label>
         <select id="paperSize">
           <option value="f4">F4 / Folio (330 × 210 mm) - Standar</option>
           <option value="a4">A4 (297 × 210 mm)</option>
@@ -231,7 +275,7 @@
       </div>
 
       <div class="form-group">
-        <label>Format Periode</label>
+        <label><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Format Periode</label>
         <select id="periodType" onchange="togglePeriodType()">
           <option value="triwulan" selected>Triwulan (3 Bulan)</option>
           <option value="bulanan">Bulanan (1 Bulan)</option>
@@ -239,20 +283,20 @@
       </div>
 
       <div class="form-group">
-        <label>Nama Petugas</label>
+        <label><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> Nama Petugas</label>
         <input type="text" id="signerName" value="Andriadi, S.Kom" placeholder="Nama Petugas" />
       </div>
     </div>
 
-    <!-- BARIS 2: 4 KOLOM -->
+    <!-- BARIS 2 -->
     <div class="form-grid-4">
       <div class="form-group">
-        <label>NIP Petugas</label>
+        <label><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M8 10h5"/><path d="M8 14h8"/><path d="M17 10h.01"/></svg> NIP Petugas</label>
         <input type="text" id="signerNip" value="198208042025210058" placeholder="NIP Petugas" />
       </div>
 
       <div class="form-group">
-        <label>Tanggal TTD</label>
+        <label><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Tanggal TTD Dokumen</label>
         <div class="date-row">
           <input type="number" id="signDay" min="1" max="31" placeholder="Tgl" />
           <select id="signMonth">
@@ -274,44 +318,48 @@
       </div>
 
       <div class="form-group">
-        <label>Kecamatan</label>
+        <label><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 21h18"/><path d="M9 8h1"/><path d="M9 12h1"/><path d="M9 16h1"/><path d="M14 8h1"/><path d="M14 12h1"/><path d="M14 16h1"/><path d="M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16"/></svg> Kecamatan</label>
         <input type="text" id="signerKecamatan" value="Bukit Santuai" placeholder="Kecamatan" />
       </div>
 
       <div class="form-group">
-        <label>Desa / Kelurahan</label>
+        <label><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Desa / Kelurahan</label>
         <input type="text" id="signerDesa" value="Lunuk Bagantung" placeholder="Desa" />
       </div>
     </div>
 
-    <!-- BARIS 3: 2 KOLOM KEPALA SEKOLAH -->
+    <!-- BARIS 3: KEPALA SEKOLAH -->
     <div class="form-grid-2">
       <div class="form-group">
-        <label>Nama Kepala Sekolah</label>
+        <label><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/><path d="M16 11l2 2 4-4"/></svg> Nama Kepala Sekolah</label>
         <input type="text" id="headmasterName" placeholder="Nama Kepala Sekolah (Opsional)" />
       </div>
 
       <div class="form-group">
-        <label>NIP Kepala Sekolah</label>
+        <label><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M8 10h5"/><path d="M8 14h8"/><path d="M17 10h.01"/></svg> NIP Kepala Sekolah</label>
         <input type="text" id="headmasterNip" placeholder="NIP Kepala Sekolah (Opsional)" />
       </div>
     </div>
 
-    <!-- KUSTOM LOGO -->
+    <!-- PANEL LOGO -->
     <div class="form-group">
-      <label>Kustom Logo (Kop &amp; Watermark)</label>
+      <label><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg> Kustom Logo (Kop &amp; Watermark)</label>
       <div class="logo-box-ani">
         <img id="logoThumb" class="logo-preview-thumb" src="" alt="Logo" style="display:none;" />
         <span id="logoStatus" style="font-size: 0.8rem; color: var(--text-muted); flex: 1;">Belum ada logo kustom</span>
-        <button type="button" class="btn-ani-small" onclick="document.getElementById('logoInput').click()">Pilih Logo</button>
-        <button type="button" class="btn-ani-small" id="btnResetLogo" onclick="resetLogo()" style="display:none; color:#ef4444;">Reset</button>
+        <button type="button" class="btn-ani-small" onclick="document.getElementById('logoInput').click()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg> Pilih Logo
+        </button>
+        <button type="button" class="btn-ani-small" id="btnResetLogo" onclick="resetLogo()" style="display:none; color:#ef4444;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg> Reset
+        </button>
         <input type="file" id="logoInput" accept="image/*" style="display:none;" onchange="handleLogoUpload(event)" />
       </div>
     </div>
 
-    <!-- PILIHAN TRIWULAN -->
+    <!-- OPSI TRIWULAN -->
     <div class="form-group" id="twContainer">
-      <label>Pilihan Triwulan</label>
+      <label><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Pilihan Triwulan</label>
       <div class="tw-btn-group">
         <button type="button" class="btn-tw-ani" data-tw="TW1" onclick="selectTw('TW1')">TW 1<span>Jan–Mar</span></button>
         <button type="button" class="btn-tw-ani" data-tw="TW2" onclick="selectTw('TW2')">TW 2<span>Apr–Jun</span></button>
@@ -320,9 +368,9 @@
       </div>
     </div>
 
-    <!-- PILIHAN BULANAN -->
+    <!-- OPSI BULANAN -->
     <div class="form-group" id="monthContainer" style="display: none;">
-      <label>Pilih Bulan Laporan</label>
+      <label><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> Pilih Bulan Laporan</label>
       <select id="singleMonth">
         <option value="JANUARI">Januari</option>
         <option value="FEBRUARI">Februari</option>
@@ -343,12 +391,15 @@
       <table id="previewTable"></table>
     </div>
 
+    <!-- TOMBOL AKSI UTAMA -->
     <div class="btn-group">
       <button class="action-btn-ani btn-primary" id="btnPdf" disabled onclick="generatePDF()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Generate PDF (Split/Zip)
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15h2v4H9zM15 15h-2v4h2"/></svg>
+        Generate PDF (Auto Split &amp; Zip)
       </button>
       <button class="action-btn-ani btn-excel" id="btnExcel" disabled onclick="exportExcel()">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9l6 6M15 9l-6 6"/></svg> Ekspor Excel
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9l6 6"/><path d="M15 9l-6 6"/></svg>
+        Ekspor Excel (Sesuai PDF)
       </button>
     </div>
   </div>
@@ -359,7 +410,28 @@
   </footer>
 </div>
 
+<!-- FLOATING TIP TRAKTEER KANAN BAWAH -->
+<div class="floating-tip-container">
+  <div class="floating-tip-popover-ani">
+    <strong>Pekerjaan selesai dalam hitungan detik?</strong><br>
+    Jika alat ini sangat membantu dan menghemat waktu berharga Anda, dukung pengembang dengan mentraktir secangkir kopi agar aplikasi ini terus aktif dan bermanfaat untuk kita semua ☕
+  </div>
+  <a href="https://trakteer.id/bukit_santuai_korcam/tip" target="_blank" rel="noopener noreferrer" class="floating-tip-btn-ani" title="Dukung Pengembang">
+    <div class="floating-tip-dot"></div>
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+    <span>Traktir Kopi</span>
+  </a>
+</div>
+
 <script>
+// Mencegah klik kanan dan F12
+document.addEventListener('keydown', function(e) {
+  if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || (e.ctrlKey && e.keyCode === 85)) {
+    e.preventDefault(); return false;
+  }
+});
+
+// Inisialisasi Tanggal
 (function initDefaultDate() {
   const now = new Date();
   const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
@@ -373,6 +445,7 @@
   if (yearInp) yearInp.value = now.getFullYear();
 })();
 
+// Pengaturan Tema & Zona Waktu
 let currentThemeMode = localStorage.getItem('theme_preference') || 'auto';
 let currentZoneMode = localStorage.getItem('zone_preference') || 'AUTO';
 
@@ -421,7 +494,9 @@ function setIndonesiaZone(zone) {
 }
 
 applyTheme();
+setInterval(() => { if (currentThemeMode === 'auto') applyTheme(); }, 60000);
 
+// Variabel Global
 let masterRows = [];
 let allRows = [];
 let groupedSchools = {};
@@ -434,7 +509,7 @@ window.addEventListener('DOMContentLoaded', () => {
   if (savedLogo) loadLogoImage(savedLogo);
 });
 
-window.handleLogoUpload = function(e) {
+function handleLogoUpload(e) {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
@@ -444,7 +519,7 @@ window.handleLogoUpload = function(e) {
     loadLogoImage(base64);
   };
   reader.readAsDataURL(file);
-};
+}
 
 function loadLogoImage(base64) {
   const img = new Image();
@@ -464,14 +539,14 @@ function loadLogoImage(base64) {
   img.src = base64;
 }
 
-window.resetLogo = function() {
+function resetLogo() {
   localStorage.removeItem('custom_kemensos_logo');
   customLogoData = null;
   document.getElementById('logoThumb').style.display = 'none';
   document.getElementById('logoStatus').innerText = 'Belum ada logo kustom';
   document.getElementById('btnResetLogo').style.display = 'none';
   document.getElementById('logoInput').value = '';
-};
+}
 
 const TW_PRESETS = {
   TW1: ['JANUARI', 'FEBRUARI', 'MARET'],
@@ -481,18 +556,18 @@ const TW_PRESETS = {
 };
 let selectedTw = 'TW4';
 
-window.selectTw = function(twKey) {
+function selectTw(twKey) {
   selectedTw = twKey;
   document.querySelectorAll('.btn-tw-ani').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-tw') === twKey);
   });
-};
+}
 
-window.togglePeriodType = function() {
+function togglePeriodType() {
   const type = document.getElementById('periodType').value;
   document.getElementById('twContainer').style.display = type === 'triwulan' ? 'flex' : 'none';
   document.getElementById('monthContainer').style.display = type === 'triwulan' ? 'none' : 'flex';
-};
+}
 
 const fileInput = document.getElementById('csvFile');
 const dz = document.getElementById('dz');
@@ -520,7 +595,7 @@ function handleMultipleFiles(files) {
   }
 
   dzText.innerText = 'Memproses ' + uploadedFiles.length + ' berkas CSV...';
-  fileListWrap.innerHTML = uploadedFiles.map(f => '<div class="file-chip-ani"><span>' + f.name + '</span></div>').join('');
+  fileListWrap.innerHTML = uploadedFiles.map(f => '<div class="file-chip-ani"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/></svg><span>' + f.name + '</span></div>').join('');
   fileListWrap.style.display = 'flex';
 
   masterRows = [];
@@ -555,7 +630,7 @@ function handleMultipleFiles(files) {
   });
 }
 
-window.applyPendampingFilter = function() {
+function applyPendampingFilter() {
   const selected = filterSelect.value;
   if (selected === 'ALL') {
     allRows = [...masterRows];
@@ -577,7 +652,7 @@ window.applyPendampingFilter = function() {
   statsBar.style.display = 'flex';
 
   renderPreview();
-};
+}
 
 function cleanStr(s) {
   return (s || '').toString().trim().replace(/^["']|["']$/g, '');
@@ -726,7 +801,7 @@ function drawDynamicWatermark(doc) {
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-window.generatePDF = async function() {
+async function generatePDF() {
   const paper = document.getElementById('paperSize').value;
   const periodType = document.getElementById('periodType').value;
   const signer = document.getElementById('signerName').value.trim() || 'Andriadi, S.Kom';
@@ -747,14 +822,14 @@ window.generatePDF = async function() {
   const schoolKeys = Object.keys(groupedSchools);
 
   if (schoolKeys.length === 1) {
-    btnPdf.innerHTML = '<svg class="icon-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg> Menyimpan PDF...';
+    btnPdf.innerHTML = '<svg class="icon-spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg> Menyimpan PDF...';
     btnPdf.disabled = true;
     
     await sleep(100);
     const doc = buildOfficialDoc(schoolKeys[0], groupedSchools[schoolKeys[0]], pageSize, months, signer, nip, formattedDate, headName, headNip);
     doc.save('Form_Verifikasi_' + schoolKeys[0].replace(/[^a-zA-Z0-9]/g, '_') + '.pdf');
     
-    btnPdf.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Generate PDF (Auto Split &amp; Zip)';
+    btnPdf.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15h2v4H9zM15 15h-2v4h2"/></svg> Generate PDF (Auto Split &amp; Zip)';
     btnPdf.disabled = false;
   } else {
     btnPdf.disabled = true;
@@ -762,14 +837,14 @@ window.generatePDF = async function() {
 
     for (let i = 0; i < schoolKeys.length; i++) {
       const sch = schoolKeys[i];
-      btnPdf.innerHTML = '<svg class="icon-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg> PDF ' + (i + 1) + ' / ' + schoolKeys.length;
+      btnPdf.innerHTML = '<svg class="icon-spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg> PDF ' + (i + 1) + ' / ' + schoolKeys.length;
       await sleep(50);
       
       const doc = buildOfficialDoc(sch, groupedSchools[sch], pageSize, months, signer, nip, formattedDate, headName, headNip);
       zip.file('Form_Verifikasi_' + sch.replace(/[^a-zA-Z0-9]/g, '_') + '.pdf', doc.output('blob'));
     }
 
-    btnPdf.innerHTML = '<svg class="icon-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Membungkus ZIP...';
+    btnPdf.innerHTML = '<svg class="icon-spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg> Membungkus ZIP...';
     await sleep(100);
 
     const zipBlob = await zip.generateAsync({ type: 'blob' });
@@ -778,10 +853,10 @@ window.generatePDF = async function() {
     a.download = 'Batch_Verifikasi_' + Date.now() + '.zip';
     a.click();
 
-    btnPdf.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Generate PDF (Auto Split &amp; Zip)';
+    btnPdf.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15h2v4H9zM15 15h-2v4h2"/></svg> Generate PDF (Auto Split &amp; Zip)';
     btnPdf.disabled = false;
   }
-};
+}
 
 function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, formattedDate, headName, headNip) {
   const { jsPDF } = window.jspdf;
@@ -938,8 +1013,8 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, forma
   return doc;
 }
 
-window.exportExcel = async function() {
-  btnExcel.innerHTML = '<svg class="icon-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg> Memproses Excel...';
+async function exportExcel() {
+  btnExcel.innerHTML = '<svg class="icon-spin" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg> Memproses Excel...';
   btnExcel.disabled = true;
   await sleep(100);
 
@@ -1070,7 +1145,7 @@ window.exportExcel = async function() {
 
   XLSX.writeFile(wb, 'Batch_Verifikasi_' + Date.now() + '.xlsx');
 
-  btnExcel.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9l6 6M15 9l-6 6"/></svg> Ekspor Excel (Sesuai PDF)';
+  btnExcel.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9l6 6"/><path d="M15 9l-6 6"/></svg> Ekspor Excel (Sesuai PDF)';
   btnExcel.disabled = false;
 }
 </script>
