@@ -7,17 +7,17 @@
   
   <!-- FAVICON & WEB ICON EKSKLUSIF (INLINE SVG) -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23090d16'/%3E%3Crect x='1' y='1' width='62' height='62' rx='15' fill='none' stroke='%233b82f6' stroke-width='2' stroke-opacity='0.4'/%3E%3Cpath d='M16 14h22l12 12v24a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z' fill='%231e293b' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M38 14v12h12' fill='none' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M20 34h14M20 42h8' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='42' cy='42' r='10' fill='%2316a34a'/%3E%3Cpath d='M38 42l3 3 6-6' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
-  <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23090d16'/%3E%3Crect x='1' y='1' width='62' height='62' rx='15' fill='none' stroke='%233b82f6' stroke-width='2' stroke-opacity='0.4'/%3E%3Cpath d='M16 14h22l12 12v24a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z' fill='%231e293b' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M38 14v12h12' fill='none' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M20 34h14M20 42h8' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='42' cy='42' r='10' fill='%2316a34a'/%3E%3Cpath d='M38 42l3 3 6-6' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <meta name="theme-color" content="#090d16" />
 
-  <!-- Pustaka Dokumen & Tabler Icons -->
+  <!-- Pustaka Dokumen & Tabler Icons (Stable CDN) -->
   <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/2.46.0/tabler-icons.min.css" />
 
   <style>
+    /* Mode Terang Micro-Animated */
     :root {
       --bg: #f8fafc;
       --panel: #ffffff;
@@ -31,10 +31,12 @@
       --accent-hover: #15803d;
       --tip: #d97706;
       --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.05);
+      --shadow-hover: 0 20px 30px -10px rgba(37, 99, 235, 0.15);
       --radius: 12px;
       --radius-sm: 8px;
     }
 
+    /* Mode Gelap Micro-Animated */
     body.dark-mode {
       --bg: #090d16;
       --panel: #111827;
@@ -48,6 +50,7 @@
       --accent-hover: #4ade80;
       --tip: #fbbf24;
       --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+      --shadow-hover: 0 20px 30px -10px rgba(59, 130, 246, 0.25);
     }
 
     * { 
@@ -55,6 +58,7 @@
       margin: 0; 
       padding: 0; 
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; 
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
     }
 
     body { 
@@ -64,6 +68,7 @@
       display: flex; 
       justify-content: center; 
     }
+    
     .container { 
       width: 100%; 
       max-width: 980px; 
@@ -72,6 +77,7 @@
       gap: 20px; 
     }
 
+    /* FLOATING ACTION BAR KANAN ATAS */
     .floating-top-right {
       position: fixed;
       top: 20px;
@@ -80,16 +86,16 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       background: var(--panel);
       padding: 8px 6px;
       border-radius: 99px;
       border: 1px solid var(--border);
-      box-shadow: var(--shadow);
+      box-shadow: 0 10px 25px -5px rgba(0,0,0,0.15), 0 8px 10px -6px rgba(0,0,0,0.1);
     }
     .floating-btn-v {
-      width: 34px;
-      height: 34px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
       border: 1px solid transparent;
       background: transparent;
@@ -100,31 +106,61 @@
       justify-content: center;
       font-size: 0.75rem;
       font-weight: 700;
-      transition: all 0.2s ease;
+      position: relative;
+      transition: all 0.2s;
     }
     .floating-btn-v:hover {
       color: var(--text);
       background: var(--bg);
+      transform: scale(1.05);
     }
     .floating-btn-v.active {
       background: var(--primary);
       color: #ffffff;
+      box-shadow: 0 4px 10px rgba(37, 99, 235, 0.35);
     }
+    .floating-btn-v i { font-size: 1.3rem; }
     .floating-divider-v {
-      width: 20px;
+      width: 24px;
       height: 1px;
       background: var(--border);
-      margin: 2px 0;
+      margin: 4px 0;
+    }
+    
+    /* Tooltip Floating Menu */
+    .floating-btn-v::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      right: 52px;
+      background: var(--panel);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateX(4px);
+      transition: all 0.2s ease;
+      box-shadow: var(--shadow);
+      font-weight: 600;
+    }
+    .floating-btn-v:hover::after {
+      opacity: 1;
+      transform: translateX(0);
     }
 
+    header { text-align: left; }
     header h1 { 
-      font-size: 1.6rem; 
+      font-size: 1.7rem; 
       font-weight: 800; 
+      color: var(--text); 
       letter-spacing: -0.5px; 
     }
     header p { 
       color: var(--text-muted); 
-      font-size: 0.85rem; 
+      font-size: 0.9rem; 
       margin-top: 4px; 
     }
     
@@ -132,85 +168,95 @@
       background: var(--panel); 
       border: 1px solid var(--border);
       border-radius: var(--radius); 
-      padding: 24px; 
+      padding: 28px; 
       box-shadow: var(--shadow);
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 22px;
+    }
+    .card-ani:hover {
+      box-shadow: var(--shadow-hover);
+      border-color: var(--border-hover);
     }
     
     .dropzone-ani {
       border: 2px dashed var(--border);
       border-radius: var(--radius);
-      padding: 30px 16px;
+      padding: 36px 16px;
       text-align: center;
       cursor: pointer;
       background: var(--bg);
-      transition: all 0.2s ease;
     }
-    .dropzone-ani:hover {
+    .dropzone-ani:hover, .dropzone-ani.dragover {
       border-color: var(--primary);
+      background: rgba(37, 99, 235, 0.03);
     }
     .icon-wrap-ani {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      width: 48px;
-      height: 48px;
+      width: 52px;
+      height: 52px;
       border-radius: 14px;
       background: var(--panel);
       border: 1px solid var(--border);
       color: var(--primary);
-      margin-bottom: 10px;
+      margin-bottom: 12px;
+      box-shadow: var(--shadow);
     }
     
-    .file-chip-wrap { display: flex; flex-wrap: wrap; gap: 8px; }
+    .file-chip-wrap { display: flex; flex-wrap: wrap; gap: 8px; max-height: 100px; overflow-y: auto; }
     .file-chip-ani { 
       background: var(--bg); 
       color: var(--text); 
-      font-size: 0.72rem; 
+      font-size: 0.75rem; 
       font-weight: 600;
-      padding: 5px 12px; 
+      padding: 6px 14px; 
       border: 1px solid var(--border);
       border-radius: 99px; 
       display: inline-flex; 
       align-items: center; 
       gap: 6px; 
     }
+    .file-chip-ani i { color: var(--primary); font-size: 1rem; }
 
+    /* GRID SISTEM RAPI */
     .form-grid-4 {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
+      gap: 16px;
     }
     .form-grid-2 {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
+      gap: 16px;
     }
-    @media (max-width: 860px) {
+    @media (max-width: 900px) {
       .form-grid-4 { grid-template-columns: repeat(2, 1fr); }
     }
-    @media (max-width: 520px) {
+    @media (max-width: 540px) {
       .form-grid-4, .form-grid-2 { grid-template-columns: 1fr; }
     }
 
     .form-group { 
       display: flex; 
       flex-direction: column; 
-      gap: 6px; 
+      gap: 8px; 
       min-width: 0; 
     }
     label { 
-      font-size: 0.75rem; 
+      font-size: 0.78rem; 
       font-weight: 700; 
       color: var(--text-muted); 
       display: flex; 
       align-items: center; 
       gap: 6px; 
       text-transform: uppercase; 
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
-    label i { font-size: 0.95rem; color: var(--primary); }
+    label i { font-size: 1.05rem; color: var(--primary); flex-shrink: 0; }
     
     select, input[type="text"], input[type="number"] { 
       width: 100%;
@@ -218,22 +264,23 @@
       border: 1px solid var(--border); 
       border-radius: var(--radius-sm); 
       color: var(--text); 
-      padding: 9px 11px; 
-      font-size: 0.83rem; 
+      padding: 10px 12px; 
+      font-size: 0.88rem; 
       outline: none; 
-      transition: all 0.2s ease;
     }
     select:focus, input[type="text"]:focus, input[type="number"]:focus { 
       border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
     }
 
+    /* Penyesuaian Baris Tanggal */
     .date-row {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       width: 100%;
     }
     .date-row input[type="number"]#signDay {
-      width: 54px;
+      width: 60px;
       flex-shrink: 0;
       text-align: center;
     }
@@ -242,7 +289,7 @@
       min-width: 0;
     }
     .date-row input[type="number"]#signYear {
-      width: 68px;
+      width: 75px;
       flex-shrink: 0;
       text-align: center;
     }
@@ -257,16 +304,16 @@
       border-radius: var(--radius-sm);
     }
     .logo-preview-thumb {
-      width: 38px;
-      height: 38px;
+      width: 40px;
+      height: 40px;
       border-radius: 8px;
       object-fit: contain;
       border: 1px solid var(--border);
       background: var(--panel);
     }
     .btn-ani-small {
-      padding: 7px 14px;
-      font-size: 0.78rem;
+      padding: 8px 14px;
+      font-size: 0.8rem;
       font-weight: 600;
       color: var(--text);
       background: var(--panel);
@@ -276,68 +323,84 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      transition: all 0.2s ease;
+    }
+    .btn-ani-small:hover {
+      border-color: var(--primary);
+      color: var(--primary);
     }
 
-    .tw-btn-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .tw-btn-group { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
     .btn-tw-ani {
       background: var(--bg); 
       border: 1px solid var(--border); 
       color: var(--text);
-      padding: 9px 4px; 
+      padding: 10px 4px; 
       border-radius: var(--radius-sm); 
-      font-size: 0.75rem; 
+      font-size: 0.8rem; 
       font-weight: 700;
       cursor: pointer; 
       text-align: center; 
-      transition: all 0.2s ease;
     }
     .btn-tw-ani.active {
       background: var(--primary);
       border-color: var(--primary);
       color: #ffffff;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
     }
-    .btn-tw-ani span { display: block; font-size: 0.65rem; opacity: 0.8; font-weight: normal; margin-top: 2px; }
+    .btn-tw-ani span { display: block; font-size: 0.7rem; opacity: 0.8; font-weight: normal; margin-top: 2px; }
 
     .stats-bar-ani { 
       display: flex; 
       justify-content: space-between; 
-      font-size: 0.8rem; 
+      font-size: 0.85rem; 
       color: var(--text-muted); 
-      padding: 12px 16px; 
+      padding: 14px 18px; 
       background: var(--bg); 
       border: 1px solid var(--border);
       border-radius: var(--radius-sm); 
     }
     .stats-bar-ani strong { color: var(--primary); }
     
-    .btn-group { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 6px; }
+    .btn-group { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 6px; }
     button.action-btn-ani {
       flex: 1; 
       min-width: 160px; 
-      padding: 13px 20px; 
+      padding: 14px 20px; 
       border-radius: var(--radius); 
       border: none;
       font-weight: 700; 
-      font-size: 0.85rem; 
+      font-size: 0.9rem; 
       cursor: pointer; 
       display: inline-flex; 
       align-items: center; 
       justify-content: center; 
-      gap: 8px;
-      transition: all 0.2s ease;
+      gap: 10px;
     }
     button.action-btn-ani.btn-primary { 
       background: var(--primary); 
       color: #ffffff; 
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+    button.action-btn-ani.btn-primary:hover:not(:disabled) { 
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.4);
     }
     button.action-btn-ani.btn-excel { 
       background: var(--accent); 
       color: #ffffff; 
+      box-shadow: 0 4px 12px rgba(22, 163, 74, 0.3);
+    }
+    button.action-btn-ani.btn-excel:hover:not(:disabled) { 
+      background: var(--accent-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(22, 163, 74, 0.4);
     }
     button:disabled { 
       opacity: 0.4; 
       cursor: not-allowed; 
+      transform: none !important;
+      box-shadow: none !important;
     }
 
     .preview-wrap-ani { 
@@ -355,13 +418,62 @@
       text-align: center;
       margin-top: 10px;
       padding: 16px 8px;
-      font-size: 0.78rem;
+      font-size: 0.8rem;
       color: var(--text-muted);
       border-top: 1px solid var(--border);
     }
     footer strong { color: var(--text); }
+
+    /* FLOATING TIP CONTAINER (BAWAH KANAN) */
+    .floating-tip-container {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 999;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+    .floating-tip-popover-ani {
+      visibility: hidden;
+      opacity: 0;
+      width: 270px;
+      background: var(--panel);
+      color: var(--text);
+      padding: 14px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 0.8rem;
+      line-height: 1.45;
+      box-shadow: var(--shadow);
+      margin-bottom: 12px;
+      transform: translateY(8px);
+      pointer-events: none;
+    }
+    .floating-tip-popover-ani strong { color: var(--tip); }
+    .floating-tip-container:hover .floating-tip-popover-ani {
+      visibility: visible;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .floating-tip-btn-ani {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 18px;
+      background: var(--tip);
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 700;
+      border-radius: 99px;
+      box-shadow: 0 8px 20px -4px rgba(217, 119, 6, 0.5);
+    }
+    .floating-tip-btn-ani:hover {
+      transform: translateY(-3px) scale(1.03);
+      box-shadow: 0 12px 25px -4px rgba(217, 119, 6, 0.7);
+    }
     
-    /* Animasi Loading Spin pada Tombol */
     @keyframes spin { 100% { transform: rotate(360deg); } }
     .ti-loader { animation: spin 1.2s linear infinite; display: inline-block; }
   </style>
@@ -370,22 +482,24 @@
 
 <!-- FLOATING MENU KANAN ATAS -->
 <div class="floating-top-right">
-  <button class="floating-btn-v active" id="btnThemeAuto" title="Mode Auto" onclick="setAppTheme('auto')">
+  <button class="floating-btn-v active" id="btnThemeAuto" data-tooltip="Mode Auto (Waktu)" onclick="setAppTheme('auto')">
     <i class="ti ti-clock-play"></i>
   </button>
-  <button class="floating-btn-v" id="btnThemeLight" title="Mode Siang" onclick="setAppTheme('light')">
+  <button class="floating-btn-v" id="btnThemeLight" data-tooltip="Mode Siang (Terang)" onclick="setAppTheme('light')">
     <i class="ti ti-sun"></i>
   </button>
-  <button class="floating-btn-v" id="btnThemeDark" title="Mode Malam" onclick="setAppTheme('dark')">
+  <button class="floating-btn-v" id="btnThemeDark" data-tooltip="Mode Malam (Gelap)" onclick="setAppTheme('dark')">
     <i class="ti ti-moon"></i>
   </button>
+  
   <div class="floating-divider-v"></div>
-  <button class="floating-btn-v active" id="btnZoneAuto" title="Auto Zona" onclick="setIndonesiaZone('AUTO')">
+  
+  <button class="floating-btn-v active" id="btnZoneAuto" data-tooltip="Zona: Auto Device" onclick="setIndonesiaZone('AUTO')">
     <i class="ti ti-map-pin"></i>
   </button>
-  <button class="floating-btn-v" id="btnZoneWIB" title="WIB" onclick="setIndonesiaZone('WIB')">WIB</button>
-  <button class="floating-btn-v" id="btnZoneWITA" title="WITA" onclick="setIndonesiaZone('WITA')">WTA</button>
-  <button class="floating-btn-v" id="btnZoneWIT" title="WIT" onclick="setIndonesiaZone('WIT')">WIT</button>
+  <button class="floating-btn-v" id="btnZoneWIB" data-tooltip="WIB (UTC+7)" onclick="setIndonesiaZone('WIB')">WIB</button>
+  <button class="floating-btn-v" id="btnZoneWITA" data-tooltip="WITA (UTC+8)" onclick="setIndonesiaZone('WITA')">WTA</button>
+  <button class="floating-btn-v" id="btnZoneWIT" data-tooltip="WIT (UTC+9)" onclick="setIndonesiaZone('WIT')">WIT</button>
 </div>
 
 <div class="container">
@@ -397,10 +511,10 @@
   <div class="card-ani">
     <div class="dropzone-ani" id="dz" onclick="document.getElementById('csvFile').click()">
       <div class="icon-wrap-ani">
-        <i class="ti ti-cloud-upload" style="font-size: 24px;"></i>
+        <i class="ti ti-cloud-upload" style="font-size: 28px;"></i>
       </div>
-      <p id="dzText" style="font-weight:700; font-size:0.9rem;">Klik atau seret berkas <strong>.CSV SIKS</strong> ke sini</p>
-      <span style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; display:block;">Mendukung multi-file batch otomatis pecah sekolah</span>
+      <p id="dzText" style="font-weight:700; font-size:0.95rem;">Klik atau seret berkas <strong>.CSV SIKS</strong> ke sini</p>
+      <span style="font-size:0.8rem; color:var(--text-muted); margin-top:6px; display:block;">Mendukung multi-file batch otomatis pecah sekolah</span>
       <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" multiple style="display:none;" />
     </div>
 
@@ -412,6 +526,7 @@
       <span><i class="ti ti-users"></i> Siswa: <strong id="statRows">0</strong></span>
     </div>
 
+    <!-- BARIS 1: 4 KOLOM -->
     <div class="form-grid-4">
       <div class="form-group">
         <label><i class="ti ti-user-search"></i> Filter Pendamping</label>
@@ -442,6 +557,7 @@
       </div>
     </div>
 
+    <!-- BARIS 2: 4 KOLOM -->
     <div class="form-grid-4">
       <div class="form-group">
         <label><i class="ti ti-id"></i> NIP Petugas</label>
@@ -481,6 +597,7 @@
       </div>
     </div>
 
+    <!-- BARIS 3: 2 KOLOM KEPALA SEKOLAH -->
     <div class="form-grid-2">
       <div class="form-group">
         <label><i class="ti ti-user-check"></i> Nama Kepala Sekolah</label>
@@ -493,17 +610,19 @@
       </div>
     </div>
 
+    <!-- KUSTOM LOGO -->
     <div class="form-group">
       <label><i class="ti ti-photo"></i> Kustom Logo (Kop &amp; Watermark)</label>
       <div class="logo-box-ani">
         <img id="logoThumb" class="logo-preview-thumb" src="" alt="Logo" style="display:none;" />
-        <span id="logoStatus" style="font-size: 0.8rem; color: var(--text-muted); flex: 1;">Belum ada logo kustom</span>
+        <span id="logoStatus" style="font-size: 0.85rem; color: var(--text-muted); flex: 1;">Belum ada logo kustom</span>
         <button type="button" class="btn-ani-small" onclick="document.getElementById('logoInput').click()"><i class="ti ti-upload"></i> Pilih Logo</button>
         <button type="button" class="btn-ani-small" id="btnResetLogo" onclick="resetLogo()" style="display:none; color:#ef4444;"><i class="ti ti-reload"></i> Reset</button>
         <input type="file" id="logoInput" accept="image/*" style="display:none;" onchange="handleLogoUpload(event)" />
       </div>
     </div>
 
+    <!-- PILIHAN TRIWULAN -->
     <div class="form-group" id="twContainer">
       <label><i class="ti ti-calendar-month"></i> Pilihan Triwulan</label>
       <div class="tw-btn-group">
@@ -514,6 +633,7 @@
       </div>
     </div>
 
+    <!-- PILIHAN BULANAN -->
     <div class="form-group" id="monthContainer" style="display: none;">
       <label><i class="ti ti-calendar"></i> Pilih Bulan Laporan</label>
       <select id="singleMonth">
@@ -538,10 +658,10 @@
 
     <div class="btn-group">
       <button class="action-btn-ani btn-primary" id="btnPdf" disabled onclick="generatePDF()">
-        <i class="ti ti-file-type-pdf" style="font-size: 1.2rem;"></i> Generate PDF (Auto Split &amp; Zip)
+        <i class="ti ti-file-type-pdf" style="font-size: 1.3rem;"></i> Generate PDF (Auto Split &amp; Zip)
       </button>
       <button class="action-btn-ani btn-excel" id="btnExcel" disabled onclick="exportExcel()">
-        <i class="ti ti-file-spreadsheet" style="font-size: 1.2rem;"></i> Ekspor Excel (Sesuai PDF)
+        <i class="ti ti-file-spreadsheet" style="font-size: 1.3rem;"></i> Ekspor Excel (Sesuai PDF)
       </button>
     </div>
   </div>
@@ -552,7 +672,28 @@
   </footer>
 </div>
 
+<!-- FLOATING TIP KANAN BAWAH -->
+<div class="floating-tip-container">
+  <div class="floating-tip-popover-ani">
+    <strong>Pekerjaan selesai dalam hitungan detik?</strong><br>
+    Jika alat ini sangat membantu dan menghemat waktu berharga Anda, dukung pengembang dengan mentraktir secangkir kopi agar aplikasi ini terus aktif dan bermanfaat untuk kita semua ☕
+  </div>
+  <a href="https://trakteer.id/bukit_santuai_korcam/tip" target="_blank" rel="noopener noreferrer" class="floating-tip-btn-ani" title="Dukung Pengembang">
+    <i class="ti ti-coffee" style="font-size: 1.2rem;"></i>
+    <span>Traktir Kopi</span>
+  </a>
+</div>
+
+<!-- SCRIPT LOGIKA APLIKASI UTAMA (BERSIH & TANPA OBFUSCATION) -->
 <script>
+// Mencegah klik kanan dan F12
+document.addEventListener('keydown', function(e) {
+  if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74 || e.keyCode === 67)) || (e.ctrlKey && e.keyCode === 85)) {
+    e.preventDefault(); return false;
+  }
+});
+
+// Inisialisasi Tanggal
 (function initDefaultDate() {
   const now = new Date();
   const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
@@ -566,13 +707,13 @@
   if (yearInp) yearInp.value = now.getFullYear();
 })();
 
+// Pengaturan Tema & Zona Waktu
 let currentThemeMode = localStorage.getItem('theme_preference') || 'auto';
 let currentZoneMode = localStorage.getItem('zone_preference') || 'AUTO';
 
 function getZoneHour() {
   const d = new Date();
   const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
-  
   if (currentZoneMode === 'WIB') return new Date(utc + 25200000).getHours();
   if (currentZoneMode === 'WITA') return new Date(utc + 28800000).getHours();
   if (currentZoneMode === 'WIT') return new Date(utc + 32400000).getHours();
@@ -615,7 +756,9 @@ function setIndonesiaZone(zone) {
 }
 
 applyTheme();
+setInterval(() => { if (currentThemeMode === 'auto') applyTheme(); }, 60000);
 
+// Logika Pemrosesan Data
 let masterRows = [];
 let allRows = [];
 let groupedSchools = {};
@@ -628,7 +771,7 @@ window.addEventListener('DOMContentLoaded', () => {
   if (savedLogo) loadLogoImage(savedLogo);
 });
 
-window.handleLogoUpload = function(e) {
+function handleLogoUpload(e) {
   const file = e.target.files[0];
   if (!file) return;
   const reader = new FileReader();
@@ -638,7 +781,7 @@ window.handleLogoUpload = function(e) {
     loadLogoImage(base64);
   };
   reader.readAsDataURL(file);
-};
+}
 
 function loadLogoImage(base64) {
   const img = new Image();
@@ -658,14 +801,14 @@ function loadLogoImage(base64) {
   img.src = base64;
 }
 
-window.resetLogo = function() {
+function resetLogo() {
   localStorage.removeItem('custom_kemensos_logo');
   customLogoData = null;
   document.getElementById('logoThumb').style.display = 'none';
   document.getElementById('logoStatus').innerText = 'Belum ada logo kustom';
   document.getElementById('btnResetLogo').style.display = 'none';
   document.getElementById('logoInput').value = '';
-};
+}
 
 const TW_PRESETS = {
   TW1: ['JANUARI', 'FEBRUARI', 'MARET'],
@@ -675,18 +818,18 @@ const TW_PRESETS = {
 };
 let selectedTw = 'TW4';
 
-window.selectTw = function(twKey) {
+function selectTw(twKey) {
   selectedTw = twKey;
   document.querySelectorAll('.btn-tw-ani').forEach(btn => {
     btn.classList.toggle('active', btn.getAttribute('data-tw') === twKey);
   });
-};
+}
 
-window.togglePeriodType = function() {
+function togglePeriodType() {
   const type = document.getElementById('periodType').value;
   document.getElementById('twContainer').style.display = type === 'triwulan' ? 'flex' : 'none';
   document.getElementById('monthContainer').style.display = type === 'triwulan' ? 'none' : 'flex';
-};
+}
 
 const fileInput = document.getElementById('csvFile');
 const dz = document.getElementById('dz');
@@ -749,7 +892,7 @@ function handleMultipleFiles(files) {
   });
 }
 
-window.applyPendampingFilter = function() {
+function applyPendampingFilter() {
   const selected = filterSelect.value;
   if (selected === 'ALL') {
     allRows = [...masterRows];
@@ -771,7 +914,7 @@ window.applyPendampingFilter = function() {
   statsBar.style.display = 'flex';
 
   renderPreview();
-};
+}
 
 function cleanStr(s) {
   return (s || '').toString().trim().replace(/^["']|["']$/g, '');
@@ -920,7 +1063,8 @@ function drawDynamicWatermark(doc) {
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-window.generatePDF = async function() {
+async function generatePDF() {
+  const { jsPDF } = window.jspdf;
   const paper = document.getElementById('paperSize').value;
   const periodType = document.getElementById('periodType').value;
   const signer = document.getElementById('signerName').value.trim() || 'Andriadi, S.Kom';
@@ -957,7 +1101,7 @@ window.generatePDF = async function() {
     for (let i = 0; i < schoolKeys.length; i++) {
       const sch = schoolKeys[i];
       btnPdf.innerHTML = '<i class="ti ti-loader"></i> Memproses PDF ' + (i + 1) + ' / ' + schoolKeys.length;
-      await sleep(50); // Jeda anti-memory leak
+      await sleep(50); // Mencegah memory leak
       
       const doc = buildOfficialDoc(sch, groupedSchools[sch], pageSize, months, signer, nip, formattedDate, headName, headNip);
       zip.file('Form_Verifikasi_' + sch.replace(/[^a-zA-Z0-9]/g, '_') + '.pdf', doc.output('blob'));
@@ -975,7 +1119,7 @@ window.generatePDF = async function() {
     btnPdf.innerHTML = '<i class="ti ti-file-type-pdf" style="font-size: 1.2rem;"></i> Generate PDF (Auto Split &amp; Zip)';
     btnPdf.disabled = false;
   }
-};
+}
 
 function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, formattedDate, headName, headNip) {
   const { jsPDF } = window.jspdf;
@@ -1132,7 +1276,7 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, forma
   return doc;
 }
 
-window.exportExcel = async function() {
+async function exportExcel() {
   btnExcel.innerHTML = '<i class="ti ti-loader"></i> Memproses Excel...';
   btnExcel.disabled = true;
   await sleep(100);
@@ -1250,12 +1394,7 @@ window.exportExcel = async function() {
     ws['!merges'] = merges;
 
     const colWidths = [
-      { wch: 6 },
-      { wch: 22 },
-      { wch: 28 },
-      { wch: 14 },
-      { wch: 28 },
-      { wch: 12 }
+      { wch: 6 }, { wch: 22 }, { wch: 28 }, { wch: 14 }, { wch: 28 }, { wch: 12 }
     ];
     months.forEach(() => {
       colWidths.push({ wch: 6 }, { wch: 6 }, { wch: 6 }, { wch: 6 }, { wch: 6 });
@@ -1271,9 +1410,7 @@ window.exportExcel = async function() {
 
   btnExcel.innerHTML = '<i class="ti ti-file-spreadsheet" style="font-size: 1.2rem;"></i> Ekspor Excel (Sesuai PDF)';
   btnExcel.disabled = false;
-};
+}
 </script>
-<!-- /End Unobfuscated Script Block -->
-
 </body>
 </html>
