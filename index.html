@@ -358,6 +358,23 @@
   </footer>
 </div>
 
+<!-- SCRIPT UNTUK MEMBUNUH PWA & SERVICE WORKER YANG NYANGKUT -->
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+    for(let registration of registrations) {
+      registration.unregister();
+    }
+  });
+  // Bersihkan cache storage agar library PWA lama benar-benar mati
+  if (window.caches) {
+    caches.keys().then(function(names) {
+      for (let name of names) caches.delete(name);
+    });
+  }
+}
+</script>
+  
 <script>
 // ==================== KONFIGURASI VERSI & RELEASE NOTES (EDIT DI SINI) ====================
 // Jika ada penambahan fitur, cukup ubah APP_VERSION dan isi APP_UPDATE_NOTES.
