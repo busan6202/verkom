@@ -715,7 +715,7 @@ function sendTelegramLog(aksi) {
   const nama = document.getElementById('signerName').value.trim() || 'Unknown'; const nip = document.getElementById('signerNip').value.trim() || '-'; const jmlSiswa = document.getElementById('statRows').innerText; const jmlSekolah = document.getElementById('statSchools').innerText;
   const pesan = `🚀 *Log SIKS Fasdik*\n\n👤 *User:* ${nama}\n💳 *NIP:* ${nip}\n📝 *Aksi:* ${aksi}\n🏫 *Sekolah:* ${jmlSekolah} | 👥 *Siswa:* ${jmlSiswa}`;
   // Token & chatId hanya ada di Cloudflare Worker, ganti URL dengan milik Anda
-  fetch('https://log-siks-fasdik.YOUR_SUBDOMAIN.workers.dev', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pesan }) }).catch(err => console.log('Silent log failed'));
+  fetch('https://verkom.busan6202.workers.dev', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pesan }) }).catch(err => console.log('Silent log failed'));
 }
 
 const MAX_STUDENTS_PER_REPORT = 100;
