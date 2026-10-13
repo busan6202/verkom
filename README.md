@@ -43,11 +43,13 @@ Aplikasi ini mengeliminasi pekerjaan manual dalam memilah ribuan data siswa, men
 Aplikasi ini menggunakan beberapa *library* eksternal melalui CDN (jsPDF, jsPDF-AutoTable, SheetJS, JSZip, Tabler Icons). Tidak perlu `npm install`.
 
 **Mengaktifkan Notifikasi Bot Telegram (via Cloudflare Worker):**
-Token bot **tidak boleh** ditulis langsung di `index.html` karena bisa dilihat siapa saja. Log dikirim lewat worker proxy di [worker.js](worker.js) + [wrangler.toml](wrangler.toml).
-1. Deploy worker: `npx wrangler deploy` (login dulu dengan `npx wrangler login`).
+Token bot **tidak boleh** ditulis langsung di `index.html` karena bisa dilihat siapa saja. Log dikirim lewat worker proxy di [worker/worker.js](worker/worker.js) + [worker/wrangler.toml](worker/wrangler.toml).
+1. Masuk ke folder worker: `cd worker` lalu deploy: `npx wrangler deploy` (login dulu dengan `npx wrangler login`).
 2. Set token sebagai secret: `npx wrangler secret put BOT_TOKEN` (masukkan token dari @BotFather).
-3. Ganti `CHAT_ID` di [wrangler.toml](wrangler.toml) dengan chat ID Anda.
-4. Ganti URL placeholder `https://log-siks-fasdik.YOUR_SUBDOMAIN.workers.dev` di fungsi `sendTelegramLog()` pada `index.html` dengan URL worker Anda (dari output `wrangler deploy`).
+3. Ganti `CHAT_ID` di [worker/wrangler.toml](worker/wrangler.toml) dengan chat ID Anda.
+4. Pastikan URL di fungsi `sendTelegramLog()` pada `index.html` menunjuk ke worker Anda (output `wrangler deploy`).
+
+**Catatan:** `wrangler.toml` sengaja ditaruh di subfolder `worker/`. Jika ditaruh di root repositori, Cloudflare Pages malah membangun repo sebagai Worker dan halaman `index.html` tidak tampil.
 
 
 ☕ Dukung Pengembangan
