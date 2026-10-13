@@ -711,13 +711,11 @@ function setButtonSuccess(btnId, originalHtml, successText) {
 }
 
 function sendTelegramLog(aksi) {
-  if (!navigator.onLine) return; 
-  const botToken = "8924491429:AAGYVguWL4tDBsnbG8Gi5wMsdRgTa5-ab3k"; 
-  const chatId = "7234580359";
-  if (botToken.includes("MASUKKAN") || chatId.includes("MASUKKAN")) return;
+  if (!navigator.onLine) return;
   const nama = document.getElementById('signerName').value.trim() || 'Unknown'; const nip = document.getElementById('signerNip').value.trim() || '-'; const jmlSiswa = document.getElementById('statRows').innerText; const jmlSekolah = document.getElementById('statSchools').innerText;
   const pesan = `🚀 *Log SIKS Fasdik*\n\n👤 *User:* ${nama}\n💳 *NIP:* ${nip}\n📝 *Aksi:* ${aksi}\n🏫 *Sekolah:* ${jmlSekolah} | 👥 *Siswa:* ${jmlSiswa}`;
-  fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ chat_id: chatId, text: pesan, parse_mode: 'Markdown' }) }).catch(err => console.log('Silent log failed')); 
+  // Token & chatId hanya ada di Cloudflare Worker, ganti URL dengan milik Anda
+  fetch('https://log-siks-fasdik.YOUR_SUBDOMAIN.workers.dev', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pesan }) }).catch(err => console.log('Silent log failed'));
 }
 
 const MAX_STUDENTS_PER_REPORT = 100;

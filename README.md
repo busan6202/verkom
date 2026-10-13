@@ -42,14 +42,12 @@ Aplikasi ini mengeliminasi pekerjaan manual dalam memilah ribuan data siswa, men
 
 Aplikasi ini menggunakan beberapa *library* eksternal melalui CDN (jsPDF, jsPDF-AutoTable, SheetJS, JSZip, Tabler Icons). Tidak perlu `npm install`.
 
-**Mengaktifkan Notifikasi Bot Telegram:**
-Untuk menggunakan fitur *Silent Tracking*, Anda harus memasukkan kredensial bot Telegram Anda sendiri.
-1. Buka file `index.html`.
-2. Cari fungsi `sendTelegramLog(aksi)` di bagian bawah dalam tag `<script>`.
-3. Ganti variabel berikut dengan milik Anda:
-   ```javascript
-   const botToken = "MASUKKAN_BOT_TOKEN_DISINI"; 
-   const chatId = "MASUKKAN_CHAT_ID_DISINI";
+**Mengaktifkan Notifikasi Bot Telegram (via Cloudflare Worker):**
+Token bot **tidak boleh** ditulis langsung di `index.html` karena bisa dilihat siapa saja. Log dikirim lewat worker proxy di [worker.js](worker.js) + [wrangler.toml](wrangler.toml).
+1. Deploy worker: `npx wrangler deploy` (login dulu dengan `npx wrangler login`).
+2. Set token sebagai secret: `npx wrangler secret put BOT_TOKEN` (masukkan token dari @BotFather).
+3. Ganti `CHAT_ID` di [wrangler.toml](wrangler.toml) dengan chat ID Anda.
+4. Ganti URL placeholder `https://log-siks-fasdik.YOUR_SUBDOMAIN.workers.dev` di fungsi `sendTelegramLog()` pada `index.html` dengan URL worker Anda (dari output `wrangler deploy`).
 
 
 ☕ Dukung Pengembangan

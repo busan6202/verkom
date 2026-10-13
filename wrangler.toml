@@ -1,0 +1,8 @@
+name = "log-siks-fasdik"
+main = "worker.js"
+compatibility_date = "2026-10-13"
+
+[vars]
+# CHAT_ID boleh di sini (tidak rahasia), tapi BOT_TOKEN WAJIB di secret:
+# npx wrangler secret put BOT_TOKEN
+CHAT_ID = "7234580359"
