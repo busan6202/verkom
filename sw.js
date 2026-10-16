@@ -2,6 +2,7 @@ const CACHE_NAME = 'siks-fasdik-pwa-v4';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
+  './libur-indonesia.js',
   './manifest.json',
   'https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js',
   'https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js',
@@ -30,7 +31,8 @@ self.addEventListener('fetch', event => {
   // Pengecualian: Jangan cache API dinamis
   if (event.request.url.includes('api.telegram.org') || 
       event.request.url.includes('worldtimeapi.org') || 
-      event.request.url.includes('vercel.app')) {
+      event.request.url.includes('vercel.app') || 
+      event.request.url.includes('upset.dev')) {
     return;
   }
 

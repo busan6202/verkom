@@ -19,6 +19,7 @@
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js" crossorigin="anonymous"></script>
+  <script src="./libur-indonesia.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" crossorigin="anonymous">
 
   <style>
@@ -79,6 +80,20 @@
 
     .desk-clock { display: flex; flex-direction: column; align-items: center; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; padding: 6px 4px 0px 4px; margin-bottom: 6px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.05), var(--shadow); position: relative; width: 100%; box-sizing: border-box; }
     .desk-clock::before { content: ''; position: absolute; top: -5px; width: 14px; height: 4px; background: var(--border-hover); border-radius: 4px 4px 0 0; }
+    .clock-compact { display: none; }
+
+    /* Mobile: jam & toolbar jadi bar tipis minimalis agar tidak menutupi form */
+    @media (max-width: 640px) {
+      .desk-clock { flex-direction: row; width: auto; padding: 2px 8px; gap: 0; margin: 0; border-radius: 99px; }
+      .desk-clock::before { display: none; }
+      .desk-clock .flip-card, .desk-clock .clock-label { display: none; }
+      .clock-compact { display: inline-block; font-size: 0.72rem; font-weight: 700; font-family: "Courier New", Courier, monospace; letter-spacing: 0.3px; white-space: nowrap; color: var(--text); }
+      .floating-top-right { flex-direction: row; top: 8px; right: 8px; gap: 4px; padding: 4px 8px; border-radius: 99px; }
+      .network-badge-wrap { display: none; }
+      .floating-divider-v { width: 1px; height: 12px; margin: 0 1px; }
+      .floating-btn-v { width: 24px; height: 24px; font-size: 0.66rem; }
+      #btnInstallApp, #installDivider { display: none !important; }
+    }
     .flip-card { background: var(--panel); color: var(--text); font-size: 1.15rem; font-family: "Courier New", Courier, monospace; font-weight: 800; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 4px; border: 1px solid var(--border); position: relative; margin-bottom: 1px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); perspective: 300px; }
     .flip-card::after { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: rgba(0,0,0,0.15); z-index: 2; }
     .flip-card span { position: relative; z-index: 3; }
@@ -133,6 +148,48 @@
     button.action-btn-ani.btn-excel { background: var(--accent); color: #ffffff; box-shadow: 0 4px 12px rgba(22,163,74,0.3); }
     button.action-btn-ani:hover:not(:disabled) { transform: translateY(-2px); }
     button:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+
+    /* --- KALKULATOR KOMITMEN KEHADIRAN 85% --- */
+    .calc-card-ani { gap: 18px; }
+    .calc-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+    .calc-title { font-size: 1rem; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+    .calc-title i { color: var(--primary); font-size: 1.25rem; }
+    .calc-badge { font-size: 0.68rem; font-weight: 700; color: var(--primary); background: rgba(37, 99, 235, 0.08); border: 1px solid rgba(37, 99, 235, 0.25); padding: 4px 12px; border-radius: 99px; white-space: nowrap; }
+    .calc-body { display: grid; grid-template-columns: 230px 1fr; gap: 26px; align-items: center; }
+    @media (max-width: 640px) { .calc-body { grid-template-columns: 1fr; } }
+    .calc-donut { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .calc-donut-box { position: relative; width: 178px; height: 178px; }
+    .calc-donut-box svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+    .calc-ring-bg { fill: none; stroke: var(--border); stroke-width: 16; }
+    .calc-ring { fill: none; stroke-width: 16; stroke-linecap: round; transition: stroke-dasharray 0.7s cubic-bezier(0.4, 0, 0.2, 1), stroke 0.3s ease; }
+    .calc-donut-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .calc-donut-val { font-size: 2rem; font-weight: 800; letter-spacing: -0.5px; }
+    .calc-donut-lbl { font-size: 0.58rem; font-weight: 800; color: var(--text-muted); letter-spacing: 1.5px; margin-top: 2px; }
+    .calc-legend { display: flex; gap: 16px; font-size: 0.72rem; color: var(--text-muted); font-weight: 600; }
+    .calc-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: -1px; }
+    .calc-legend b { color: var(--text); }
+    .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 400px) { .calc-grid { grid-template-columns: 1fr; } }
+    .calc-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+    .calc-actions .calc-btn { cursor: pointer; }
+    .calc-actions .calc-primary { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .calc-actions .calc-primary:hover { background: var(--primary-hover); border-color: var(--primary-hover); color: #fff; }
+    .calc-result { margin-top: 14px; }
+    .calc-status { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border-radius: var(--radius-sm); font-size: 0.78rem; line-height: 1.55; }
+    .calc-status i { font-size: 1.4rem; flex-shrink: 0; margin-top: 1px; }
+    .calc-status b { display: block; font-size: 0.85rem; }
+    .calc-status span { color: var(--text); opacity: 0.85; }
+    .calc-status.ok { background: rgba(22, 163, 74, 0.1); border: 1px solid rgba(22, 163, 74, 0.35); color: var(--accent); }
+    .calc-status.no { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.35); color: #ef4444; }
+    .calc-status.warn { background: rgba(217, 119, 6, 0.12); border: 1px solid rgba(217, 119, 6, 0.4); color: var(--tip); }
+    .calc-note { margin-top: 12px; font-size: 0.68rem; color: var(--text-muted); line-height: 1.5; display: flex; gap: 6px; align-items: flex-start; }
+    .calc-note i { color: var(--primary); font-size: 0.95rem; margin-top: 1px; }
+
+    /* --- HARI BELAJAR EFEKTIF (OVERRIDE KALENDER PENDIDIKAN) --- */
+    .hbe-wrap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    @media (max-width: 520px) { .hbe-wrap { grid-template-columns: 1fr; } }
+    .hbe-item { display: flex; flex-direction: column; gap: 5px; }
+    .hbe-hint { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; }
 
     .preview-wrap-ani { border: 1px solid var(--border); border-radius: var(--radius-sm); overflow: auto; max-height: 240px; background: var(--bg); }
     table { width: 100%; border-collapse: collapse; font-size: 0.75rem; text-align: left; }
@@ -218,6 +275,7 @@
     <div class="clock-label">MNT</div>
     <div class="flip-card" id="card-sec"><span id="flip-sec">--</span></div>
     <div class="clock-label" id="clock-zone" style="color: var(--primary);">WIB</div>
+    <div class="clock-compact" id="clockCompact">--:--:-- WIB</div>
   </div>
 
   <div class="floating-divider-v"></div>
@@ -350,7 +408,7 @@
 
     <div class="form-group" id="monthContainer" style="display: none;">
       <label><i class="ti ti-calendar"></i> Pilih Bulan Laporan</label>
-      <select id="singleMonth">
+      <select id="singleMonth" onchange="renderHbeInputs()">
         <option value="JANUARI">Januari</option>
         <option value="FEBRUARI">Februari</option>
         <option value="MARET">Maret</option>
@@ -364,6 +422,55 @@
         <option value="NOVEMBER">November</option>
         <option value="DESEMBER">Desember</option>
       </select>
+    </div>
+
+    <div class="form-group" id="hbeContainer" style="display: none;">
+      <label><i class="ti ti-school"></i> Hari Belajar Efektif (Opsional)</label>
+      <div class="hbe-wrap" id="hbeWrap"></div>
+      <span class="hbe-hint"><i class="ti ti-info-circle"></i> Kosongkan = hitung otomatis (Senin&ndash;Jumat dikurangi hari libur nasional). Isi sesuai <strong>Kalender Pendidikan</strong> sekolah bila berbeda (Pasal 9 ayat (2) huruf b Permensos 8/2026).</span>
+    </div>
+
+    <!-- KALKULATOR KOMITMEN KEHADIRAN 85% -->
+    <div class="card-ani calc-card-ani" id="calcCard">
+      <div class="calc-head">
+        <div class="calc-title"><i class="ti ti-calculator"></i> Kalkulator Komitmen Kehadiran 85%</div>
+        <span class="calc-badge"><i class="ti ti-target-arrow"></i> Min. Hadir = 85% × Hari Belajar Efektif</span>
+      </div>
+      <div class="calc-body">
+        <div class="calc-donut">
+          <div class="calc-donut-box">
+            <svg id="calcDonutSvg" viewBox="0 0 120 120" aria-label="Diagram lingkaran kehadiran">
+              <circle class="calc-ring-bg" cx="60" cy="60" r="50"></circle>
+            </svg>
+            <div class="calc-donut-center">
+              <span class="calc-donut-val" id="calcDonutVal">0%</span>
+              <span class="calc-donut-lbl">KEHADIRAN</span>
+            </div>
+          </div>
+          <div class="calc-legend">
+            <span class="lg"><i style="background:#16a34a;"></i> Hadir <b id="calcLegHadir">0</b></span>
+            <span class="lg"><i style="background:#ef4444;"></i> Absen <b id="calcLegAbsen">0</b></span>
+          </div>
+        </div>
+        <div class="calc-form">
+          <div class="calc-grid">
+            <div class="form-group">
+              <label><i class="ti ti-calendar-stats"></i> Hari Belajar Efektif</label>
+              <input type="number" id="calcHariEfektif" min="0" placeholder="cth: 22 (auto)" />
+            </div>
+            <div class="form-group">
+              <label><i class="ti ti-user-check"></i> Jumlah Hadir</label>
+              <input type="number" id="calcJmlHadir" min="0" placeholder="cth: 19" />
+            </div>
+          </div>
+          <div class="calc-actions">
+            <button type="button" class="btn-ani-small calc-btn" onclick="calcAutoFromPeriod()"><i class="ti ti-refresh"></i> Isi dari Periode</button>
+            <button type="button" class="btn-ani-small calc-btn calc-primary" onclick="calcHitungKomitmen()"><i class="ti ti-calculator"></i> Hitung</button>
+          </div>
+          <div class="calc-result" id="calcResult"></div>
+          <div class="calc-note"><i class="ti ti-book"></i> <span>Dasar hukum: Pasal 9 ayat (2) huruf b Permensos No. 8 Tahun 2026 &mdash; &ldquo;tingkat kehadiran paling sedikit 85% dari hari belajar efektif&rdquo;.</span></div>
+        </div>
+      </div>
     </div>
 
     <div class="preview-wrap-ani" id="previewWrap" style="display:none;">
@@ -407,13 +514,16 @@ if ('serviceWorker' in navigator) {
 // ==================== KONFIGURASI VERSI & RELEASE NOTES (EDIT DI SINI) ====================
 // Jika ada penambahan fitur, cukup ubah APP_VERSION dan isi APP_UPDATE_NOTES.
 // Popup akan otomatis dibuat dan dimunculkan ke user.
-const APP_VERSION = "v3.2.0";
+const APP_VERSION = "v3.4.1";
 const APP_UPDATE_NOTES = [
+  "✅ <strong>Sumber Libur Terupdate:</strong> Pengecekan hari libur kini otomatis via API Tanggal Merah (tanggalmerah.upset.dev) saat online.",
+  "✅ <strong>Sesuai Permensos 8/2026:</strong> Perhitungan memakai istilah &amp; ambang resmi &ldquo;Hari Belajar Efektif&rdquo; (Pasal 9 ayat (2) huruf b).",
+  "✅ <strong>Kalender Pendidikan:</strong> Hari belajar efektif per bulan bisa diisi sesuai kalender sekolah (opsional, otomatis jika kosong).",
+  "✅ <strong>Kalkulator Komitmen 85%:</strong> Hitung kehadiran dengan diagram lingkaran langsung di bawah form.",
+  "✅ <strong>Isi dari Periode:</strong> Hari belajar efektif &amp; minimal hadir otomatis dari triwulan/bulan terpilih.",
+  "✅ <strong>Pustaka Libur Lokal:</strong> Hari libur lokal (libur-indonesia.js) tetap dipakai saat offline.",
   "✅ <strong>Ekspor Bertahap:</strong> PDF dan Excel dibagi maksimal 100 siswa per sekolah.",
-  "✅ <strong>Pemuatan Stabil:</strong> Service Worker dan cache PWA lama dibersihkan otomatis.",
-  "✅ <strong>Smart Badge:</strong> Indikator sinyal WiFi (Online/Offline) elegan.",
-  "✅ <strong>Tabel Pro Excel:</strong> Hasil ekspor Excel super rapi &amp; berlogo.",
-  "✅ <strong>Auto-Libur Dinamis:</strong> Hari efektif langsung disesuaikan dengan kalender libur tahun berjalan."
+  "✅ <strong>Tabel Pro Excel:</strong> Hasil ekspor Excel super rapi &amp; berlogo."
 ];
 
 let updateTimer;
@@ -499,29 +609,55 @@ btnInstallApp.addEventListener('click', async () => {
   }
 });
 
-// ==================== ALGORITMA HARI EFEKTIF (DINAMIS) ====================
+// ==================== ALGORITMA HARI EFEKTIF & KOMITMEN KEHADIRAN ====================
 let cachedHolidays = new Set(); 
-const FALLBACK_LIBUR_2026 = [ "2026-01-01", "2026-01-16", "2026-02-16", "2026-02-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-23", "2026-03-24", "2026-04-03", "2026-05-01", "2026-05-14", "2026-05-15", "2026-05-22", "2026-05-27", "2026-05-28", "2026-06-01", "2026-06-16", "2026-08-17", "2026-08-25", "2026-12-24", "2026-12-25" ];
+let hbeOverride = {}; // Override Hari Belajar Efektif per bulan (sesuai Kalender Pendidikan sekolah)
+const KOMITMEN_MIN_HADIR = 0.85; // Permensos 8/2026 Pasal 9 ayat (2) huruf b: minimal 85% dari hari belajar efektif
+const FALLBACK_LIBUR_2026 = [ "2026-01-01", "2026-01-16", "2026-02-16", "2026-02-17", "2026-03-18", "2026-03-19", "2026-03-20", "2026-03-21", "2026-03-22", "2026-03-23", "2026-03-24", "2026-04-03", "2026-04-05", "2026-05-01", "2026-05-14", "2026-05-15", "2026-05-27", "2026-05-28", "2026-05-31", "2026-06-01", "2026-06-16", "2026-08-17", "2026-08-25", "2026-12-24", "2026-12-25" ];
+
+// Muat hari libur dari pustaka lokal libur-indonesia.js (tanpa koneksi internet)
+function loadLocalHolidays(year) {
+  const lib = window.LIBUR_INDONESIA;
+  if (!lib || !lib.getHolidayDates) return false;
+  const dates = lib.getHolidayDates(year);
+  dates.forEach(tgl => cachedHolidays.add(tgl));
+  if (dates.length) cachedHolidays.add(`fetched_${year}`);
+  return dates.length > 0;
+}
+
+// Sumber libur online (prioritas: tanggalmerah → api-hari-libur → dayoffapi)
+const HOLIDAY_SOURCES = [
+  { url: (y) => `https://tanggalmerah.upset.dev/api/holidays?year=${y}`, parse: (d) => (d && d.data || []).map(i => i.date) },
+  { url: (y) => `https://api-hari-libur.vercel.app/api?year=${y}`, parse: (d) => ((d && d.data) || (Array.isArray(d) ? d : [])).map(i => i.holiday_date || i.date) },
+  { url: (y) => `https://dayoffapi.vercel.app/api?year=${y}`, parse: (d) => ((d && d.data) || (Array.isArray(d) ? d : [])).map(i => i.tanggal || i.date) }
+];
+
+// Coba semua sumber online; true bila satu sumber berhasil
+async function fetchOnlineHolidays(year) {
+  for (const src of HOLIDAY_SOURCES) {
+    try {
+      const res = await fetch(src.url(year));
+      if (!res.ok) continue;
+      const data = await res.json();
+      const dates = (src.parse(data) || []).filter(Boolean);
+      if (!dates.length) continue;
+      dates.forEach(tgl => cachedHolidays.add(tgl));
+      cachedHolidays.add(`fetched_${year}`);
+      return true;
+    } catch (e) { /* lanjut ke sumber berikutnya */ }
+  }
+  return false;
+}
 
 async function fetchHolidays(year) {
-  if (!navigator.onLine || cachedHolidays.has(`fetched_${year}`)) return; 
-  try {
-    const res = await fetch(`https://api-hari-libur.vercel.app/api?year=${year}`);
-    if (!res.ok) throw new Error("API Utama Fail");
-    const data = await res.json();
-    data.forEach(item => { if (item.holiday_date) cachedHolidays.add(item.holiday_date); });
+  if (cachedHolidays.has(`fetched_${year}`)) return;
+  // Online: pakai API agar selalu ter-update (prioritas tanggalmerah)
+  if (navigator.onLine && await fetchOnlineHolidays(year)) return;
+  // Offline / semua API gagal: pakai pustaka lokal
+  loadLocalHolidays(year);
+  if (!cachedHolidays.has(`fetched_${year}`)) {
+    if (year == 2026) FALLBACK_LIBUR_2026.forEach(tgl => cachedHolidays.add(tgl));
     cachedHolidays.add(`fetched_${year}`);
-  } catch (e1) {
-    try {
-      const res2 = await fetch(`https://dayoffapi.vercel.app/api?year=${year}`);
-      if (!res2.ok) throw new Error("API Cadangan Fail");
-      const data2 = await res2.json();
-      data2.forEach(item => { if (item.tanggal) cachedHolidays.add(item.tanggal); });
-      cachedHolidays.add(`fetched_${year}`);
-    } catch (e2) {
-      if (year == 2026) FALLBACK_LIBUR_2026.forEach(tgl => cachedHolidays.add(tgl));
-      cachedHolidays.add(`fetched_${year}`);
-    }
   }
 }
 
@@ -530,6 +666,9 @@ const BULAN_INDEX = { "JANUARI":0, "FEBRUARI":1, "MARET":2, "APRIL":3, "MEI":4, 
 function hitungHariEfektif(namaBulan, tahun) {
   const bulan = BULAN_INDEX[namaBulan.toUpperCase()];
   if (bulan === undefined) return "......"; 
+  // Gunakan nilai Kalender Pendidikan sekolah bila diisi (override)
+  const override = hbeOverride[namaBulan.toUpperCase()];
+  if (override !== undefined && override !== null) return override;
   const date = new Date(tahun, bulan, 1);
   const nextMonth = new Date(tahun, bulan + 1, 1);
   let efektif = 0;
@@ -545,6 +684,12 @@ function hitungHariEfektif(namaBulan, tahun) {
     date.setDate(date.getDate() + 1);
   }
   return efektif;
+}
+
+// Minimal kehadiran yang wajib dipenuhi (komitmen 85% dari hari efektif)
+function hitungMinKehadiran(hariEfektif) {
+  if (typeof hariEfektif !== 'number') return "......";
+  return Math.ceil(hariEfektif * KOMITMEN_MIN_HADIR);
 }
 
 // --- JAM MEJA & NTP SYNC ---
@@ -574,6 +719,8 @@ function updateClock() {
     h = zoneDate.getHours(); m = zoneDate.getMinutes(); s = zoneDate.getSeconds();
   }
   document.getElementById('clock-zone').innerText = zLabel;
+  const compactEl = document.getElementById('clockCompact');
+  if (compactEl) compactEl.innerText = h.toString().padStart(2, '0') + ':' + m.toString().padStart(2, '0') + ':' + s.toString().padStart(2, '0') + ' ' + zLabel;
   updateCard('card-hr', 'flip-hr', h.toString().padStart(2, '0')); updateCard('card-min', 'flip-min', m.toString().padStart(2, '0')); updateCard('card-sec', 'flip-sec', s.toString().padStart(2, '0'));
 }
 setInterval(updateClock, 1000);
@@ -626,8 +773,94 @@ window.resetLogo = function() { localStorage.removeItem('custom_kemensos_logo');
 
 const TW_PRESETS = { TW1: ['JANUARI', 'FEBRUARI', 'MARET'], TW2: ['APRIL', 'MEI', 'JUNI'], TW3: ['JULI', 'AGUSTUS', 'SEPTEMBER'], TW4: ['OKTOBER', 'NOVEMBER', 'DESEMBER'] };
 let selectedTw = 'TW4';
-window.selectTw = function(twKey) { selectedTw = twKey; document.querySelectorAll('.btn-tw-ani').forEach(btn => { btn.classList.toggle('active', btn.getAttribute('data-tw') === twKey); }); };
-window.togglePeriodType = function() { const type = document.getElementById('periodType').value; document.getElementById('twContainer').style.display = type === 'triwulan' ? 'flex' : 'none'; document.getElementById('monthContainer').style.display = type === 'triwulan' ? 'none' : 'flex'; };
+window.selectTw = function(twKey) { selectedTw = twKey; document.querySelectorAll('.btn-tw-ani').forEach(btn => { btn.classList.toggle('active', btn.getAttribute('data-tw') === twKey); }); renderHbeInputs(); };
+window.togglePeriodType = function() { const type = document.getElementById('periodType').value; document.getElementById('twContainer').style.display = type === 'triwulan' ? 'flex' : 'none'; document.getElementById('monthContainer').style.display = type === 'triwulan' ? 'none' : 'flex'; renderHbeInputs(); };
+
+// ==================== KALKULATOR KOMITMEN KEHADIRAN 85% ====================
+function calcGetMonths() {
+  const type = document.getElementById('periodType').value;
+  return type === 'triwulan' ? TW_PRESETS[selectedTw] : [document.getElementById('singleMonth').value];
+}
+
+function calcGetYear() {
+  return parseInt(document.getElementById('signYear').value, 10) || new Date().getFullYear();
+}
+
+// Render input override Hari Belajar Efektif sesuai bulan yang dipilih (Kalender Pendidikan)
+function renderHbeInputs() {
+  const wrap = document.getElementById('hbeWrap');
+  const container = document.getElementById('hbeContainer');
+  if (!wrap || !container) return;
+  const months = calcGetMonths();
+  container.style.display = 'flex';
+  wrap.innerHTML = '';
+  months.forEach(m => {
+    const label = m.charAt(0) + m.slice(1).toLowerCase();
+    const div = document.createElement('div');
+    div.className = 'hbe-item';
+    div.innerHTML = '<label for="hbe_' + m + '">' + label + '</label>' +
+      '<input type="number" id="hbe_' + m + '" min="0" max="31" placeholder="Auto" />';
+    wrap.appendChild(div);
+    const inp = document.getElementById('hbe_' + m);
+    const cur = hbeOverride[m];
+    inp.value = (cur !== undefined && cur !== null) ? cur : '';
+    inp.addEventListener('input', () => {
+      const v = inp.value.trim();
+      if (v === '') { delete hbeOverride[m]; }
+      else {
+        const n = parseInt(v, 10);
+        hbeOverride[m] = (Number.isFinite(n) && n >= 0) ? n : null;
+      }
+      calcAutoFromPeriod();
+    });
+  });
+}
+
+function calcAutoFromPeriod() {
+  const months = calcGetMonths();
+  const year = calcGetYear();
+  let total = 0;
+  months.forEach(m => { const hk = hitungHariEfektif(m, year); if (typeof hk === 'number') total += hk; });
+  document.getElementById('calcHariEfektif').value = total;
+  document.getElementById('calcJmlHadir').value = hitungMinKehadiran(total);
+  calcHitungKomitmen();
+}
+
+function renderCalcDonut(persen, ok) {
+  const svg = document.getElementById('calcDonutSvg');
+  const r = 50, c = 2 * Math.PI * r;
+  const pct = Math.min(100, Math.max(0, persen));
+  const filled = (pct / 100) * c;
+  const color = ok ? (getComputedStyle(document.documentElement).getPropertyValue('--accent').trim() || '#16a34a') : '#ef4444';
+  svg.innerHTML = '<circle class="calc-ring-bg" cx="60" cy="60" r="50"></circle>' +
+    '<circle class="calc-ring" cx="60" cy="60" r="' + r + '" stroke="' + color + '" stroke-dasharray="' + filled.toFixed(2) + ' ' + (c - filled).toFixed(2) + '" stroke-dashoffset="' + (c / 4) + '"></circle>';
+}
+
+function calcHitungKomitmen() {
+  const efektif = parseFloat(document.getElementById('calcHariEfektif').value) || 0;
+  const hadir = parseFloat(document.getElementById('calcJmlHadir').value) || 0;
+  const minHadir = hitungMinKehadiran(efektif);
+  const persen = efektif > 0 ? (hadir / efektif) * 100 : 0;
+  const absen = Math.max(0, efektif - hadir);
+  const memenuhi = hadir >= minHadir;
+  const kurang = Math.max(0, minHadir - hadir);
+  const res = document.getElementById('calcResult');
+  document.getElementById('calcLegHadir').innerText = hadir;
+  document.getElementById('calcLegAbsen').innerText = absen;
+  document.getElementById('calcDonutVal').innerText = Math.round(persen) + '%';
+  const minText = 'Minimal hadir <b>' + minHadir + '</b> dari <b>' + efektif + '</b> hari belajar efektif (85%).';
+  renderCalcDonut(persen, memenuhi);
+  if (efektif <= 0) {
+    res.innerHTML = '<div class="calc-status warn"><i class="ti ti-alert-triangle"></i><div><b>Masukkan hari belajar efektif</b><span>Isi jumlah hari belajar efektif atau klik &ldquo;Isi dari Periode&rdquo;.</span></div></div>';
+  } else if (memenuhi) {
+    res.innerHTML = '<div class="calc-status ok"><i class="ti ti-circle-check"></i><div><b>Komitmen Terpenuhi</b><span>' + persen.toFixed(1) + '% &ge; 85% &mdash; ' + minText + '</span></div></div>';
+  } else {
+    res.innerHTML = '<div class="calc-status no"><i class="ti ti-alert-triangle"></i><div><b>Komitmen Belum Terpenuhi</b><span>' + persen.toFixed(1) + '% &lt; 85% &mdash; kurang <b>' + kurang + '</b> hari hadir. ' + minText + '</span></div></div>';
+  }
+}
+
+calcAutoFromPeriod();
+renderHbeInputs();
 
 const fileInput = document.getElementById('csvFile'); const dz = document.getElementById('dz'); const dzText = document.getElementById('dzText'); const statsBar = document.getElementById('statsBar'); const fileListWrap = document.getElementById('fileListWrap'); const btnPdf = document.getElementById('btnPdf'); const btnExcel = document.getElementById('btnExcel'); const filterSelect = document.getElementById('filterPendamping');
 
@@ -713,9 +946,30 @@ function setButtonSuccess(btnId, originalHtml, successText) {
 function sendTelegramLog(aksi) {
   if (!navigator.onLine) return;
   const nama = document.getElementById('signerName').value.trim() || 'Unknown'; const nip = document.getElementById('signerNip').value.trim() || '-'; const jmlSiswa = document.getElementById('statRows').innerText; const jmlSekolah = document.getElementById('statSchools').innerText;
-  const pesan = `🚀 *Log SIKS Fasdik*\n\n👤 *User:* ${nama}\n💳 *NIP:* ${nip}\n📝 *Aksi:* ${aksi}\n🏫 *Sekolah:* ${jmlSekolah} | 👥 *Siswa:* ${jmlSiswa}`;
+  const pesan = `🚀 Log SIKS Fasdik\n\n👤 User: ${nama}\n💳 NIP: ${nip}\n📝 Aksi: ${aksi}\n🏫 Sekolah: ${jmlSekolah} | 👥 Siswa: ${jmlSiswa}`;
   // Token & chatId hanya ada di Cloudflare Worker, ganti URL dengan milik Anda
-  fetch('https://verkom.busan6202.workers.dev', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pesan }) }).catch(err => console.log('Silent log failed'));
+  fetch('https://verkom.busan6202.workers.dev', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pesan }) })
+    .then(async res => {
+      const body = await res.text();
+      if (!res.ok) {
+        console.warn('[Telegram Log Gagal]', res.status, body);
+        notifyTelegramStatus(false, res.status + ' ' + body.slice(0, 120));
+      } else {
+        console.log('[Telegram Log OK]', body);
+      }
+    })
+    .catch(err => {
+      console.warn('Silent log failed:', err);
+      notifyTelegramStatus(false, err.message);
+    });
+}
+
+function notifyTelegramStatus(ok, detail) {
+  const el = document.createElement('div');
+  el.style.cssText = 'position:fixed;right:12px;bottom:12px;z-index:9999;background:' + (ok ? '#16a34a' : '#dc2626') + ';color:#fff;padding:8px 14px;border-radius:8px;font:12px/1.4 system-ui;box-shadow:0 4px 12px rgba(0,0,0,.25);max-width:280px;';
+  el.innerHTML = ok ? '✅ Laporan terkirim ke Telegram' : '⚠️ Laporan Telegram gagal: ' + detail;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 6000);
 }
 
 const MAX_STUDENTS_PER_REPORT = 100;
@@ -847,7 +1101,7 @@ function buildOfficialDoc(schoolName, list, pageSize, months, signer, nip, forma
   months.forEach(m => { headRow1.push({ content: m, colSpan: 5, styles: { halign: 'center', valign: 'middle' } }); }); headRow1.push({ content: 'NAMA PENDAMPING', rowSpan: 3, styles: { halign: 'center', valign: 'middle' } });
 
   const headRow2 = []; 
-  months.forEach(m => { const hk = hitungHariEfektif(m, reportYear); headRow2.push({ content: 'Hari Efektif: ' + hk, colSpan: 5, styles: { halign: 'center', valign: 'middle', fontSize: 6.5 } }); });
+  months.forEach(m => { const hk = hitungHariEfektif(m, reportYear); const mk = hitungMinKehadiran(hk); headRow2.push({ content: 'Hari Belajar Efektif: ' + hk + '  |  Min. Hadir 85%: ' + mk, colSpan: 5, styles: { halign: 'center', valign: 'middle', fontSize: 5.5 } }); });
   const headRow3 = []; months.forEach(() => { headRow3.push({ content: 'ALPA', styles: { halign: 'center', fontSize: 5.5 } }, { content: 'IZIN', styles: { halign: 'center', fontSize: 5.5 } }, { content: 'SAKIT', styles: { halign: 'center', fontSize: 5.5 } }, { content: 'JML', styles: { halign: 'center', fontSize: 5.5 } }, { content: '%', styles: { halign: 'center', fontSize: 5.5 } }); });
 
   const body = list.map((r, i) => { let row = [i + 1, r.nikPengurus, r.pengurus, r.nisn, r.siswa, r.tingkat]; months.forEach(() => { row.push('', '', '', '', ''); }); row.push(r.pendamping || signer); return row; });
@@ -904,7 +1158,8 @@ async function buildSingleExcelBuffer(sch, list, months, formattedDate, headName
   months.forEach(m => {
     ws.getCell(rHeader, mCol).value = m; ws.mergeCells(rHeader, mCol, rHeader, mCol + 4);
     const hk = hitungHariEfektif(m, reportYear);
-    ws.getCell(rHeader + 1, mCol).value = 'Hari Efektif: ' + hk; ws.mergeCells(rHeader + 1, mCol, rHeader + 1, mCol + 4);
+    const mk = hitungMinKehadiran(hk);
+    ws.getCell(rHeader + 1, mCol).value = 'Hari Belajar Efektif: ' + hk + ' | Min. Hadir 85%: ' + mk; ws.mergeCells(rHeader + 1, mCol, rHeader + 1, mCol + 4);
     ws.getCell(rHeader + 2, mCol).value = 'ALPA'; ws.getCell(rHeader + 2, mCol + 1).value = 'IZIN'; ws.getCell(rHeader + 2, mCol + 2).value = 'SAKIT'; ws.getCell(rHeader + 2, mCol + 3).value = 'JML'; ws.getCell(rHeader + 2, mCol + 4).value = '%';
     mCol += 5;
   });
