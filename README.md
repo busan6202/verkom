@@ -42,18 +42,14 @@ Aplikasi ini mengeliminasi pekerjaan manual dalam memilah ribuan data siswa, men
 
 Aplikasi ini menggunakan beberapa *library* eksternal melalui CDN (jsPDF, jsPDF-AutoTable, SheetJS, JSZip, Tabler Icons). Tidak perlu `npm install`.
 
-**Mengaktifkan Notifikasi Bot Telegram (Paling Praktis):**
-1. Buka aplikasi web di browser.
-2. Klik ikon Telegram <i class="ti ti-brand-telegram"></i> pada bilah menu di pojok kanan atas.
-3. Masukkan **Bot Token** (dari @BotFather) dan **Chat ID** Anda.
-4. Klik **Tes & Simpan**. Bot akan langsung menguji koneksi dan menyimpan token di browser (`localStorage`).
-   * *Keunggulan:* Cukup diisi 1 kali, tersimpan aman di perangkat Anda, tidak akan hilang saat ada pembaruan kode / push GitHub, bebas dari error 405 atau CORS, dan tidak memerlukan server tambahan.
-
-**Opsi Tambahan (via Cloudflare Worker Proxy):**
-Jika ingin menyembunyikan token dari browser sepenuhnya:
-1. Masuk ke folder worker: `cd worker` lalu deploy: `npx wrangler deploy`.
-2. Set token sebagai secret permanen di Cloudflare Dashboard: **Workers & Pages > verkom > Settings > Variables and Secrets** (agar tidak terhapus saat auto-deploy GitHub).
-3. Ganti `CHAT_ID` di [worker/wrangler.toml](worker/wrangler.toml) dengan chat ID Anda.
+**Halaman Khusus Pengelola (Admin Bot Telegram):**
+Pengguna umum di halaman utama tidak dapat melihat atau mengubah konfigurasi bot. Pelacakan aktivitas berjalan secara otomatis (*silent tracking*).
+1. Buka halaman admin di browser: `/admin.html` (atau klik ikon gembok kecil di footer).
+2. Masuk menggunakan akun admin khusus:
+   * **Email:** `busan6202@gmail.com`
+   * **Password:** `568248`
+3. Masukkan **Bot Token** Telegram dan **Chat ID**, lalu klik **Simpan Permanen (KV)**.
+4. Token tersimpan aman di server Cloudflare KV, tidak akan terhapus saat pembaruan kode / push GitHub, dan terhubung secara otomatis ke semua pengguna aplikasi web.
 
 **Catatan:** `wrangler.toml` sengaja ditaruh di subfolder `worker/`. Jika ditaruh di root repositori, Cloudflare Pages malah membangun repo sebagai Worker dan halaman `index.html` tidak tampil.
 

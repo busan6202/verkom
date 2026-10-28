@@ -2,7 +2,9 @@ name = "verkom"
 main = "worker.js"
 compatibility_date = "2026-10-13"
 
+[[kv_namespaces]]
+binding = "VERKOM_CONFIG"
+id = "98f8c5452b804127bcd758d363326d78"
+
 [vars]
-# CHAT_ID boleh di sini (tidak rahasia), tapi BOT_TOKEN WAJIB di secret:
-# npx wrangler secret put BOT_TOKEN
 CHAT_ID = "7234580359"

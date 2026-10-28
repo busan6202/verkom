@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel - SIKS Fasdik Telegram Manager</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23090d16'/%3E%3Cpath d='M16 14h22l12 12v24a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z' fill='%231e293b' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Ccircle cx='42' cy='42' r='10' fill='%230284c7'/%3E%3Cpath d='M38 42l3 3 6-6' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" crossorigin="anonymous">
+
+  <style>
+    :root {
+      --bg: #090d16;
+      --panel: #111827;
+      --panel-soft: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --border: #1f2937;
+      --border-hover: #374151;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --accent: #16a34a;
+      --danger: #ef4444;
+      --radius: 12px;
+      --radius-sm: 8px;
+      --shadow: 0 15px 35px -5px rgba(0, 0, 0, 0.5);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; width: 100%; max-width: 480px; box-shadow: var(--shadow); }
+    .head { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+    .head-icon { width: 44px; height: 44px; border-radius: 10px; background: rgba(2, 132, 199, 0.15); border: 1px solid rgba(2, 132, 199, 0.3); display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.5rem; }
+    h1 { font-size: 1.15rem; font-weight: 800; letter-spacing: -0.3px; }
+    p.sub { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
+    label { font-size: 0.75rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.4px; display: flex; align-items: center; gap: 6px; }
+    label i { font-size: 0.95rem; color: var(--primary); }
+    input[type="text"], input[type="password"], input[type="email"] { width: 100%; background: var(--panel-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); color: var(--text); padding: 10px 12px; font-size: 0.88rem; outline: none; transition: border-color 0.2s; }
+    input:focus { border-color: var(--primary); }
+
+    .btn { background: var(--primary); color: #fff; border: none; padding: 10px 18px; border-radius: var(--radius-sm); font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s; text-decoration: none; }
+    .btn:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-1px); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn-secondary { background: var(--panel-soft); color: var(--text); border: 1px solid var(--border); }
+    .btn-secondary:hover:not(:disabled) { border-color: var(--border-hover); background: #283548; }
+    .btn-danger { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+    .btn-danger:hover:not(:disabled) { background: #ef4444; color: #fff; }
+
+    .status-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; font-weight: 700; padding: 4px 10px; border-radius: 99px; margin-bottom: 16px; }
+    .status-badge.ok { background: rgba(22, 163, 74, 0.15); color: #4ade80; border: 1px solid rgba(22, 163, 74, 0.3); }
+    .status-badge.no { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3); }
+
+    .alert { font-size: 0.8rem; padding: 10px 14px; border-radius: var(--radius-sm); margin-bottom: 14px; line-height: 1.4; display: none; }
+    .alert.ok { background: rgba(22, 163, 74, 0.15); border: 1px solid rgba(22, 163, 74, 0.3); color: #4ade80; }
+    .alert.err { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171; }
+    .alert.info { background: rgba(2, 132, 199, 0.15); border: 1px solid rgba(2, 132, 199, 0.3); color: #38bdf8; }
+
+    .info-box { background: var(--panel-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px; font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; margin-top: 16px; }
+    .info-box strong { color: var(--text); }
+  </style>
+</head>
+<body>
+
+  <!-- VIEW 1: LOGIN ADMIN -->
+  <div class="card" id="viewLogin">
+    <div class="head">
+      <div class="head-icon"><i class="ti ti-lock"></i></div>
+      <div>
+        <h1>Login Pengelola SIKS Fasdik</h1>
+        <p class="sub">Halaman khusus admin pengelola bot telegram</p>
+      </div>
+    </div>
+
+    <div id="loginAlert" class="alert err"></div>
+
+    <form onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label for="adminEmail"><i class="ti ti-mail"></i> Email Admin</label>
+        <input type="email" id="adminEmail" value="busan6202@gmail.com" required readonly style="opacity:0.8; cursor:not-allowed;" />
+      </div>
+      <div class="form-group">
+        <label for="adminPassword"><i class="ti ti-key"></i> Password Admin</label>
+        <input type="password" id="adminPassword" placeholder="Masukkan password khusus" required autofocus autocomplete="current-password" />
+      </div>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:20px;">
+        <a href="./index.html" class="btn btn-secondary" style="font-size:0.8rem;"><i class="ti ti-arrow-left"></i> Kembali</a>
+        <button type="submit" class="btn" id="btnLogin"><i class="ti ti-login"></i> Masuk Admin</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- VIEW 2: DASHBOARD ADMIN -->
+  <div class="card" id="viewDashboard" style="display:none; max-width:540px;">
+    <div class="head">
+      <div class="head-icon"><i class="ti ti-brand-telegram"></i></div>
+      <div style="flex:1;">
+        <h1>Pengaturan Bot Telegram</h1>
+        <p class="sub">Login sebagai: <strong id="userDisplay" style="color:#38bdf8;">busan6202@gmail.com</strong></p>
+      </div>
+      <button class="btn btn-danger" onclick="handleLogout()" style="padding:6px 12px; font-size:0.75rem;" title="Keluar"><i class="ti ti-logout"></i> Keluar</button>
+    </div>
+
+    <div id="statusBadge" class="status-badge no">
+      <i class="ti ti-alert-circle"></i> Memuat status bot...
+    </div>
+
+    <div id="dashAlert" class="alert"></div>
+
+    <form onsubmit="handleSaveConfig(event)">
+      <div class="form-group">
+        <label for="botToken"><i class="ti ti-key"></i> Bot Token (dari @BotFather)</label>
+        <input type="text" id="botToken" placeholder="Contoh: 8724497476:AA..." required autocomplete="off" />
+      </div>
+
+      <div class="form-group">
+        <label for="chatId"><i class="ti ti-id"></i> Chat ID Penerima Notifikasi</label>
+        <input type="text" id="chatId" placeholder="7234580359" required autocomplete="off" />
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:20px; flex-wrap:wrap;">
+        <button type="button" class="btn btn-secondary" id="btnTest" onclick="handleTestBot()" style="flex:1;">
+          <i class="ti ti-send"></i> Tes Kirim Pesan
+        </button>
+        <button type="submit" class="btn" id="btnSave" style="flex:1.2;">
+          <i class="ti ti-device-floppy"></i> Simpan Permanen (KV)
+        </button>
+      </div>
+    </form>
+
+    <div class="info-box">
+      <i class="ti ti-shield-check" style="color:#4ade80;"></i> <strong>Privasi &amp; Keamanan Terjamin:</strong><br>
+      Token bot disimpan secara permanen di server <strong>Cloudflare KV</strong>. Pengguna umum di halaman utama tidak akan dapat melihat token Anda, dan setiap kali mereka mencetak PDF atau ekspor Excel, notifikasi akan langsung terkirim secara otomatis (silent) ke Telegram Anda.
+    </div>
+  </div>
+
+  <script>
+    const WORKER_URL = 'https://verkom.busan6202.workers.dev';
+    const SESSION_KEY = 'siks_admin_session_token';
+
+    function showAlert(elId, msg, type = 'err') {
+      const el = document.getElementById(elId);
+      el.className = 'alert ' + type;
+      el.innerHTML = msg;
+      el.style.display = 'block';
+    }
+
+    function hideAlert(elId) {
+      const el = document.getElementById(elId);
+      if (el) el.style.display = 'none';
+    }
+
+    // Cek Session saat halaman dibuka
+    window.addEventListener('DOMContentLoaded', () => {
+      const token = sessionStorage.getItem(SESSION_KEY);
+      if (token) {
+        showDashboard();
+      }
+    });
+
+    async function handleLogin(e) {
+      e.preventDefault();
+      hideAlert('loginAlert');
+      const email = document.getElementById('adminEmail').value.trim();
+      const password = document.getElementById('adminPassword').value.trim();
+      const btn = document.getElementById('btnLogin');
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="ti ti-loader"></i> Memeriksa...';
+
+      try {
+        const res = await fetch(`${WORKER_URL}/api/admin/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok && data.ok) {
+          sessionStorage.setItem(SESSION_KEY, data.token);
+          showDashboard();
+        } else {
+          showAlert('loginAlert', data.message || 'Email atau password salah!');
+        }
+      } catch (err) {
+        showAlert('loginAlert', 'Gagal terhubung ke server backend: ' + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="ti ti-login"></i> Masuk Admin';
+      }
+    }
+
+    function handleLogout() {
+      sessionStorage.removeItem(SESSION_KEY);
+      document.getElementById('viewDashboard').style.display = 'none';
+      document.getElementById('viewLogin').style.display = 'block';
+      document.getElementById('adminPassword').value = '';
+      hideAlert('loginAlert');
+    }
+
+    async function showDashboard() {
+      document.getElementById('viewLogin').style.display = 'none';
+      document.getElementById('viewDashboard').style.display = 'block';
+      hideAlert('dashAlert');
+
+      const token = sessionStorage.getItem(SESSION_KEY);
+      try {
+        const res = await fetch(`${WORKER_URL}/api/admin/config`, {
+          headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok && data.ok) {
+          const badge = document.getElementById('statusBadge');
+          if (data.hasToken) {
+            badge.className = 'status-badge ok';
+            badge.innerHTML = '<i class="ti ti-check"></i> Bot Aktif di Server (KV)';
+          } else {
+            badge.className = 'status-badge no';
+            badge.innerHTML = '<i class="ti ti-alert-triangle"></i> Bot Belum Diset';
+          }
+          if (data.fullBotToken) {
+            document.getElementById('botToken').value = data.fullBotToken;
+          }
+          document.getElementById('chatId').value = data.chatId || '7234580359';
+        } else {
+          handleLogout();
+        }
+      } catch (err) {
+        showAlert('dashAlert', 'Gagal memuat status bot: ' + err.message, 'err');
+      }
+    }
+
+    async function handleTestBot() {
+      hideAlert('dashAlert');
+      const token = sessionStorage.getItem(SESSION_KEY);
+      const botToken = document.getElementById('botToken').value.trim();
+      const chatId = document.getElementById('chatId').value.trim();
+      const btn = document.getElementById('btnTest');
+
+      if (!botToken) {
+        showAlert('dashAlert', 'Masukkan Bot Token terlebih dahulu sebelum menguji!', 'err');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="ti ti-loader"></i> Mengirim Tes...';
+
+      try {
+        const res = await fetch(`${WORKER_URL}/api/admin/test`, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ botToken, chatId })
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok && data.ok) {
+          showAlert('dashAlert', `✅ <strong>Pesan Tes Berhasil!</strong> Pesan verifikasi masuk ke Telegram Anda (@${data.bot}).`, 'ok');
+        } else {
+          showAlert('dashAlert', `⚠️ Gagal dari Telegram: ${data.message || 'Periksa token atau chat id'}`, 'err');
+        }
+      } catch (err) {
+        showAlert('dashAlert', 'Koneksi gagal: ' + err.message, 'err');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="ti ti-send"></i> Tes Kirim Pesan';
+      }
+    }
+
+    async function handleSaveConfig(e) {
+      e.preventDefault();
+      hideAlert('dashAlert');
+      const token = sessionStorage.getItem(SESSION_KEY);
+      const botToken = document.getElementById('botToken').value.trim();
+      const chatId = document.getElementById('chatId').value.trim();
+      const btn = document.getElementById('btnSave');
+
+      btn.disabled = true;
+      btn.innerHTML = '<i class="ti ti-loader"></i> Menyimpan ke KV...';
+
+      try {
+        const res = await fetch(`${WORKER_URL}/api/admin/config`, {
+          method: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ botToken, chatId })
+        });
+        const data = await res.json().catch(() => ({}));
+
+        if (res.ok && data.ok) {
+          showAlert('dashAlert', `✅ <strong>Berhasil Disimpan!</strong> Konfigurasi Bot Telegram tersimpan permanen di Cloudflare KV. Aman dari pembaruan kode.`, 'ok');
+          const badge = document.getElementById('statusBadge');
+          badge.className = 'status-badge ok';
+          badge.innerHTML = '<i class="ti ti-check"></i> Bot Aktif di Server (KV)';
+        } else {
+          showAlert('dashAlert', `⚠️ Gagal menyimpan: ${data.message || 'Terjadi kesalahan'}`, 'err');
+        }
+      } catch (err) {
+        showAlert('dashAlert', 'Koneksi gagal: ' + err.message, 'err');
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="ti ti-device-floppy"></i> Simpan Permanen (KV)';
+      }
+    }
+  </script>
+</body>
+</html>
