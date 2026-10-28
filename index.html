@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SIKS Fasdik - Form Verifikasi Komitmen Pendidikan</title>
   
+  <meta name="description" content="Otomasi Form Verifikasi Komitmen Pendidikan (Fasdik) PKH Kementerian Sosial RI dari berkas CSV SIKS-NG. Cepat, akurat, dan rapi." />
+  
   <link rel="manifest" href="./manifest.json" />
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -13,16 +15,22 @@
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23090d16'/%3E%3Crect x='1' y='1' width='62' height='62' rx='15' fill='none' stroke='%233b82f6' stroke-width='2' stroke-opacity='0.4'/%3E%3Cpath d='M16 14h22l12 12v24a4 4 0 0 1-4 4H16a4 4 0 0 1-4-4V18a4 4 0 0 1 4-4z' fill='%231e293b' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M38 14v12h12' fill='none' stroke='%2360a5fa' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M20 34h14M20 42h8' stroke='%2394a3b8' stroke-width='2.5' stroke-linecap='round'/%3E%3Ccircle cx='42' cy='42' r='10' fill='%2316a34a'/%3E%3Cpath d='M38 42l3 3 6-6' fill='none' stroke='%23ffffff' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
   <meta name="theme-color" content="#090d16" />
 
-  <!-- Pustaka JS & CSS -->
-  <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js" crossorigin="anonymous"></script>
-  <script src="./libur-indonesia.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" crossorigin="anonymous">
+  <!-- Preconnect untuk mempercepat koneksi CDN saat dibutuhkan -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+
+  <!-- Pustaka Libur Lokal (di-defer agar tidak memblokir render pertama) -->
+  <script src="./libur-indonesia.js" defer crossorigin="anonymous"></script>
+
+  <!-- CSS Ikon dimuat asinkron untuk eliminasi render-blocking (FCP & LCP) -->
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'" crossorigin="anonymous">
+  <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"></noscript>
 
   <style>
+    @font-face {
+      font-family: 'tabler-icons';
+      font-display: swap;
+    }
     :root { --bg: #f8fafc; --panel: #ffffff; --text: #0f172a; --text-muted: #64748b; --border: #e2e8f0; --border-hover: #cbd5e1; --primary: #2563eb; --primary-hover: #1d4ed8; --accent: #16a34a; --accent-hover: #15803d; --tip: #d97706; --shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.05), 0 8px 10px -6px rgba(15, 23, 42, 0.05); --radius: 12px; --radius-sm: 8px; }
     body.dark-mode { --bg: #090d16; --panel: #111827; --text: #f8fafc; --text-muted: #94a3b8; --border: #1f2937; --border-hover: #374151; --primary: #3b82f6; --primary-hover: #60a5fa; --accent: #22c55e; --accent-hover: #4ade80; --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3); }
     
@@ -137,7 +145,8 @@
     .btn-tw-ani { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 9px 4px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 700; cursor: pointer; text-align: center; transition: all 0.2s;}
     .btn-tw-ani:hover { border-color: var(--primary); }
     .btn-tw-ani.active { background: var(--primary); border-color: var(--primary); color: #ffffff; box-shadow: 0 4px 10px rgba(37,99,235,0.2); }
-    .btn-tw-ani span { display: block; font-size: 0.65rem; opacity: 0.8; font-weight: normal; margin-top: 2px; }
+    .btn-tw-ani span { display: block; font-size: 0.65rem; color: var(--text-muted); font-weight: 500; margin-top: 2px; }
+    .btn-tw-ani.active span { color: #ffffff; opacity: 1; font-weight: 600; }
 
     .stats-bar-ani { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); padding: 12px 16px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); }
     .stats-bar-ani strong { color: var(--primary); }
@@ -179,9 +188,18 @@
     .calc-status i { font-size: 1.4rem; flex-shrink: 0; margin-top: 1px; }
     .calc-status b { display: block; font-size: 0.85rem; }
     .calc-status span { color: var(--text); opacity: 0.85; }
-    .calc-status.ok { background: rgba(22, 163, 74, 0.1); border: 1px solid rgba(22, 163, 74, 0.35); color: var(--accent); }
-    .calc-status.no { background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.35); color: #ef4444; }
-    .calc-status.warn { background: rgba(217, 119, 6, 0.12); border: 1px solid rgba(217, 119, 6, 0.4); color: var(--tip); }
+    .calc-status.ok { background: rgba(22, 163, 74, 0.12); border: 1px solid rgba(22, 163, 74, 0.35); color: #166534; }
+    .calc-status.ok b { color: #14532d; font-weight: 700; }
+    .calc-status.no { background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.35); color: #991b1b; }
+    .calc-status.no b { color: #7f1d1d; font-weight: 700; }
+    .calc-status.warn { background: rgba(217, 119, 6, 0.12); border: 1px solid rgba(217, 119, 6, 0.4); color: #92400e; }
+    .calc-status.warn b { color: #78350f; font-weight: 700; }
+    body.dark-mode .calc-status.ok { color: #4ade80; }
+    body.dark-mode .calc-status.ok b { color: #86efac; }
+    body.dark-mode .calc-status.no { color: #f87171; }
+    body.dark-mode .calc-status.no b { color: #fca5a5; }
+    body.dark-mode .calc-status.warn { color: #fbbf24; }
+    body.dark-mode .calc-status.warn b { color: #fde68a; }
     .calc-note { margin-top: 12px; font-size: 0.68rem; color: var(--text-muted); line-height: 1.5; display: flex; gap: 6px; align-items: flex-start; }
     .calc-note i { color: var(--primary); font-size: 0.95rem; margin-top: 1px; }
 
@@ -202,30 +220,19 @@
 </head>
 <body oncontextmenu="return false;">
 <script>
-(async function serviceWorkerKiller() {
-  const reloadKey = 'siks-sw-cleanup-reloaded';
-  let cleaned = false;
-
+(async function cleanOldServiceWorkers() {
   try {
     if ('serviceWorker' in navigator) {
       const registrations = await navigator.serviceWorker.getRegistrations();
-      const results = await Promise.all(registrations.map(registration => registration.unregister()));
-      cleaned = results.some(Boolean) || Boolean(navigator.serviceWorker.controller);
+      await Promise.all(registrations.map(r => r.unregister()));
     }
-
     if ('caches' in window) {
       const cacheNames = await caches.keys();
       const appCaches = cacheNames.filter(name => name.startsWith('siks-fasdik-pwa-'));
-      const results = await Promise.all(appCaches.map(name => caches.delete(name)));
-      cleaned = results.some(Boolean) || cleaned;
+      await Promise.all(appCaches.map(name => caches.delete(name)));
     }
-
-    if (cleaned && !sessionStorage.getItem(reloadKey)) {
-      sessionStorage.setItem(reloadKey, '1');
-      location.reload();
-    }
-  } catch (error) {
-    console.error('Gagal membersihkan Service Worker/cache PWA:', error);
+  } catch (e) {
+    // Abaikan kegagalan pembersihan cache
   }
 })();
 </script>
@@ -234,7 +241,7 @@
 <div id="updatePopup" class="update-popup">
   <div class="update-header">
     <div class="update-title"><i class="ti ti-rocket"></i> <span id="popupTitle">Update Terbaru!</span></div>
-    <button class="update-close" onclick="closeUpdatePopup()"><i class="ti ti-x"></i></button>
+    <button class="update-close" onclick="closeUpdatePopup()" aria-label="Tutup jendela pembaruan" title="Tutup pembaruan"><i class="ti ti-x"></i></button>
   </div>
   <div class="update-body">
     <ul id="updateList"></ul>
@@ -263,7 +270,7 @@
     </div>
   </div>
 
-  <button class="floating-btn-v" id="btnInstallApp" title="Install Aplikasi ke Layar Utama" style="display:none; background:#10b981; color:#fff;">
+  <button class="floating-btn-v" id="btnInstallApp" title="Install Aplikasi ke Layar Utama" aria-label="Install Aplikasi ke Layar Utama" style="display:none; background:#10b981; color:#fff;">
     <i class="ti ti-device-mobile"></i>
   </button>
   <div class="floating-divider-v" id="installDivider" style="display:none;"></div>
@@ -279,14 +286,14 @@
   </div>
 
   <div class="floating-divider-v"></div>
-  <button class="floating-btn-v active" id="btnThemeAuto" title="Mode Auto" onclick="setAppTheme('auto')"><i class="ti ti-clock-play"></i></button>
-  <button class="floating-btn-v" id="btnThemeLight" title="Mode Siang" onclick="setAppTheme('light')"><i class="ti ti-sun"></i></button>
-  <button class="floating-btn-v" id="btnThemeDark" title="Mode Malam" onclick="setAppTheme('dark')"><i class="ti ti-moon"></i></button>
+  <button class="floating-btn-v active" id="btnThemeAuto" title="Mode Auto" aria-label="Mode Tema Otomatis" onclick="setAppTheme('auto')"><i class="ti ti-clock-play"></i></button>
+  <button class="floating-btn-v" id="btnThemeLight" title="Mode Siang" aria-label="Mode Tema Terang" onclick="setAppTheme('light')"><i class="ti ti-sun"></i></button>
+  <button class="floating-btn-v" id="btnThemeDark" title="Mode Malam" aria-label="Mode Tema Gelap" onclick="setAppTheme('dark')"><i class="ti ti-moon"></i></button>
   <div class="floating-divider-v"></div>
-  <button class="floating-btn-v active" id="btnZoneAuto" title="Auto Zona" onclick="setIndonesiaZone('AUTO')"><i class="ti ti-map-pin"></i></button>
-  <button class="floating-btn-v" id="btnZoneWIB" title="WIB" onclick="setIndonesiaZone('WIB')">WIB</button>
-  <button class="floating-btn-v" id="btnZoneWITA" title="WITA" onclick="setIndonesiaZone('WITA')">WTA</button>
-  <button class="floating-btn-v" id="btnZoneWIT" title="WIT" onclick="setIndonesiaZone('WIT')">WIT</button>
+  <button class="floating-btn-v active" id="btnZoneAuto" title="Auto Zona" aria-label="Zona Waktu Otomatis" onclick="setIndonesiaZone('AUTO')"><i class="ti ti-map-pin"></i></button>
+  <button class="floating-btn-v" id="btnZoneWIB" title="WIB" aria-label="Zona Waktu WIB" onclick="setIndonesiaZone('WIB')">WIB</button>
+  <button class="floating-btn-v" id="btnZoneWITA" title="WITA" aria-label="Zona Waktu WITA" onclick="setIndonesiaZone('WITA')">WTA</button>
+  <button class="floating-btn-v" id="btnZoneWIT" title="WIT" aria-label="Zona Waktu WIT" onclick="setIndonesiaZone('WIT')">WIT</button>
 </div>
 
 <div class="container">
@@ -295,12 +302,12 @@
     <p>Otomasi CSV SIKS Fasdik ke Lembar Verifikasi Resmi (Kemensos)</p>
   </header>
 
-  <div class="card-ani">
+  <main class="card-ani" id="main-content">
     <div class="dropzone-ani" id="dz" onclick="document.getElementById('csvFile').click()">
       <div class="icon-wrap-ani"><i class="ti ti-cloud-upload" style="font-size: 24px;"></i></div>
       <p id="dzText" style="font-weight:700; font-size:0.9rem;">Klik atau seret berkas <strong>.CSV SIKS</strong> ke sini</p>
       <span style="font-size:0.75rem; color:var(--text-muted); margin-top:4px; display:block;">Perlu koneksi internet untuk memuat pustaka dan memproses laporan</span>
-      <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" multiple style="display:none;" />
+      <input type="file" id="csvFile" accept=".csv,text/csv,text/plain" multiple aria-label="Unggah Berkas CSV SIKS" style="display:none;" />
     </div>
 
     <div class="file-chip-wrap" id="fileListWrap" style="display:none;"></div>
@@ -313,41 +320,41 @@
 
     <div class="form-grid-4">
       <div class="form-group">
-        <label><i class="ti ti-user-search"></i> Filter Pendamping</label>
-        <select id="filterPendamping" onchange="applyPendampingFilter()">
+        <label for="filterPendamping"><i class="ti ti-user-search"></i> Filter Pendamping</label>
+        <select id="filterPendamping" onchange="applyPendampingFilter()" aria-label="Filter Pendamping">
           <option value="ALL">-- Semua Pendamping --</option>
         </select>
       </div>
       <div class="form-group">
-        <label><i class="ti ti-file-text"></i> Ukuran Kertas</label>
-        <select id="paperSize">
+        <label for="paperSize"><i class="ti ti-file-text"></i> Ukuran Kertas</label>
+        <select id="paperSize" aria-label="Ukuran Kertas">
           <option value="f4">F4 / Folio (330 × 210 mm) - Standar</option>
           <option value="a4">A4 (297 × 210 mm)</option>
         </select>
       </div>
       <div class="form-group">
-        <label><i class="ti ti-calendar-stats"></i> Format Periode</label>
-        <select id="periodType" onchange="togglePeriodType()">
+        <label for="periodType"><i class="ti ti-calendar-stats"></i> Format Periode</label>
+        <select id="periodType" onchange="togglePeriodType()" aria-label="Format Periode">
           <option value="triwulan" selected>Triwulan (3 Bulan)</option>
           <option value="bulanan">Bulanan (1 Bulan)</option>
         </select>
       </div>
       <div class="form-group">
-        <label><i class="ti ti-user"></i> Nama Petugas</label>
+        <label for="signerName"><i class="ti ti-user"></i> Nama Petugas</label>
         <input type="text" id="signerName" value="Andriadi, S.Kom" placeholder="Nama Petugas" />
       </div>
     </div>
 
     <div class="form-grid-4">
       <div class="form-group">
-        <label><i class="ti ti-id"></i> NIP Petugas</label>
+        <label for="signerNip"><i class="ti ti-id"></i> NIP Petugas</label>
         <input type="text" id="signerNip" value="198208042025210058" placeholder="NIP Petugas" />
       </div>
       <div class="form-group">
-        <label><i class="ti ti-calendar-event"></i> Tanggal TTD Dokumen</label>
+        <label for="signMonth"><i class="ti ti-calendar-event"></i> Tanggal TTD Dokumen</label>
         <div class="date-row">
-          <input type="number" id="signDay" min="1" max="31" placeholder="Tgl" />
-          <select id="signMonth">
+          <input type="number" id="signDay" min="1" max="31" placeholder="Tgl" aria-label="Tanggal Penandatanganan" />
+          <select id="signMonth" aria-label="Bulan Penandatanganan">
             <option value="Januari">Januari</option>
             <option value="Februari">Februari</option>
             <option value="Maret">Maret</option>
@@ -361,26 +368,26 @@
             <option value="November">November</option>
             <option value="Desember">Desember</option>
           </select>
-          <input type="number" id="signYear" min="2020" max="2050" placeholder="Thn" />
+          <input type="number" id="signYear" min="2020" max="2050" placeholder="Thn" aria-label="Tahun Penandatanganan" />
         </div>
       </div>
       <div class="form-group">
-        <label><i class="ti ti-building-community"></i> Kecamatan</label>
+        <label for="signerKecamatan"><i class="ti ti-building-community"></i> Kecamatan</label>
         <input type="text" id="signerKecamatan" value="Bukit Santuai" placeholder="Kecamatan" />
       </div>
       <div class="form-group">
-        <label><i class="ti ti-map-pin"></i> Desa / Kelurahan</label>
+        <label for="signerDesa"><i class="ti ti-map-pin"></i> Desa / Kelurahan</label>
         <input type="text" id="signerDesa" value="Lunuk Bagantung" placeholder="Desa" />
       </div>
     </div>
 
     <div class="form-grid-2">
       <div class="form-group">
-        <label><i class="ti ti-user-check"></i> Nama Kepala Sekolah</label>
+        <label for="headmasterName"><i class="ti ti-user-check"></i> Nama Kepala Sekolah</label>
         <input type="text" id="headmasterName" placeholder="Nama Kepala Sekolah (Opsional)" />
       </div>
       <div class="form-group">
-        <label><i class="ti ti-id-badge"></i> NIP Kepala Sekolah</label>
+        <label for="headmasterNip"><i class="ti ti-id-badge"></i> NIP Kepala Sekolah</label>
         <input type="text" id="headmasterNip" placeholder="NIP Kepala Sekolah (Opsional)" />
       </div>
     </div>
@@ -388,11 +395,11 @@
     <div class="form-group">
       <label><i class="ti ti-photo"></i> Kustom Logo (Kop &amp; Watermark)</label>
       <div class="logo-box-ani">
-        <img id="logoThumb" class="logo-preview-thumb" src="" alt="Logo" style="display:none;" />
+        <img id="logoThumb" class="logo-preview-thumb" src="" alt="Logo Kustom" style="display:none;" />
         <span id="logoStatus" style="font-size: 0.8rem; color: var(--text-muted); flex: 1;">Belum ada logo kustom</span>
         <button type="button" class="btn-ani-small" onclick="document.getElementById('logoInput').click()"><i class="ti ti-upload"></i> Pilih Logo</button>
-        <button type="button" class="btn-ani-small" id="btnResetLogo" onclick="resetLogo()" style="display:none; color:#ef4444;"><i class="ti ti-reload"></i> Reset</button>
-        <input type="file" id="logoInput" accept="image/*" style="display:none;" onchange="handleLogoUpload(event)" />
+        <button type="button" class="btn-ani-small" id="btnResetLogo" onclick="resetLogo()" style="display:none; color:#b91c1c;"><i class="ti ti-reload"></i> Reset</button>
+        <input type="file" id="logoInput" accept="image/*" aria-label="Unggah Logo Kustom" style="display:none;" onchange="handleLogoUpload(event)" />
       </div>
     </div>
 
@@ -407,8 +414,8 @@
     </div>
 
     <div class="form-group" id="monthContainer" style="display: none;">
-      <label><i class="ti ti-calendar"></i> Pilih Bulan Laporan</label>
-      <select id="singleMonth" onchange="renderHbeInputs()">
+      <label for="singleMonth"><i class="ti ti-calendar"></i> Pilih Bulan Laporan</label>
+      <select id="singleMonth" onchange="renderHbeInputs()" aria-label="Pilih Bulan Laporan">
         <option value="JANUARI">Januari</option>
         <option value="FEBRUARI">Februari</option>
         <option value="MARET">Maret</option>
@@ -455,11 +462,11 @@
         <div class="calc-form">
           <div class="calc-grid">
             <div class="form-group">
-              <label><i class="ti ti-calendar-stats"></i> Hari Belajar Efektif</label>
+              <label for="calcHariEfektif"><i class="ti ti-calendar-stats"></i> Hari Belajar Efektif</label>
               <input type="number" id="calcHariEfektif" min="0" placeholder="cth: 22 (auto)" />
             </div>
             <div class="form-group">
-              <label><i class="ti ti-user-check"></i> Jumlah Hadir</label>
+              <label for="calcJmlHadir"><i class="ti ti-user-check"></i> Jumlah Hadir</label>
               <input type="number" id="calcJmlHadir" min="0" placeholder="cth: 19" />
             </div>
           </div>
@@ -485,31 +492,14 @@
         <i class="ti ti-file-spreadsheet" style="font-size: 1.2rem;"></i> Ekspor Excel (Sesuai PDF)
       </button>
     </div>
-  </div>
+  </main>
 
   <footer>
-    &copy; <script>document.write(new Date().getFullYear())</script> <strong>Andriadi, S.Kom</strong> &middot; All Rights Reserved<br>
+    &copy; <span id="curYear">2026</span> <strong>Andriadi, S.Kom</strong> &middot; All Rights Reserved<br>
     SIKS Fasdik Report Generator &middot; Kementerian Sosial Republik Indonesia
   </footer>
 </div>
 
-<!-- SCRIPT UNTUK MEMBUNUH PWA & SERVICE WORKER YANG NYANGKUT -->
-<script>
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.getRegistrations().then(function(registrations) {
-    for(let registration of registrations) {
-      registration.unregister();
-    }
-  });
-  // Bersihkan cache storage agar library PWA lama benar-benar mati
-  if (window.caches) {
-    caches.keys().then(function(names) {
-      for (let name of names) caches.delete(name);
-    });
-  }
-}
-</script>
-  
 <script>
 // ==================== KONFIGURASI VERSI & RELEASE NOTES (EDIT DI SINI) ====================
 // Jika ada penambahan fitur, cukup ubah APP_VERSION dan isi APP_UPDATE_NOTES.
@@ -692,15 +682,19 @@ function hitungMinKehadiran(hariEfektif) {
   return Math.ceil(hariEfektif * KOMITMEN_MIN_HADIR);
 }
 
-// --- JAM MEJA & NTP SYNC ---
+// --- JAM MEJA & NTP / WAKTU SERVER SYNC ---
 let timeOffsetMs = 0;
 async function syncNTP() {
   if (!navigator.onLine) return;
   try {
-    const res = await fetch('https://worldtimeapi.org/api/timezone/Asia/Jakarta');
-    const data = await res.json();
-    timeOffsetMs = new Date(data.utc_datetime).getTime() - Date.now();
-  } catch (e) { console.log("NTP Sync terganggu, pakai waktu lokal."); }
+    const res = await fetch(window.location.href, { method: 'HEAD', cache: 'no-store' });
+    const serverDate = res.headers.get('date');
+    if (serverDate) {
+      timeOffsetMs = new Date(serverDate).getTime() - Date.now();
+    }
+  } catch (e) {
+    // fallback senyap ke waktu lokal perangkat
+  }
 }
 
 function updateCard(cardId, spanId, val) {
@@ -733,6 +727,8 @@ setInterval(updateClock, 1000);
   if (dayInp) dayInp.value = now.getDate();
   if (monthInp) monthInp.value = months[now.getMonth()];
   if (yearInp) { yearInp.value = now.getFullYear(); fetchHolidays(now.getFullYear()); }
+  const curYearEl = document.getElementById('curYear');
+  if (curYearEl) curYearEl.textContent = now.getFullYear();
 })();
 
 let currentThemeMode = localStorage.getItem('theme_preference') || 'auto';
@@ -879,6 +875,9 @@ function handleMultipleFiles(files) {
     filterSelect.innerHTML = '<option value="ALL">-- Semua Pendamping --</option>';
     Array.from(pendampingList).sort().forEach(p => { if (p && p !== '-' && p !== 'Andriadi, S.Kom') { const opt = document.createElement('option'); opt.value = p; opt.textContent = p; filterSelect.appendChild(opt); } });
     applyPendampingFilter(); dzText.innerHTML = 'Berhasil memuat <strong>' + uploadedFiles.length + ' berkas</strong>'; btnPdf.disabled = false; btnExcel.disabled = false;
+    // Prefetch pustaka ekspor di background agar siap saat tombol ditekan
+    ensurePdfLibs().catch(() => {});
+    ensureExcelLibs().catch(() => {});
   });
 }
 
@@ -1005,6 +1004,89 @@ function getSchoolReportJobs(schoolKeys) {
   });
 }
 
+// ==================== LAZY LOADING PUSTAKA EKSPOR (OPTIMASI FCP & LCP) ====================
+function loadScriptAsync(src) {
+  return new Promise((resolve, reject) => {
+    const existing = document.querySelector(`script[src="${src}"]`);
+    if (existing) {
+      if (existing.dataset.loaded === 'true') return resolve();
+      existing.addEventListener('load', () => resolve(), { once: true });
+      existing.addEventListener('error', (err) => reject(err), { once: true });
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = src;
+    script.crossOrigin = 'anonymous';
+    script.onload = () => {
+      script.dataset.loaded = 'true';
+      resolve();
+    };
+    script.onerror = () => reject(new Error('Gagal mengunduh pustaka: ' + src));
+    document.head.appendChild(script);
+  });
+}
+
+// Fallback native saveAs jika FileSaver belum terpasang
+if (typeof window.saveAs !== 'function') {
+  window.saveAs = function(blob, filename) {
+    const a = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      URL.revokeObjectURL(url);
+      a.remove();
+    }, 1000);
+  };
+}
+
+let _pdfPromise = null;
+function ensurePdfLibs() {
+  if (window.jspdf && window.jspdf.jsPDF && (typeof window.JSZip !== 'undefined')) {
+    return Promise.resolve();
+  }
+  if (!_pdfPromise) {
+    _pdfPromise = (async () => {
+      await Promise.all([
+        loadScriptAsync('https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js'),
+        loadScriptAsync('https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js'),
+        loadScriptAsync('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js')
+      ]);
+      await loadScriptAsync('https://cdn.jsdelivr.net/npm/jspdf-autotable@3.5.31/dist/jspdf.plugin.autotable.min.js');
+    })();
+  }
+  return _pdfPromise;
+}
+
+let _excelPromise = null;
+function ensureExcelLibs() {
+  if (window.ExcelJS && (typeof window.JSZip !== 'undefined')) {
+    return Promise.resolve();
+  }
+  if (!_excelPromise) {
+    _excelPromise = (async () => {
+      await Promise.all([
+        loadScriptAsync('https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js'),
+        loadScriptAsync('https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js'),
+        loadScriptAsync('https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js')
+      ]);
+    })();
+  }
+  return _excelPromise;
+}
+
+// Prefetch pustaka saat browser senggang
+window.addEventListener('load', () => {
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => {
+      ensurePdfLibs().catch(() => {});
+      ensureExcelLibs().catch(() => {});
+    }, { timeout: 6000 });
+  }
+});
+
 // ==================== GENERATE PDF ====================
 window.generatePDF = async function() {
   sendTelegramLog('Cetak PDF'); 
@@ -1014,6 +1096,9 @@ window.generatePDF = async function() {
   btnPdf.disabled = true;
 
   try {
+    btnPdf.innerText = 'Menyiapkan pustaka PDF...';
+    await ensurePdfLibs();
+
     if (navigator.onLine) {
       btnPdf.innerText = 'Menyinkronkan Kalender...';
       await fetchHolidays(sYearInp);
@@ -1194,6 +1279,9 @@ window.exportExcel = async function() {
   btnExcel.disabled = true;
 
   try {
+    btnExcel.innerText = 'Menyiapkan pustaka Excel...';
+    await ensureExcelLibs();
+
     if (navigator.onLine) {
       btnExcel.innerText = 'Menyinkronkan Kalender...';
       await fetchHolidays(sYearInp);
