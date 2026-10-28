@@ -1,9 +1,8 @@
-// Cloudflare Worker: menyajikan halaman statis (index.html, sw.js, manifest.json)
-// sekaligus proxy log Telegram. Token tidak pernah terlihat oleh frontend.
+// Cloudflare Worker: proxy log Telegram. Token tidak pernah terlihat oleh frontend.
 function corsHeaders() {
   return {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   };
 }
@@ -12,17 +11,14 @@ export default {
   async fetch(request, env) {
     // Tangani preflight CORS dari halaman statis
     if (request.method === 'OPTIONS') {
-      return new Response(null, { headers: corsHeaders() });
+      return new Response(null, { status: 204, headers: corsHeaders() });
     }
 
     // POST = endpoint log Telegram (dipakai sendTelegramLog di index.html)
     if (request.method === 'POST') {
       try {
         if (!env.BOT_TOKEN) {
-          return new Response('BOT_TOKEN belum di-set (jalankan: npx wrangler secret put BOT_TOKEN)', { status: 500, headers: corsHeaders() });
-        }
-        if (!env.CHAT_ID) {
-          return new Response('CHAT_ID belum di-set', { status: 500, headers: corsHeaders() });
+          return new Response('BOT_TOKEN belum di-set di Worker secret', { status: 500, headers: corsHeaders() });
         }
 
         const { pesan } = await request.json();
@@ -30,11 +26,11 @@ export default {
           return new Response('Missing pesan', { status: 400, headers: corsHeaders() });
         }
 
-        // Hapus parse_mode agar nama user berisi karakter khusus (_, *, [) tidak menolak pesan
+        const chatId = env.CHAT_ID || '7234580359';
         const res = await fetch(`https://api.telegram.org/bot${env.BOT_TOKEN}/sendMessage`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ chat_id: env.CHAT_ID, text: pesan }),
+          body: JSON.stringify({ chat_id: chatId, text: pesan }),
         });
 
         const bodyText = await res.text();
@@ -44,7 +40,6 @@ export default {
       }
     }
 
-    // GET/HEAD = sajikan halaman statis dari folder root repo
-    return env.ASSETS.fetch(request);
+    return new Response('SIKS Fasdik Telegram Proxy OK', { status: 200, headers: corsHeaders() });
   },
 };

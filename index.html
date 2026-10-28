@@ -56,6 +56,15 @@
     .update-popup:hover .update-progress-bar { animation-play-state: paused; }
     @keyframes progressShrink { from { transform: scaleX(1); } to { transform: scaleX(0); } }
 
+    /* --- MODAL PENGATURAN BOT TELEGRAM --- */
+    .tg-modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(5px); z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 16px; }
+    .tg-modal-card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); max-width: 440px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4); overflow: hidden; animation: tgPopIn 0.22s ease-out; }
+    @keyframes tgPopIn { from { transform: scale(0.94); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .tg-modal-header { display: flex; justify-content: space-between; align-items: center; background: #0284c7; color: #fff; padding: 12px 16px; }
+    .tg-modal-title { font-weight: 800; font-size: 0.95rem; display: flex; align-items: center; gap: 8px; }
+    .tg-modal-body { padding: 18px 16px; display: flex; flex-direction: column; gap: 12px; }
+    .floating-btn-v.tg-active { color: #0284c7 !important; border-color: rgba(2, 132, 199, 0.4) !important; background: rgba(2, 132, 199, 0.12) !important; }
+
     .btn-success-state { background: #10b981 !important; color: #ffffff !important; border-color: #10b981 !important; transition: all 0.3s ease; }
     .btn-shiny { position: relative; overflow: hidden; }
     .btn-shiny::before { content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%); transform: skewX(-25deg); animation: shine 1.5s infinite; }
@@ -251,6 +260,42 @@
   </div>
 </div>
 
+<!-- MODAL PENGATURAN BOT TELEGRAM (PRAKTIS & PERMANEN DI BROWSER) -->
+<div id="tgModalOverlay" class="tg-modal-overlay" style="display:none;" onclick="if(event.target===this)closeTelegramModal()">
+  <div class="tg-modal-card">
+    <div class="tg-modal-header">
+      <div class="tg-modal-title"><i class="ti ti-brand-telegram"></i> Pengaturan Bot Telegram</div>
+      <button class="update-close" onclick="closeTelegramModal()" aria-label="Tutup pengaturan Telegram" title="Tutup pengaturan"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="tg-modal-body">
+      <p style="font-size:0.8rem; color:var(--text-muted); line-height:1.5;">
+        Simpan Bot Token &amp; Chat ID langsung di browser ini. <strong>Cukup diisi 1 kali</strong>, tersimpan di perangkat Anda, tidak akan hilang saat pembaruan kode GitHub, dan bebas dari error 405.
+      </p>
+
+      <div class="form-group">
+        <label for="inputTgToken"><i class="ti ti-key"></i> Bot Token (dari @BotFather)</label>
+        <input type="text" id="inputTgToken" placeholder="Contoh: 8724497476:AA..." autocomplete="off" />
+      </div>
+
+      <div class="form-group">
+        <label for="inputTgChatId"><i class="ti ti-id"></i> Chat ID Penerima</label>
+        <input type="text" id="inputTgChatId" placeholder="Contoh: 7234580359" value="7234580359" autocomplete="off" />
+      </div>
+
+      <div id="tgTestResult" style="display:none; font-size:0.78rem; padding:9px 12px; border-radius:6px; line-height:1.4;"></div>
+
+      <div style="display:flex; gap:8px; justify-content:flex-end; margin-top:4px;">
+        <button type="button" class="btn-tw-ani" onclick="clearTelegramSettings()" style="padding:8px 12px; color:#ef4444;" title="Hapus token dari browser">
+          Hapus
+        </button>
+        <button type="button" class="action-btn-ani btn-pdf" id="btnSaveTg" onclick="testAndSaveTelegramSettings()" style="padding:8px 16px; font-size:0.82rem;">
+          <i class="ti ti-send"></i> Tes &amp; Simpan
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="floating-bottom-left">
   <div class="trakteer-msg">
     <i>"Di balik kemudahan sebuah aplikasi, ada waktu dan dedikasi panjang yang dicurahkan."</i><br><br>
@@ -294,6 +339,8 @@
   <button class="floating-btn-v" id="btnZoneWIB" title="WIB" aria-label="Zona Waktu WIB" onclick="setIndonesiaZone('WIB')">WIB</button>
   <button class="floating-btn-v" id="btnZoneWITA" title="WITA" aria-label="Zona Waktu WITA" onclick="setIndonesiaZone('WITA')">WTA</button>
   <button class="floating-btn-v" id="btnZoneWIT" title="WIT" aria-label="Zona Waktu WIT" onclick="setIndonesiaZone('WIT')">WIT</button>
+  <div class="floating-divider-v"></div>
+  <button class="floating-btn-v" id="btnTgSettings" title="Pengaturan Bot Telegram" aria-label="Pengaturan Bot Telegram" onclick="openTelegramModal()"><i class="ti ti-brand-telegram"></i></button>
 </div>
 
 <div class="container">
@@ -518,6 +565,7 @@ const APP_UPDATE_NOTES = [
 
 let updateTimer;
 window.addEventListener('DOMContentLoaded', () => {
+  updateTelegramButtonState();
   // Cek apakah versi ini sudah dilihat user
   const lastSeenVersion = localStorage.getItem('seen_version');
   
@@ -942,34 +990,182 @@ function setButtonSuccess(btnId, originalHtml, successText) {
   const btn = document.getElementById(btnId); btn.innerHTML = `<i class="ti ti-check" style="font-size: 1.2rem;"></i> ${successText}`; btn.classList.add('btn-success-state', 'btn-shiny'); setTimeout(() => { btn.innerHTML = originalHtml; btn.classList.remove('btn-success-state', 'btn-shiny'); }, 3500);
 }
 
+// ==================== PENGATURAN & LOG BOT TELEGRAM ====================
+function updateTelegramButtonState() {
+  const token = (localStorage.getItem('tg_bot_token') || '').trim();
+  const btn = document.getElementById('btnTgSettings');
+  if (btn) {
+    if (token) {
+      btn.classList.add('tg-active');
+      btn.title = 'Pengaturan Bot Telegram (Terhubung Langsung)';
+    } else {
+      btn.classList.remove('tg-active');
+      btn.title = 'Pengaturan Bot Telegram (Klik untuk Menghubungkan)';
+    }
+  }
+}
+
+function openTelegramModal() {
+  const modal = document.getElementById('tgModalOverlay');
+  const tokenInput = document.getElementById('inputTgToken');
+  const chatIdInput = document.getElementById('inputTgChatId');
+  const resultBox = document.getElementById('tgTestResult');
+
+  tokenInput.value = localStorage.getItem('tg_bot_token') || '';
+  chatIdInput.value = localStorage.getItem('tg_chat_id') || '7234580359';
+  if (resultBox) resultBox.style.display = 'none';
+
+  modal.style.display = 'flex';
+}
+
+function closeTelegramModal() {
+  const modal = document.getElementById('tgModalOverlay');
+  if (modal) modal.style.display = 'none';
+}
+
+async function testAndSaveTelegramSettings() {
+  const tokenInput = document.getElementById('inputTgToken');
+  const chatIdInput = document.getElementById('inputTgChatId');
+  const resultBox = document.getElementById('tgTestResult');
+  const saveBtn = document.getElementById('btnSaveTg');
+
+  const token = tokenInput.value.trim();
+  const chatId = chatIdInput.value.trim() || '7234580359';
+
+  if (!token) {
+    resultBox.style.display = 'block';
+    resultBox.style.background = 'rgba(239, 68, 68, 0.12)';
+    resultBox.style.color = '#ef4444';
+    resultBox.innerHTML = '⚠️ Masukkan Bot Token dari @BotFather terlebih dahulu.';
+    return;
+  }
+
+  saveBtn.disabled = true;
+  saveBtn.innerHTML = '<i class="ti ti-loader"></i> Menguji...';
+  resultBox.style.display = 'block';
+  resultBox.style.background = 'rgba(14, 165, 233, 0.12)';
+  resultBox.style.color = '#0284c7';
+  resultBox.innerHTML = 'Mengirim pesan tes langsung ke Telegram...';
+
+  try {
+    const testMsg = '🔔 *Tes Koneksi SIKS Fasdik*\n\n✅ Bot berhasil terhubung langsung dari browser!\nToken tersimpan permanen di perangkat Anda.';
+    const res = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: chatId, text: testMsg, parse_mode: 'Markdown' })
+    });
+
+    const data = await res.json().catch(() => ({}));
+    if (res.ok && data.ok) {
+      localStorage.setItem('tg_bot_token', token);
+      localStorage.setItem('tg_chat_id', chatId);
+      updateTelegramButtonState();
+
+      resultBox.style.background = 'rgba(22, 163, 74, 0.12)';
+      resultBox.style.color = '#16a34a';
+      const botName = data.result?.from?.username ? `@${data.result.from.username}` : 'Bot';
+      resultBox.innerHTML = `✅ <strong>Berhasil!</strong> Pesan tes terkirim ke Telegram. Terhubung dengan <strong>${botName}</strong>. Pengaturan tersimpan permanen di browser ini.`;
+
+      setTimeout(() => {
+        closeTelegramModal();
+      }, 2200);
+    } else {
+      resultBox.style.background = 'rgba(239, 68, 68, 0.12)';
+      resultBox.style.color = '#ef4444';
+      resultBox.innerHTML = `⚠️ Gagal dari Telegram: ${data.description || 'Token atau Chat ID tidak valid'}`;
+    }
+  } catch (err) {
+    resultBox.style.background = 'rgba(239, 68, 68, 0.12)';
+    resultBox.style.color = '#ef4444';
+    resultBox.innerHTML = `⚠️ Koneksi gagal: ${err.message}`;
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.innerHTML = '<i class="ti ti-send"></i> Tes &amp; Simpan';
+  }
+}
+
+function clearTelegramSettings() {
+  if (confirm('Hapus pengaturan Bot Telegram dari browser ini?')) {
+    localStorage.removeItem('tg_bot_token');
+    localStorage.removeItem('tg_chat_id');
+    document.getElementById('inputTgToken').value = '';
+    const resultBox = document.getElementById('tgTestResult');
+    if (resultBox) {
+      resultBox.style.display = 'block';
+      resultBox.style.background = 'rgba(239, 68, 68, 0.12)';
+      resultBox.style.color = '#ef4444';
+      resultBox.innerHTML = 'Pengaturan bot telah dihapus dari browser.';
+    }
+    updateTelegramButtonState();
+  }
+}
+
 function sendTelegramLog(aksi) {
   if (!navigator.onLine) return;
-  const nama = document.getElementById('signerName').value.trim() || 'Unknown'; const nip = document.getElementById('signerNip').value.trim() || '-'; const jmlSiswa = document.getElementById('statRows').innerText; const jmlSekolah = document.getElementById('statSchools').innerText;
+  const nama = document.getElementById('signerName').value.trim() || 'Unknown';
+  const nip = document.getElementById('signerNip').value.trim() || '-';
+  const jmlSiswa = document.getElementById('statRows').innerText;
+  const jmlSekolah = document.getElementById('statSchools').innerText;
   const pesan = `🚀 Log SIKS Fasdik\n\n👤 User: ${nama}\n💳 NIP: ${nip}\n📝 Aksi: ${aksi}\n🏫 Sekolah: ${jmlSekolah} | 👥 Siswa: ${jmlSiswa}`;
-  // Token & chatId hanya ada di Cloudflare Worker, ganti URL dengan milik Anda
-  fetch('https://verkom.busan6202.workers.dev', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pesan }) })
+
+  const localToken = (localStorage.getItem('tg_bot_token') || '').trim();
+  const localChatId = (localStorage.getItem('tg_chat_id') || '7234580359').trim();
+
+  // 1. PRIORITAS UTAMA: Kirim LANGSUNG ke Telegram Bot API
+  //    (Natif CORS, bebas error 405, bebas 'Load failed', dan tidak pernah hilang saat push kode)
+  if (localToken) {
+    fetch(`https://api.telegram.org/bot${localToken}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: localChatId, text: pesan })
+    })
+    .then(async res => {
+      const data = await res.json().catch(() => ({}));
+      if (res.ok && data.ok) {
+        console.log('[Telegram Direct OK]', data);
+        notifyTelegramStatus(true, 'Terkirim ke Telegram');
+      } else {
+        console.warn('[Telegram Direct Error]', data);
+        notifyTelegramStatus(false, data.description || 'Gagal mengirim');
+      }
+    })
+    .catch(err => {
+      console.warn('[Telegram Network Error]', err);
+      notifyTelegramStatus(false, err.message || 'Koneksi Telegram gagal');
+    });
+    return;
+  }
+
+  // 2. FALLBACK: Panggil Cloudflare Worker jika token belum disimpan di browser
+  fetch('https://verkom.busan6202.workers.dev', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ pesan })
+  })
     .then(async res => {
       const body = await res.text();
       if (!res.ok) {
-        console.warn('[Telegram Log Gagal]', res.status, body);
-        notifyTelegramStatus(false, res.status + ' ' + body.slice(0, 120));
+        console.warn('[Telegram Worker Gagal]', res.status, body);
+        notifyTelegramStatus(false, `${res.status}. Klik ikon Telegram di pojok kanan atas untuk simpan token langsung.`);
       } else {
-        console.log('[Telegram Log OK]', body);
+        console.log('[Telegram Worker OK]', body);
+        notifyTelegramStatus(true, 'Terkirim via Worker');
       }
     })
     .catch(err => {
       console.warn('Silent log failed:', err);
-      notifyTelegramStatus(false, err.message);
+      notifyTelegramStatus(false, 'Worker tidak merespons. Klik ikon Telegram di pojok kanan atas untuk simpan token permanen.');
     });
 }
 
 function notifyTelegramStatus(ok, detail) {
   const el = document.createElement('div');
-  el.style.cssText = 'position:fixed;right:12px;bottom:12px;z-index:9999;background:' + (ok ? '#16a34a' : '#dc2626') + ';color:#fff;padding:8px 14px;border-radius:8px;font:12px/1.4 system-ui;box-shadow:0 4px 12px rgba(0,0,0,.25);max-width:280px;';
-  el.innerHTML = ok ? '✅ Laporan terkirim ke Telegram' : '⚠️ Laporan Telegram gagal: ' + detail;
+  el.style.cssText = 'position:fixed;right:12px;bottom:12px;z-index:9999;background:' + (ok ? '#16a34a' : '#dc2626') + ';color:#fff;padding:8px 14px;border-radius:8px;font:12px/1.4 system-ui;box-shadow:0 4px 12px rgba(0,0,0,.25);max-width:320px;';
+  el.innerHTML = ok ? '✅ ' + detail : '⚠️ Laporan Telegram gagal: ' + detail;
   document.body.appendChild(el);
   setTimeout(() => el.remove(), 6000);
 }
+
 
 const MAX_STUDENTS_PER_REPORT = 100;
 const MAX_REPORTS_PER_ZIP = 10;

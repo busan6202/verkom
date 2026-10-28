@@ -2,12 +2,6 @@ name = "verkom"
 main = "worker.js"
 compatibility_date = "2026-10-13"
 
-# Sajikan file statis (index.html, sw.js, manifest.json) dari folder public/
-[assets]
-directory = "./public"
-binding = "ASSETS"
-run_worker_first = true
-
 [vars]
 # CHAT_ID boleh di sini (tidak rahasia), tapi BOT_TOKEN WAJIB di secret:
 # npx wrangler secret put BOT_TOKEN
